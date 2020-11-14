@@ -1,0 +1,185 @@
+﻿@model KhdoumWeb.Models.ViewModels.ItemDetailsViewModel
+@{
+    ViewData["Title"] = $"{Model.Title}";
+    int? count = Model.RatingCount;
+    int? value = Model.RatingValues;
+
+    int? rating = value / count;
+
+}
+<style>
+    #ItemMain {
+        background-color: white;
+        padding: 10px;
+    }
+
+    #ImgContainer {
+        width: 100%;
+        text-align: center;
+    }
+
+    #ItemImg {
+        height: 500px;
+        width: 500px
+    }
+
+    #UserInfo {
+        background-color: white;
+        padding: 10px;
+        margin-top: 20px;
+    }
+
+    #UserImgContainer {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    #UserImg {
+        width: 100px;
+        height: 100px;
+        border-radius: 200px;
+    }
+
+    #PriceContainer {
+        margin-top: 20px;
+        background-color: white;
+        height: 50px;
+        padding-top: 8px;
+    }
+
+    #OrderContainer {
+        margin-top: 20px;
+        height: 50px;
+    }
+
+        #OrderContainer a {
+            width: 100%;
+            height: 100%;
+            border-radius: 0;
+            padding-top: 10px;
+        }
+
+    #OrderIcon {
+        position: absolute;
+        right: 30px;
+        margin-top: 5px;
+    }
+
+    #Raiting {
+        background-color: white;
+        height: 50px;
+        font-size: 25px;
+        text-align: center;
+        padding-top: 8px;
+    }
+
+    #Views {
+        background-color: white;
+        height: 50px;
+        text-align: center;
+        margin-top: 20px;
+        font-size: 25px;
+    }
+
+        #Views p {
+            padding-top: 8px;
+        }
+
+        #Views i {
+            position: absolute;
+            right: 30px;
+            margin-top: 5px;
+        }
+</style>
+
+<div style="margin-top:20px">
+    <div class="row">
+        <div class="col-lg-9">
+            <div id="ItemMain">
+                <h4>@Model.Title</h4>
+                <p>تمت الاضافة بتاريخ : @Model.Date</p>
+                <div id="ImgContainer">
+                    @if (Model.ImgUrl == "false")
+                    {
+                        <img id="ItemImg" src="~/uploads/default.png" alt="@Model.Title" title="@Model.Title">
+                    }
+                    else
+                    {
+                        <img id="ItemImg" src="~/uploads/Items/@Model.ImgUrl" alt="@Model.Title" title="@Model.Title">
+                    }
+                </div>
+                <div>
+                    <p>@Html.Raw(Model.Description)</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+
+            <div id="Raiting">
+                <div id="Stars">
+                    @for (int i = 1; i < 6; i++)
+                    {
+                        if (rating > 0)
+                        {
+                            <i class="fas fa-star text-warning"></i>
+                        }
+                        else
+                        {
+                            <i class="far fa-star text-warning"></i>
+                        }
+
+                        rating = rating - 1;
+                    }
+                </div>
+            </div>
+            <div id="Views" class="text-warning">
+                <p><i class="fas fa-eye"></i> @Model.ViewsCount</p>
+            </div>
+            <div id="UserInfo">
+                @*<a href="#" class="btn btn-primary">طلب الخدمة</a>*@
+                <div id="UserImgContainer">
+                    @if (Model.ImgUrl == "false")
+                    {
+                        <img id="UserImg" src="~/uploads/default.png" alt="@Model.Title" title="@Model.Member.FullName">
+                    }
+                    else
+                    {
+                        <img id="UserImg" src="~/uploads/Members/@Model.Member.ImgUrl" alt="@Model.Member.FullName" title="@Model.Member.FullName">
+                    }
+                </div>
+                <h5 class="text-center"><a asp-action="Search" asp-route-q="@Model.Member.FullName" class="Lnk">@Model.Member.FullName</a></h5>
+            </div>
+            @if (Model.Price != 0)
+            {
+                <div id="PriceContainer">
+                    <h4 class="text-center text-danger">@Model.Price ج.م</h4>
+                </div>
+            }
+
+            <div id="OrderContainer">
+                <a id="OrderBtn" asp-action="Order" asp-route-id="@Model.Id" data-ajax="true" data-ajax-method="post" class="btn btn-primary" type="button"><i id="OrderIcon" class="fas fa-phone"></i> <span>أطلب الآن</span></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+
+    <script>
+    $(function () {
+        $('#OrderBtn').click(function (e) {
+
+            if ($(this).find('span').text() != "أطلب الآن") {
+                console.log("true")
+                $(this).attr('href', '');
+                e.preventDefault();
+                return;
+            }
+
+            $(this).find('span').text("@Model.Phone");
+        });
+    });
+    </script>
+}

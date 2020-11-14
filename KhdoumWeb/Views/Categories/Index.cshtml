@@ -1,0 +1,203 @@
+﻿@model IEnumerable<KhdoumWeb.Models.Category>
+
+@{
+    ViewData["Title"] = "قائمة التصنيفات";
+    Layout = "~/Views/Shared/DashBoardLayout.cshtml";
+}
+
+
+
+
+<!--Start Show Categories-->
+<h1>قائمة التصنيفات</h1>
+
+<p>
+    <a class="btn btn-primary" asp-action="Create"><i class="fas fa-plus"></i> اضافة تصنيف جديد</a>
+</p>
+<table class="table table-striped table-bordered text-center" id="tbl">
+    <thead>
+        <tr>
+            <th>
+
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+
+
+            <th>
+                @Html.DisplayNameFor(model => model.State)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                @if (item.ImgUrl == "false")
+                {
+                    <td>
+                        <img class="tbl-img" src="~/uploads/default.png" />
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        <img class="tbl-img" src="~/uploads/categories/@item.ImgUrl" />
+                    </td>
+                }
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                @if (item.State)
+                {
+                    <td>
+                        <i class="fas fa-check text-success"></i>
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        <i class="fas fa-times text-danger"></i>
+                    </td>
+                }
+
+
+                <td>
+                    <a class="btn btn-warning tbl-btn" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-pen"></i></a>
+                    <a class="btn btn-info tbl-btn" asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-info"></i></a>
+                    <a class="btn btn-danger tbl-btn" asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-trash"></i></a>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+<!--End Show Categories-->
+<!--Start Add Edit Modal -->
+@*<div id="myModal"  class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">اضافة تصنيفات</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div id="ContentModal" class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+                </div>
+
+            </div>
+        </div>
+    </div>*@
+<!--End Add Edit Modal -->
+
+
+
+
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+
+
+            var datatable;
+            datatable = $('#tbl').DataTable({
+                language: {
+                    "sEmptyTable": "ليست هناك بيانات متاحة في الجدول",
+                    "sLoadingRecords": "جارٍ التحميل...",
+                    "sProcessing": "جارٍ التحميل...",
+                    "sLengthMenu": "أظهر _MENU_ اصناف",
+                    "sZeroRecords": "لم يعثر على أى أصناف",
+                    "sInfo": "إظهار _START_ إلى _END_ من أصل _TOTAL_ أصناف",
+                    "sInfoEmpty": "يعرض 0 إلى 0 من أصل 0 سجل",
+                    "sInfoFiltered": "(منتقاة من مجموع _MAX_ مُدخل)",
+                    "sInfoPostFix": "",
+                    "sSearch": "ابحث:",
+                    "sUrl": "",
+                    "oPaginate": {
+                        "sFirst": "الأول",
+                        "sPrevious": "السابق",
+                        "sNext": "التالي",
+                        "sLast": "الأخير"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": تفعيل لترتيب العمود تصاعدياً",
+                        "sSortDescending": ": تفعيل لترتيب العمود تنازلياً"
+                    }
+                },
+                //{
+                //    "search": "إبحث",
+                //    "lengthMenu": "أظهر _MENU_ شركات",
+                //    "zeroRecords": "لايوجد شركات",
+                //    //"info": "يوجد _PAGE_ من _PAGES_ شركات",
+                //    "infoEmpty": "لايوجد شركات",
+                //    "infoFiltered": "(بحث  من _MAX_ كل الشركات)"
+                //},
+                order: [0, 'asc'],
+                dom: 'Bflrtip',
+                buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+            });
+
+            var Catdatatable;
+            Catdatatable = $('#catstbl').DataTable({
+                language: {
+                    "sEmptyTable": "ليست هناك بيانات متاحة في الجدول",
+                    "sLoadingRecords": "جارٍ التحميل...",
+                    "sProcessing": "جارٍ التحميل...",
+                    "sLengthMenu": "أظهر _MENU_ اصناف",
+                    "sZeroRecords": "لم يعثر على أى أصناف",
+                    "sInfo": "إظهار _START_ إلى _END_ من أصل _TOTAL_ أصناف",
+                    "sInfoEmpty": "يعرض 0 إلى 0 من أصل 0 سجل",
+                    "sInfoFiltered": "(منتقاة من مجموع _MAX_ مُدخل)",
+                    "sInfoPostFix": "",
+                    "sSearch": "ابحث:",
+                    "sUrl": "",
+                    "oPaginate": {
+                        "sFirst": "الأول",
+                        "sPrevious": "السابق",
+                        "sNext": "التالي",
+                        "sLast": "الأخير"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": تفعيل لترتيب العمود تصاعدياً",
+                        "sSortDescending": ": تفعيل لترتيب العمود تنازلياً"
+                    }
+                },
+                //{
+                //    "search": "إبحث",
+                //    "lengthMenu": "أظهر _MENU_ شركات",
+                //    "zeroRecords": "لايوجد شركات",
+                //    //"info": "يوجد _PAGE_ من _PAGES_ شركات",
+                //    "infoEmpty": "لايوجد شركات",
+                //    "infoFiltered": "(بحث  من _MAX_ كل الشركات)"
+                //},
+                order: [0, 'asc'],
+                dom: 'Bflrtip',
+                buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+            });
+
+
+            //On Success
+            function OnSuccess() {
+                $('#myModal').hide();
+            }
+
+        });
+    </script>
+
+}

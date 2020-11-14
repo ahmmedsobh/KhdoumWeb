@@ -1,0 +1,219 @@
+﻿@model IEnumerable<KhdoumWeb.Models.Item>
+
+@{
+    ViewData["Title"] = "قائمة العناصر";
+    Layout = "~/Views/Shared/DashBoardLayout.cshtml";
+}
+
+<h1>قائمة العناصر</h1>
+
+
+<div class="btn-group mb-3" role="group" aria-label="Button group with nested dropdown">
+    <a class="btn btn-primary"  asp-action="Create">اضافة عنصر جديد</a>
+
+    <div class="btn-group" role="group">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            عرض حسب التصنيف
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" asp-action="SortByCategory" asp-route-id="0" data-ajax="true" data-ajax-update="#tbl" data-ajax-mode="replace">الكل</a>
+
+            @foreach (var item in ViewBag.Categories as List<Category>)
+            {
+                if (item.ItemsCategories.Count > 0)
+                {
+                    <a class="dropdown-item" asp-action="SortByCategory" asp-route-id="@item.Id" data-ajax="true" data-ajax-update="#tbl" data-ajax-mode="replace">@item.Name</a>
+                }
+            }
+        </div>
+    </div>
+
+    <div class="btn-group" role="group">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="SupCatDropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            عرض حسب التصنيف الفرعى
+        </button>
+        <div class="dropdown-menu" aria-labelledby="SupCatDropdownMenuButton">
+            <a class="dropdown-item" asp-action="SortBySupCategory" asp-route-id="0" data-ajax="true" data-ajax-update="#tbl" data-ajax-mode="replace">الكل</a>
+            @foreach (var item in ViewBag.SupCategories as List<SubCategory>)
+            {
+                if (item.ItemsSupCategories.Count > 0)
+                {
+                    <a class="dropdown-item" asp-action="SortBySupCategory" asp-route-id="@item.Id" data-ajax="true" data-ajax-update="#tbl" data-ajax-mode="replace">@item.Name</a>
+                }
+            }
+        </div>
+    </div>
+
+</div>
+
+<partial model="Model" name="~/Views\Items\Items.cshtml" />
+
+<div id="myModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">اضافة تصنيفات</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="ManageCategories" class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+            $(document).ready(function () {
+
+
+                var datatable;
+                datatable = $('#tbl').DataTable({
+                    language: {
+                        "sEmptyTable": "ليست هناك بيانات متاحة في الجدول",
+                        "sLoadingRecords": "جارٍ التحميل...",
+                        "sProcessing": "جارٍ التحميل...",
+                        "sLengthMenu": "أظهر _MENU_ عناصر",
+                        "sZeroRecords": "لم يعثر على أى عناصر",
+                        "sInfo": "إظهار _START_ إلى _END_ من أصل _TOTAL_ عناصر",
+                        "sInfoEmpty": "يعرض 0 إلى 0 من أصل 0 سجل",
+                        "sInfoFiltered": "(منتقاة من مجموع _MAX_ مُدخل)",
+                        "sInfoPostFix": "",
+                        "sSearch": "ابحث:",
+                        "sUrl": "",
+                        "oPaginate": {
+                            "sFirst": "الأول",
+                            "sPrevious": "السابق",
+                            "sNext": "التالي",
+                            "sLast": "الأخير"
+                        },
+                        "oAria": {
+                            "sSortAscending": ": تفعيل لترتيب العمود تصاعدياً",
+                            "sSortDescending": ": تفعيل لترتيب العمود تنازلياً"
+                        }
+                    },
+                    //{
+                    //    "search": "إبحث",
+                    //    "lengthMenu": "أظهر _MENU_ شركات",
+                    //    "zeroRecords": "لايوجد شركات",
+                    //    //"info": "يوجد _PAGE_ من _PAGES_ شركات",
+                    //    "infoEmpty": "لايوجد شركات",
+                    //    "infoFiltered": "(بحث  من _MAX_ كل الشركات)"
+                    //},
+                    order: [0, 'asc'],
+                    dom: 'Bflrtip',
+                    buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+                });
+
+
+
+
+
+            });
+
+            function Finished(elm) {
+                var $btn = $("#btn" + elm)
+                if ($btn.hasClass("btn-primary")) {
+                    $btn.removeClass("btn-primary");
+                    $btn.addClass(" btn-danger");
+
+                    $btn.html('<i class="fas fa-trash"></i>');
+                }
+                else {
+                    $btn.html('<i class="fas fa-plus"></i>');
+                    $btn.removeClass("btn-danger");
+                    $btn.addClass(" btn-primary");
+                }
+            }
+
+            function AddCategorySuccess() {
+                var Catdatatable;
+                Catdatatable = $('#catstbl').DataTable({
+                    language: {
+                        "sEmptyTable": "ليست هناك بيانات متاحة في الجدول",
+                        "sLoadingRecords": "جارٍ التحميل...",
+                        "sProcessing": "جارٍ التحميل...",
+                        "sLengthMenu": "أظهر _MENU_ اصناف",
+                        "sZeroRecords": "لم يعثر على أى أصناف",
+                        "sInfo": "إظهار _START_ إلى _END_ من أصل _TOTAL_ أصناف",
+                        "sInfoEmpty": "يعرض 0 إلى 0 من أصل 0 سجل",
+                        "sInfoFiltered": "(منتقاة من مجموع _MAX_ مُدخل)",
+                        "sInfoPostFix": "",
+                        "sSearch": "ابحث:",
+                        "sUrl": "",
+                        "oPaginate": {
+                            "sFirst": "الأول",
+                            "sPrevious": "السابق",
+                            "sNext": "التالي",
+                            "sLast": "الأخير"
+                        },
+                        "oAria": {
+                            "sSortAscending": ": تفعيل لترتيب العمود تصاعدياً",
+                            "sSortDescending": ": تفعيل لترتيب العمود تنازلياً"
+                        }
+                    },
+                    //{
+                    //    "search": "إبحث",
+                    //    "lengthMenu": "أظهر _MENU_ شركات",
+                    //    "zeroRecords": "لايوجد شركات",
+                    //    //"info": "يوجد _PAGE_ من _PAGES_ شركات",
+                    //    "infoEmpty": "لايوجد شركات",
+                    //    "infoFiltered": "(بحث  من _MAX_ كل الشركات)"
+                    //},
+                    order: [0, 'asc'],
+                    dom: 'Bflrtip',
+                    buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+                });
+
+            }
+            function AddSupCategorySuccess() {
+                var Catdatatable;
+                Catdatatable = $('#supcatstbl').DataTable({
+                    language: {
+                        "sEmptyTable": "ليست هناك بيانات متاحة في الجدول",
+                        "sLoadingRecords": "جارٍ التحميل...",
+                        "sProcessing": "جارٍ التحميل...",
+                        "sLengthMenu": "أظهر _MENU_ اصناف",
+                        "sZeroRecords": "لم يعثر على أى أصناف",
+                        "sInfo": "إظهار _START_ إلى _END_ من أصل _TOTAL_ أصناف",
+                        "sInfoEmpty": "يعرض 0 إلى 0 من أصل 0 سجل",
+                        "sInfoFiltered": "(منتقاة من مجموع _MAX_ مُدخل)",
+                        "sInfoPostFix": "",
+                        "sSearch": "ابحث:",
+                        "sUrl": "",
+                        "oPaginate": {
+                            "sFirst": "الأول",
+                            "sPrevious": "السابق",
+                            "sNext": "التالي",
+                            "sLast": "الأخير"
+                        },
+                        "oAria": {
+                            "sSortAscending": ": تفعيل لترتيب العمود تصاعدياً",
+                            "sSortDescending": ": تفعيل لترتيب العمود تنازلياً"
+                        }
+                    },
+                    //{
+                    //    "search": "إبحث",
+                    //    "lengthMenu": "أظهر _MENU_ شركات",
+                    //    "zeroRecords": "لايوجد شركات",
+                    //    //"info": "يوجد _PAGE_ من _PAGES_ شركات",
+                    //    "infoEmpty": "لايوجد شركات",
+                    //    "infoFiltered": "(بحث  من _MAX_ كل الشركات)"
+                    //},
+                    order: [0, 'asc'],
+                    dom: 'Bflrtip',
+                    buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+                });
+
+            }
+
+    </script>
+
+}

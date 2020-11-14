@@ -1,0 +1,54 @@
+﻿@model KhdoumWeb.Models.ViewModels.HomeModelView
+@{
+    ViewData["Title"] = "التصنيفات الفرعية";
+}
+
+<br />
+<h4>التصنيفات الفرعية</h4>
+<hr />
+
+<div class="MainCategories">
+    <div class="row">
+        @foreach (var item in Model.SubCategories)
+        {
+            //if (item.ItemsCategories.Count() != 0)
+            //{
+            //data-ajax-loading="SpinnerDown()"  data-ajax-success="SpinnerUp()"
+            <div class="col-lg-3 col-md-12 mb-4">
+                <div class="Category">
+                    <a asp-action="SubCategories" asp-route-SubId="@item.Id" asp-route-id="@Model.CategoryId" data-ajax="true" data-ajax-mode="replace" class="Lnk">
+                        <div class="CategoryImg">
+                            @if (item.ImgUrl == "false")
+                            {
+                                <img src="~/uploads/default.png" />
+                            }
+                            else
+                            {
+                                <img src="~/uploads/SubCategory/@item.ImgUrl" />
+                            }
+                        </div>
+                        <div class="CategoryTitle">
+                            <h6>@item.Name</h6>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            @*}*@
+        }
+    </div>
+</div>
+
+@*<partial name="~/Views\Shared\_Spinner.cshtml" />*@
+<partial model="Model.Items" name="~/Views\Home\ItemsList.cshtml" />
+
+@section Scripts{
+    <script>
+        //function SpinnerDown() {
+        //    $('#LoadSpinner').slideDown();
+        //}
+
+        //function SpinnerUp() {
+        //    $('#LoadSpinner').slideUp();
+        //}
+    </script>
+}

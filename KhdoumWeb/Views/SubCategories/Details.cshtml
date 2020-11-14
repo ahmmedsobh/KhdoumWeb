@@ -1,0 +1,60 @@
+﻿@model KhdoumWeb.Models.SubCategory
+
+@{
+    ViewData["Title"] = "تفاصيل تصنيف فرعى";
+    Layout = "~/Views/Shared/DashBoardLayout.cshtml";
+}
+
+<h1>تفاصيل تصنيف فرعى</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt>
+
+        </dt>
+        @if (Model.ImgUrl == "false")
+        {
+            <dd class="col-sm-12">
+                <img class="tbl-img" src="~/uploads/default.png" />
+            </dd>
+        }
+        else
+        {
+            <dd class="col-sm-12">
+                <img class="tbl-img" src="~/uploads/SubCategory/@Model.ImgUrl" />
+            </dd>
+        }
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.State)
+        </dt>
+        @if (Model.State)
+        {
+            <dd class="col-sm-10">
+                <i class="fas fa-check text-success"></i>
+            </dd>
+        }
+        else
+        {
+            <dd class="col-sm-10">
+                <i class="fas fa-times text-danger"></i>
+            </dd>
+        }
+    </dl>
+</div>
+<div>
+    <a class="btn btn-warning" asp-action="Edit" asp-route-id="@Model.Id">تعديل</a>
+    <a class="btn btn-info" asp-action="Index">الرجوع للقائمة</a>
+</div>

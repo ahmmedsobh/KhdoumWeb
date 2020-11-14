@@ -1,0 +1,67 @@
+﻿@model IEnumerable<KhdoumWeb.Models.Item>
+
+
+
+<table class="table table-striped table-bordered text-center" id="tbl">
+    <thead>
+        <tr>
+            <th>
+
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.State)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                @if (item.ImgUrl == "false")
+                {
+                    <td>
+                        <img class="tbl-img" src="~/uploads/default.png" />
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        <img class="tbl-img" src="~/uploads/Items/@item.ImgUrl" />
+                    </td>
+                }
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                @if (item.State)
+                {
+                    <td>
+                        <i class="fas fa-check text-success"></i>
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        <i class="fas fa-times text-danger"></i>
+                    </td>
+                }
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    <a class="btn btn-warning tbl-btn" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-pen"></i></a>
+                    <a class="btn btn-info tbl-btn" asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-info"></i></a>
+                    <a class="btn btn-danger tbl-btn" asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-trash"></i></a>
+                    <a class="btn btn-secondary tbl-btn" asp-action="AddCategories" asp-route-id="@item.Id" data-toggle="modal" data-target=".bd-example-modal-lg" data-ajax="true" data-ajax-update="#ManageCategories" data-ajax-mode="replace" data-ajax-success="AddCategorySuccess()"><abbr title="اضافة تصنيف رئيسى"><i class="fas fa-layer-group"></i></abbr></a>
+                    <a class="btn btn-secondary tbl-btn" asp-action="AddSupCategories" asp-route-id="@item.Id" data-toggle="modal" data-target=".bd-example-modal-lg" data-ajax="true" data-ajax-update="#ManageCategories" data-ajax-mode="replace" data-ajax-success="AddSupCategorySuccess()"><abbr title="اضافة تصنيف فرعى"><i class="fas fa-layer-group"></i></abbr></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,27 @@
+﻿@model KhdoumWeb.Models.Governorate
+
+@{
+    ViewData["Title"] = "حذف محافظة";
+    Layout = "~/Views/Shared/DashBoardLayout.cshtml";
+}
+
+<h1>حذف محافظة</h1>
+
+<h3>هل أنت متأكد من عملية الحذف</h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="حذف" class="btn btn-danger" />
+        <a class="btn badge-info" asp-action="Index">الرجوع للقائمة</a>
+    </form>
+</div>

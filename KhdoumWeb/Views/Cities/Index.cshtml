@@ -1,0 +1,97 @@
+﻿@model IEnumerable<KhdoumWeb.Models.City>
+
+@{
+    ViewData["Title"] = "قائمة المدن";
+    Layout = "~/Views/Shared/DashBoardLayout.cshtml";
+}
+
+<h1>قائمة المدن</h1>
+
+<p>
+    <a class="btn btn-primary" asp-action="Create">اضافة مدينة جديدة</a>
+</p>
+<table class="table table-striped table-bordered text-center" id="tbl">
+    <thead>
+        <tr>
+            <th class="col-lg-4">
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th class="col-lg-4">
+                @Html.DisplayNameFor(model => model.Governorate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Governorate.Name)
+                </td>
+                <td>
+                    <a class="btn btn-warning tbl-btn" asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-pen"></i></a>
+                    <a class="btn btn-info tbl-btn" asp-action="Details" asp-route-id="@item.Id"><i class="fas fa-info"></i></a>
+                    <a class="btn btn-danger tbl-btn" asp-action="Delete" asp-route-id="@item.Id"><i class="fas fa-trash"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+
+
+            var datatable;
+            datatable = $('#tbl').DataTable({
+                language: {
+                    "sEmptyTable": "ليست هناك بيانات متاحة في الجدول",
+                    "sLoadingRecords": "جارٍ التحميل...",
+                    "sProcessing": "جارٍ التحميل...",
+                    "sLengthMenu": "أظهر _MENU_ مدن",
+                    "sZeroRecords": "لم يعثر على أى مدن",
+                    "sInfo": "إظهار _START_ إلى _END_ من أصل _TOTAL_ مدن",
+                    "sInfoEmpty": "يعرض 0 إلى 0 من أصل 0 سجل",
+                    "sInfoFiltered": "(منتقاة من مجموع _MAX_ مُدخل)",
+                    "sInfoPostFix": "",
+                    "sSearch": "ابحث:",
+                    "sUrl": "",
+                    "oPaginate": {
+                        "sFirst": "الأول",
+                        "sPrevious": "السابق",
+                        "sNext": "التالي",
+                        "sLast": "الأخير"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": تفعيل لترتيب العمود تصاعدياً",
+                        "sSortDescending": ": تفعيل لترتيب العمود تنازلياً"
+                    }
+                },
+                //{
+                //    "search": "إبحث",
+                //    "lengthMenu": "أظهر _MENU_ شركات",
+                //    "zeroRecords": "لايوجد شركات",
+                //    //"info": "يوجد _PAGE_ من _PAGES_ شركات",
+                //    "infoEmpty": "لايوجد شركات",
+                //    "infoFiltered": "(بحث  من _MAX_ كل الشركات)"
+                //},
+                order: [0, 'asc'],
+                dom: 'Bflrtip',
+                buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+            });
+
+
+            //On Success
+            function OnSuccess() {
+                $('#myModal').hide();
+            }
+
+        });
+    </script>
+
+}

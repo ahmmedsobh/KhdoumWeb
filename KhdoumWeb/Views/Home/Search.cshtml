@@ -1,0 +1,11 @@
+﻿@model IEnumerable<KhdoumWeb.Models.Item>
+@{
+    ViewData["Title"] = "بحث";
+}
+
+<br />
+<h4>نتيجة البحث : </h4>
+<hr />
+<partial model="Model" name="~/Views\Home\ItemsList.cshtml" />
+<a asp-action="Index" style="width:100%;border-radius:0" class="btn iqlaa3-btn">الرجوع للرئيسية</a>
+

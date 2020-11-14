@@ -1,0 +1,72 @@
+﻿@model IEnumerable<KhdoumWeb.Models.SubCategory>
+
+
+<h1>قائمة التصنيفات</h1>
+<table class="table table-striped table-bordered text-center" id="supcatstbl">
+    <thead>
+        <tr>
+            <th>
+
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                @if (item.ImgUrl == "false")
+                {
+                    <td>
+                        <img class="tbl-img" src="~/uploads/default.png" />
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        <img class="tbl-img" src="~/uploads/categories/@item.ImgUrl" />
+                    </td>
+                }
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+
+                <td>
+                    @{
+                        string Id = "btn" + item.Id;
+                    }
+                    <form asp-action="AddSupCategories" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="Finished(@item.Id)">
+                        <input type="hidden" name="ItemId" style="width:60px" value="@ViewBag.ItemId" />
+                        <input type="hidden" name="CategoryId" style="width:60px" value="@item.Id" />
+
+                        @if (item.ItemsSupCategories != null)
+                        {
+
+                            if (item.ItemsSupCategories.FirstOrDefault(ic => ic.ItemId == ViewBag.ItemId) != null)
+                            {
+                                <button id="@Id" type="submit" class="btn btn-danger btn-tbl"><i class="fas fa-trash"></i></button>
+                            }
+                            else
+                            {
+                                <button id="@Id" type="submit" class="btn btn-primary btn-tbl"><i class="fas fa-plus"></i></button>
+                            }
+                        }
+
+
+                    </form>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+
+
+
+

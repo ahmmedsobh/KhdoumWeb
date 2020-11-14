@@ -1,0 +1,158 @@
+﻿@model KhdoumWeb.Models.Item
+
+@{
+    ViewData["Title"] = "تعديل عنصر";
+    Layout = "~/Views/Shared/DashBoardLayout.cshtml";
+}
+
+<h1>تعديل عنصر</h1>
+<div>
+    <hr />
+    <dl class="row">
+        <dt>
+
+        </dt>
+        @if (Model.ImgUrl == "false")
+        {
+            <dd class="col-sm-12">
+                <img class="tbl-img" src="~/uploads/default.png" />
+            </dd>
+        }
+        else
+        {
+            <dd class="col-sm-12">
+                <img class="tbl-img" src="~/uploads/Items/@Model.ImgUrl" />
+            </dd>
+        }
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.Raw(Model.Description)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Address)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Address)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Privacy)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Privacy)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ShortLink)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ShortLink)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ClicksCount)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ClicksCount)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ViewsCount)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ViewsCount)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.RatingValues)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RatingValues)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.RatingCount)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.RatingCount)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.MembersCount)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.MembersCount)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.FavoriteCount)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.FavoriteCount)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Sorting)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Sorting)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IsPaid)
+        </dt>
+        @if (Model.IsPaid)
+        {
+            <dd class="col-sm-10">
+                <i class="fas fa-check text-success"></i>
+            </dd>
+        }
+        else
+        {
+            <dd class="col-sm-10">
+                <i class="fas fa-times text-danger"></i>
+            </dd>
+        }
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Member)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Member.FullName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.City)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.City.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.State)
+        </dt>
+        @if (Model.State)
+        {
+            <dd class="col-sm-10">
+                <i class="fas fa-check text-success"></i>
+            </dd>
+        }
+        else
+        {
+            <dd class="col-sm-10">
+                <i class="fas fa-times text-danger"></i>
+            </dd>
+        }
+    </dl>
+</div>
+<div>
+    <a class="btn btn-warning" asp-action="Edit" asp-route-id="@Model.Id">تعديل</a>
+    <a class="btn btn-info" asp-action="Index">الرجوع للقائمة</a>
+</div>

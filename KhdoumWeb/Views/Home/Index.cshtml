@@ -1,0 +1,81 @@
+﻿@model KhdoumWeb.Models.ViewModels.HomeModelView
+
+@{
+    ViewData["Title"] = "الرئيسية";
+    int LoadItemsCount = Model.Items.Count + 9;
+}
+<style>
+    .main {
+        width: 100%;
+    }
+
+    .inner {
+        width: 70%;
+        margin: 100px auto 50px;
+    }
+
+    .input-group-style {
+        height: 47px;
+    }
+
+    .input-group-append-style {
+        width: 11%;
+        z-index: 1;
+    }
+
+    .search {
+        width: 89%;
+        border: 0;
+        padding: 10px;
+    }
+
+    .iqlaa3-btn {
+        background-color: white;
+        color: #007eb2;
+    }
+
+        .iqlaa3-btn:hover {
+            background-color: #007eb2;
+            color: white;
+        }
+</style>
+<div class="main">
+    <div class="inner">
+        <form asp-action="Search" method="get" id="myForm" target="_blank">
+            <div class="input-group input-group-style">
+                <input type="search" name="q" class="search" placeholder="ابحث عن أى شئ" />
+                <div class="input-group-append input-group-append-style">
+                    <button style=" border-top-left-radius: .25rem; border-bottom-left-radius: .25rem;" type="submit" class=" btn iqlaa3-btn"><i style="font-size:25px" class="fas fa-search"></i></button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div class="MainCategories">
+    <div class="row">
+        @foreach (var item in Model.Categories)
+        {
+            //if (item.ItemsCategories.Count() != 0)
+            //{
+            <div class="col-lg-3 col-md-12 mb-4">
+                <div class="Category">
+                    <a asp-action="SubCategories" asp-route-id="@item.Id" class="Lnk">
+                        <div class="CategoryImg">
+                            <img src="~/uploads/categories/@item.ImgUrl" />
+                        </div>
+                        <div class="CategoryTitle">
+                            <h6>@item.Name</h6>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            @*}*@
+        }
+    </div>
+</div>
+
+<partial model="Model.Items" name="~/Views\Home\ItemsList.cshtml" />
+<a asp-action="Index" asp-route-LoadItemsCount="@LoadItemsCount" data-ajax="true" data-ajax-method="post" style="width:100%;border-radius:0" class="btn iqlaa3-btn">عرض المزيد</a>
+

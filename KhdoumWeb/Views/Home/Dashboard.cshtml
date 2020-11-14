@@ -1,0 +1,68 @@
+﻿@model KhdoumWeb.Models.Member
+@{
+    ViewData["Title"] = "لوحة التحكم";
+}
+
+<h3>لوحة التحكم</h3>
+<p> مرحبا @Model.FullName</p>
+<hr />
+<h6>الاحصاءات</h6>
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">عدد الخدمات</h5>
+                <p class="card-text">@Model.Items.Count</p>
+            </div>
+        </div>
+        <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">عدد المشاهدات</h5>
+                <p class="card-text"></p>
+            </div>
+        </div>
+        <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">عدد النقرات على طلب الخدمة</h5>
+                <p class="card-text"></p>
+            </div>
+        </div>
+        <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">عدد العملاء</h5>
+                <p class="card-text"></p>
+            </div>
+        </div>
+        <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">متوسط التقييمات</h5>
+                <p class="card-text"></p>
+            </div>
+        </div>
+        <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">عدد من وضعوك فى المفضلة</h5>
+                <p class="card-text"></p>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts
+{
+    <script>
+
+        $(function () {
+            if (localStorage["UserName"] == null || localStorage["UserName"] == "" && localStorage["Password"] == null || localStorage["Password"] == "") {
+                localStorage["UserName"] = '@Model.Phone';
+                localStorage["Password"] = '@Model.Password';
+                console.log("true");
+            }
+            else {
+                console.log("false");
+            }
+
+        });
+    </script>
+}
+
+
