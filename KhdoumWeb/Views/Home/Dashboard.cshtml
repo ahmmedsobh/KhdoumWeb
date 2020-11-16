@@ -1,51 +1,90 @@
 ﻿@model KhdoumWeb.Models.Member
 @{
     ViewData["Title"] = "لوحة التحكم";
-}
 
+
+}
+<br />
+<br />
 <h3>لوحة التحكم</h3>
 <p> مرحبا @Model.FullName</p>
 <hr />
-<h6>الاحصاءات</h6>
+<h5>الاحصاءات العامة</h5>
 <div class="row">
     <div class="col-lg-4">
         <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
             <div class="card-body">
-                <h5 class="card-title">عدد الخدمات</h5>
-                <p class="card-text">@Model.Items.Count</p>
-            </div>
-        </div>
-        <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">عدد المشاهدات</h5>
-                <p class="card-text"></p>
-            </div>
-        </div>
-        <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">عدد النقرات على طلب الخدمة</h5>
-                <p class="card-text"></p>
-            </div>
-        </div>
-        <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">عدد العملاء</h5>
-                <p class="card-text"></p>
-            </div>
-        </div>
-        <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">متوسط التقييمات</h5>
-                <p class="card-text"></p>
-            </div>
-        </div>
-        <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">عدد من وضعوك فى المفضلة</h5>
-                <p class="card-text"></p>
+                <h5 class="card-title">اجمالى الخدمات</h5>
+                <p class="card-text text-center">@Model.Items.Count</p>
             </div>
         </div>
     </div>
+    <div class="col-lg-4">
+        <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">اجمالى المشاهدات</h5>
+                <p class="card-text text-center">@Model.Items.Select(i=>i.ViewsCount).Sum()</p>
+            </div>
+        </div>
+    </div>
+  
+    <div class="col-lg-4">
+        <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">اجمالى النقرات</h5>
+                <p class="card-text text-center">@Model.Items.Select(i => i.ClicksCount).Sum()</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div>
+    <h5>خدماتك</h5>
+    <div id="tbl">
+        <div style="margin-top:50px">
+            @if (Model.Items.Count() != 0)
+            {
+                <div class="row">
+
+                    @foreach (var item in Model.Items)
+                    {
+                        string Id = $"btn{item.Id}";
+                        <div class="col-lg-4">
+                            <div class="card" style="margin-bottom:15px">
+                                @if (item.ImgUrl == "false")
+                                {
+                                    <img style="height:200px" src="~/uploads/default.png" class="card-img-top" alt="@item.Title" title="@item.Title">
+                                }
+                                else
+                                {
+                                    <img style="height:200px" src="~/uploads/Items/@item.ImgUrl" class="card-img-top" alt="@item.Title" title="@item.Title">
+                                }
+                            <div class="card-body">
+                                <h5 class="card-title"><a target="_blank" asp-action="Item" asp-route-id="@item.ShortLink" class="nav-link Lnk">@item.Title</a></h5>
+                                <p style="margin:0" class="card-text">
+                                    <a target="_blank" asp-action="Item" asp-route-id="@item.ShortLink" class="nav-link text-dark">
+                                        @Html.Raw(item.Description.Substring(0, 85))
+                                        <span>...</span>
+                                    </a>
+                                </p>
+                                @*<a asp-action="" class="btn btn-primary tbl-btn"><i class="fas fa-eye"></i></a>*@
+                                <a asp-action="ItemStatistics" asp-route-Id="@item.Id" class="btn btn-primary"><i class="fas fa-sort-amount-up"></i> احصاءات الخدمة </a>
+                            </div>
+                            </div>
+
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <p class="alert alert-warning text-center" style="border-radius:0;width:100%">لم يتم العثور على اى عناصر</p>
+            }
+
+        </div>
+    </div>
+
 </div>
 @section Scripts
 {

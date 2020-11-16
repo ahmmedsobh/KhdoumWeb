@@ -78,5 +78,10 @@ namespace KhdoumWeb.Models.ViewModels
         [DisplayName("المدينة")]
         [Required(ErrorMessage = "اختر المدينة")]
         public int CityId { get; set; }
+
+        [DisplayName("التقييم")]
+        [Required(ErrorMessage = "اختر تقييم")]
+        public int RaitingValue { get; set; }
+
     }
 }

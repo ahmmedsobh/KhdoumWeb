@@ -1,0 +1,99 @@
+﻿@model KhdoumWeb.Models.Item
+@{
+    ViewData["Title"] = "احصاءات الخدمة";
+    int? RaitAvg = 0;
+    int? RaitingCount = 0;
+    int? RatingValues = 0;
+    int? ViewsCount = 0;
+    int? ClicksCount = 0;
+    int? MembersCount = 0;
+
+    if(Model.RatingCount != null)
+    {
+        RaitingCount = Model.RatingCount;
+    }
+
+    if (Model.ViewsCount != null)
+    {
+        ViewsCount = Model.ViewsCount;
+    }
+
+    if (Model.RatingValues != null)
+    {
+        RatingValues = Model.RatingValues;
+    }
+
+    if (Model.ClicksCount != null)
+    {
+        ClicksCount = Model.ClicksCount;
+    }
+
+    if (Model.MembersCount != null)
+    {
+        MembersCount = Model.MembersCount;
+    }
+
+    if (Model.RatingValues < 0)
+    {
+        RaitAvg = Model.RatingValues / Model.RatingCount;
+    }
+}
+
+
+<br />
+<h4>احصاءات @Model.Title</h4>
+<hr />
+<div class="row">
+
+    <div class="col-lg-4">
+        <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">عدد المشاهدات</h5>
+                <p class="card-text text-center">@ViewsCount</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">عدد النقرات على طلب الخدمة</h5>
+                <p class="card-text text-center">@ClicksCount</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">عدد العملاء</h5>
+                <p class="card-text text-center">@MembersCount</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">عدد التقييمات</h5>
+                <p class="card-text text-center">@RaitingCount</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">مجموع التقييمات</h5>
+                <p class="card-text text-center">@RatingValues</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">متوسط التقييمات</h5>
+                <p class="card-text text-center">@RaitAvg</p>
+            </div>
+        </div>
+    </div>
+</div>

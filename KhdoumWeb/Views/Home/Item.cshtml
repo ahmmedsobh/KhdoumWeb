@@ -66,6 +66,24 @@
         margin-top: 5px;
     }
 
+    #TextOrderContainer {
+        margin-top: 20px;
+        height: 50px;
+    }
+
+        #TextOrderContainer a {
+            width: 100%;
+            height: 100%;
+            border-radius: 0;
+            padding-top: 10px;
+        }
+
+    #TextOrderIcon {
+        position: absolute;
+        right: 30px;
+        margin-top: 5px;
+    }
+
     #Raiting {
         background-color: white;
         height: 50px;
@@ -91,6 +109,28 @@
             right: 30px;
             margin-top: 5px;
         }
+
+    .Message{
+        background-color:white;
+        padding:10px;
+        margin-top:20px;
+    }
+    .MessageBody {
+        border: none;
+        background-color: #f3f3f3;
+        width: 100%;
+        padding: 10px;
+    }
+    .Message .MessageLnks
+    {
+        width:100%;
+    }
+
+    .Message .MessageLnks a {
+        border-radius: 0;
+        width: 100%;
+        margin: auto;
+    }
 </style>
 
 <div style="margin-top:20px">
@@ -113,7 +153,17 @@
                     <p>@Html.Raw(Model.Description)</p>
                 </div>
             </div>
+            <div id="Message" class="Message">
+                <h5 class="MessageTitle">ارسال طلبك فى رسالة</h5>
+                <textarea class="MessageBody" placeholder="اطلب طلباتك الآن عبر الواتساب أو الايميل" rows="8"></textarea>
+                <div class="MessageLnks">
+                    <a href="#" target="_blank" id="Whats" onclick="GoWhats()" class="btn btn-info">ارسال عبر الواتساب</a>
+                    <a href="#" id="Email" target="_blank" onclick="GoEmail()" class="btn btn-primary">ارسال عبر الايميل</a>
+                </div>
+                <span class="text-danger Alert"></span>
+            </div>
         </div>
+      
         <div class="col-lg-3">
 
             <div id="Raiting">
@@ -137,7 +187,6 @@
                 <p><i class="fas fa-eye"></i> @Model.ViewsCount</p>
             </div>
             <div id="UserInfo">
-                @*<a href="#" class="btn btn-primary">طلب الخدمة</a>*@
                 <div id="UserImgContainer">
                     @if (Model.ImgUrl == "false")
                     {
@@ -158,7 +207,10 @@
             }
 
             <div id="OrderContainer">
-                <a id="OrderBtn" asp-action="Order" asp-route-id="@Model.Id" data-ajax="true" data-ajax-method="post" class="btn btn-primary" type="button"><i id="OrderIcon" class="fas fa-phone"></i> <span>أطلب الآن</span></a>
+                <a id="OrderBtn" asp-action="Order" asp-route-id="@Model.Id" data-ajax="true" data-ajax-method="post" class="btn btn-primary"><i id="OrderIcon" class="fas fa-phone"></i> <span>أطلب الآن</span></a>
+            </div>
+            <div id="TextOrderContainer">
+                <a href="#Message" id="TextOrderBtn" class="btn btn-info"><i id="TextOrderIcon" class="fas fa-comment-medical"></i> <span>أرسل طلبك فى رساله</span></a>
             </div>
         </div>
     </div>
@@ -181,5 +233,32 @@
             $(this).find('span').text("@Model.Phone");
         });
     });
+
+        function GoWhats() {
+            var message = $('.MessageBody').val();
+            
+            var Title = "طلب الخدمة @Model.ShortLink";
+            if (message == '') {
+                $('.Alert').text("ادخل طلبك");
+                return;
+            }
+
+            $('#Whats').attr("href", `https://wa.me/@Model.Phone?text= ${message} (${Title})`)
+           
+            
+        }
+
+        function GoEmail() {
+            var message = $('.MessageBody').val();
+            var Title = "طلب الخدمة @Model.ShortLink";
+
+            if (message == '') {
+                $('.Alert').text("ادخل طلبك");
+                return;
+            }
+
+            $('#Email').attr("href", `mailto:@Model.Member.Email?subject= ${Title}&body=${message}`)
+            //console.log(`mailto:@Model.Member.Email?subject= ${Title}&body=${message}`);
+        }
     </script>
 }

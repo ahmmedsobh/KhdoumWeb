@@ -24,6 +24,7 @@ namespace KhdoumWeb.Models.ViewModels
         public string SubCategoryName { get; set; }
         public int CategoryId { get; set; }
         public int SubCategoryId { get; set; }
+        public string Email { get; set; }
 
 
         public Member Member { get; set; }

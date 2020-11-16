@@ -15,5 +15,7 @@ namespace KhdoumWeb.Models.ViewModels
         [Required(ErrorMessage = "من فضلك ادخل كلمة المرور")]
         [DisplayName("كلمة المرور")]
         public string Password { get; set; }
+
+        public string Url { get; set; }
     }
 }

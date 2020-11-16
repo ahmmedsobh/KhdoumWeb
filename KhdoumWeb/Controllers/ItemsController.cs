@@ -75,11 +75,27 @@ namespace KhdoumWeb.Controllers
         {
             if (ModelState.IsValid)
             {
+                
                 var Item = mapper.Map<Item>(item);
                 Item.ImgUrl = uploadImages.AddImage(item.File);
                 Item.Sorting = _context.Items.Count() + 1;
                 Item.ShortLink = RandomURL.GetURL();
                 Item.Date = DateTime.Now.ToShortDateString();
+                if(Item.RatingValues == null)
+                {
+                    Item.RatingValues = 0;
+                }
+                if(Item.RatingCount == null)
+                {
+                    Item.RatingCount = 0;
+                }
+
+                if(item.RaitingValue != 0)
+                {
+                    Item.RatingCount++;
+                    Item.RatingValues += item.RaitingValue; 
+                }
+                        
 
 
                 _context.Add(Item);
@@ -138,9 +154,26 @@ namespace KhdoumWeb.Controllers
                     item.Sorting = Item.Sorting;
                     item.Date = Item.Date;
                     string ImgUrl = Item.ImgUrl;
+                    item.RatingValues = Item.RatingValues;
+                    item.RatingCount = Item.RatingCount;
 
                     Item = mapper.Map<Item>(item);
                     Item.ImgUrl = uploadImages.UpdateImage(ImgUrl, item.File);
+
+                    if (Item.RatingValues == null)
+                    {
+                        Item.RatingValues = 0;
+                    }
+                    if (Item.RatingCount == null)
+                    {
+                        Item.RatingCount = 0;
+                    }
+
+                    if (item.RaitingValue != 0)
+                    {
+                        Item.RatingCount++;
+                        Item.RatingValues += item.RaitingValue;
+                    }
 
                     _context.Update(Item);
                     await _context.SaveChangesAsync();

@@ -60,7 +60,6 @@ namespace KhdoumWeb.Controllers
                 return NotFound();
             }
 
-
             var item = (from i in _context.Items.Include(i => i.Member)
                         from c in _context.Categories
                         from sc in _context.SubCategories
@@ -104,6 +103,7 @@ namespace KhdoumWeb.Controllers
                             SubCategoryId = sc.Id
                              ,
                             Member = i.Member
+                          
                         }).FirstOrDefault();
 
             if (FromAction == 0)
@@ -148,9 +148,9 @@ namespace KhdoumWeb.Controllers
             return RedirectToAction(nameof(Item), new { id = Item.ShortLink, FromAction = 1 });
         }
 
-        public IActionResult Login()
+        public IActionResult Login(string Url)
         {
-            return View();
+            return View(new LoginViewModel {Url=Url});
         }
         [HttpPost]
         public IActionResult Login(LoginViewModel login)
@@ -164,7 +164,15 @@ namespace KhdoumWeb.Controllers
                 }
 
                 TempData["IsLogin"] = "true";
-                return RedirectToAction(nameof(Dashboard), new { id = user.Id });
+
+                if(!string.IsNullOrEmpty(login.Url))
+                {
+                    return Redirect(login.Url);
+                }
+                else
+                {
+                    return RedirectToAction(nameof(Dashboard), new { id = user.Id });
+                }
             }
             return View(login);
         }
@@ -173,8 +181,10 @@ namespace KhdoumWeb.Controllers
         {
             if (TempData["IsLogin"] as string != "true")
             {
-                return RedirectToAction(nameof(Login));
+                return RedirectToAction(nameof(Login),new {Url=Request.Path});
             }
+
+            TempData.Keep("IsLogin");
 
             if (id == 0)
             {
@@ -183,6 +193,28 @@ namespace KhdoumWeb.Controllers
 
             var member = _context.Members.Include(m => m.Items).FirstOrDefault(m => m.Id == id);
             return View(member);
+        }
+        public IActionResult ItemStatistics(int Id=0)
+        {
+            if (TempData["IsLogin"] as string != "true")
+            {
+                return RedirectToAction(nameof(Login), new { Url = Request.Path });
+            }
+
+            TempData.Keep("IsLogin");
+
+            if (Id == 0)
+            {
+                return BadRequest();
+            }
+
+            var Item = _context.Items.FirstOrDefault(i=>i.Id == Id);
+            if(Item == null)
+            {
+                return NotFound();
+            }
+
+            return View(Item);
         }
 
         public IActionResult Privacy()
