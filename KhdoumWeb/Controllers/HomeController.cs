@@ -40,7 +40,7 @@ namespace KhdoumWeb.Controllers
                          where ic.ItemId == i.Id && ic.CategoryId == c.Id && isc.ItemId == i.Id && isc.SubCategoryId == sc.Id
                          where i.Title.Contains(q) || i.Description.Contains(q) || i.Address.Contains(q) || c.Name.Contains(q) || sc.Name.Contains(q) || i.Member.FullName.Contains(q)
                          select i).ToList();
-
+            ViewBag.q = q;
             return View(items);
         }
 
@@ -57,7 +57,7 @@ namespace KhdoumWeb.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             var item = (from i in _context.Items.Include(i => i.Member)
@@ -105,18 +105,38 @@ namespace KhdoumWeb.Controllers
                             Member = i.Member
                           
                         }).FirstOrDefault();
+            if(item == null)
+            {
+                return NotFound();
+            }
+
+            if(TempData["IsWatchIt"] as string == "true")
+            {
+                TempData.Keep("IsWatchIt");
+            }
+
 
             if (FromAction == 0)
             {
-                var ItemForViewCount = _context.Items.FirstOrDefault(i => i.ShortLink == id);
-                if (ItemForViewCount.ViewsCount == null)
+            
+                if(TempData["IsWatchIt"] as string != "true")
                 {
-                    ItemForViewCount.ViewsCount = 0;
-                }
+                    var ItemForViewCount = _context.Items.FirstOrDefault(i => i.ShortLink == id);
+                    if (ItemForViewCount.ViewsCount == null)
+                    {
+                        ItemForViewCount.ViewsCount = 0;
+                    }
 
-                ItemForViewCount.ViewsCount++;
-                _context.Update(ItemForViewCount);
-                _context.SaveChanges();
+                    ItemForViewCount.ViewsCount++;
+                    _context.Update(ItemForViewCount);
+                    _context.SaveChanges();
+                    TempData["IsWatchIt"] = "true";
+                   
+
+                       
+                }
+                
+                
             }
 
 
@@ -215,6 +235,34 @@ namespace KhdoumWeb.Controllers
             }
 
             return View(Item);
+        }
+
+        public IActionResult Favorites(string id)
+        {
+            if(string.IsNullOrEmpty(id))
+            {
+                return BadRequest();
+            }
+
+            string[] items = id.Split(",");
+            
+
+            var itemsList = new List<Item>();
+            for(var i =0;i<items.Length;i++)
+            {
+                int iid =int.Parse(items[i]);
+                var item = _context.Items.FirstOrDefault(i => i.Id == iid );
+                if(item != null)
+                {
+                    var Itm = itemsList.FirstOrDefault(im => im.Id == item.Id);
+                    if(Itm == null)
+                    {
+                        itemsList.Add(item);
+                    }
+                }
+            }
+
+            return View(itemsList);
         }
 
         public IActionResult Privacy()

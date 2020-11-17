@@ -34,6 +34,17 @@
                 color: white;
             }
 
+        .btn-outline-color2 {
+            background-color:white;
+            border-color: white;
+            color: #fd8204;
+        }
+
+            .btn-outline-color2:hover {
+                background-color: #fd8204;
+                border-color: #fd8204;
+                color: white;
+            }
 
         .btn-blue:hover {
             background-color: #3c11d1;
@@ -149,10 +160,12 @@
                 <div class=" d-sm-inline-flex flex-sm-row-reverse">
                     @*<partial name="_LoginPartial" />*@
                     <ul class="navbar-nav">
-                        <li class="nav-item">
+                        <li style="margin-left: 10px;" class="nav-item">
                             <a class="btn btn-color2 text-white"><i class="fas fa-plus"></i> <span>اضف نشاطك</span> </a>
                         </li>
-                        
+                        <li class="nav-item">
+                            <a href="#" id="FavoriteLink" onclick="GetFavorites()" class="btn btn-outline-color2"><i class="fas fa-heart"></i> <span>المفضلة</span> </a>
+                        </li>
                     </ul>
                     
                 </div>
@@ -178,7 +191,50 @@
     <script src="https://kit.fontawesome.com/ef95329904.js" crossorigin="anonymous"></script>
     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5ece7c650c8b6e5f"></script>
     <script src="~/js/caleandar.min.js"></script>
+    <script src="//code.tidio.co/zq3epalba2ghwuf9u8apjfk8wzkktpo9.js" async></script>
     <script>
+        function AddToFavorite(id) {
+            items = JSON.parse(localStorage.getItem("items") || "[]");
+            if (!items.includes(id)) {
+                items.push(id);
+                localStorage.setItem("items", JSON.stringify(items));
+                $("#btn" + id).removeClass("btn-primary");
+                $("#btn" + id).addClass("btn-danger");
+
+            }
+            else {
+                var index = items.indexOf(id);
+                items.splice(index, 1);
+                localStorage.setItem("items", JSON.stringify(items));
+                $("#btn" + id).addClass("btn-primary");
+                $("#btn" + id).removeClass("btn-danger");
+            }
+
+            console.log(items);
+        }
+
+        function GetFavorites() {
+            items = JSON.parse(localStorage.getItem("items") || "[]");
+            $('#FavoriteLink').attr("href", `/home/Favorites/${items}`);
+        }
+
+        $(function () {
+            items = JSON.parse(localStorage.getItem("items") || "[]");
+            
+            $('#tbl button').each(function () {
+                id = $(this).attr("name");
+                if (items.includes(Number(id))) {
+                    $("#btn" + id).attr("class", "btn btn-danger");
+                }
+                console.log(items);
+                console.log(items.includes(id));
+                console.log(id);
+
+            });
+
+            
+
+        });
     </script>
     @RenderSection("Scripts", required: false)
 </body>

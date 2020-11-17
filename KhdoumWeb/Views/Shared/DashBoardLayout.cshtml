@@ -83,7 +83,7 @@
         <input class="form-control form-control-dark w-100" type="text" placeholder="ابحث" aria-label="Search">
         <ul class="navbar-nav px-3">
             <li class="nav-item text-nowrap">
-                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("LoginId", "students", new { area = "" })">
+                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Home", "Index", new { area = "" })">
                     <button type="submit" class="nav-link btn btn-link ">تسجيل الخروج</button>
                 </form>
             </li>

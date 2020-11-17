@@ -12,7 +12,7 @@
                 {
                     string Id = $"btn{item.Id}";
                     <div class="col-lg-4">
-                        <div class="card" style="margin-bottom:15px">
+                        <div class="card" style="margin-bottom:15px;height: 475px;">
                             @if (item.ImgUrl == "false")
                             {
                                 <img style="height:200px" src="~/uploads/default.png" class="card-img-top" alt="@item.Title" title="@item.Title">
@@ -21,15 +21,16 @@
                             {
                                 <img style="height:200px" src="~/uploads/Items/@item.ImgUrl" class="card-img-top" alt="@item.Title" title="@item.Title">
                             }
-                            <div class="card-body">
-                                <h5 class="card-title"><a target="_blank" asp-action="Item" asp-route-id="@item.ShortLink" class="nav-link Lnk">@item.Title</a></h5>
-                                <p style="margin:0" class="card-text">
-                                    <a target="_blank" asp-action="Item" asp-route-id="@item.ShortLink" class="nav-link text-dark">
-                                        @Html.Raw(item.Description.Substring(0, 85))
-                                        <span>...</span>
-                                    </a>
-                                </p>
-                            </div>
+                        <div class="card-body">
+                            <h5 class="card-title"><a target="_blank" asp-action="Item" asp-route-id="@item.ShortLink" class="nav-link Lnk">@item.Title</a></h5>
+                            <p style="margin:0" class="card-text">
+                                <a target="_blank" asp-action="Item" asp-route-id="@item.ShortLink" class="nav-link text-dark">
+                                    @Html.Raw(item.Description.Substring(0, 85)))
+                                    <span>...</span>
+                                </a>
+                            </p>
+                            <button onclick="AddToFavorite(@item.Id)" name="@item.Id" id="@Id" class="btn btn-primary"><i class="fas fa-heart text-white"></i></button>
+                        </div>
                         </div>
                     </div>
                 }
@@ -42,3 +43,10 @@
 
     </div>
 </div>
+
+@section Scripts
+{
+    <script>
+        
+    </script>
+}
