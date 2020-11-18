@@ -132,9 +132,59 @@
         width: 100%;
         margin: auto;
     }
+
+    #Share {
+        margin-top: 20px;
+        height: 50px;
+    }
+
+        #Share a {
+            width: 100%;
+            height: 100%;
+            border-radius: 0;
+            padding-top: 10px;
+        }
+
+    #ShareBtnIcon {
+        position: absolute;
+        right: 30px;
+        margin-top: 5px;
+    }
+
+    .HeaderAd {
+        background-color: #007eb2;
+        color:white;
+        height:100px;
+        margin-bottom:20px;
+    }
+
+    .SideAd {
+        background-color: #007eb2;
+        color: white;
+        height: 300px;
+        margin-top: 20px;
+        text-align:center;
+    }
+
+    .ContentAd {
+        background-color: #007eb2;
+        color: white;
+        height: 300px;
+        margin-top: 20px;
+        text-align: center;
+    }
+
+
 </style>
 
 <div style="margin-top:20px">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="HeaderAd">
+                <h3 style="padding-top:30px" class="text-center">مساحه اعلانيه</h3>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-lg-9">
             <div id="ItemMain">
@@ -162,6 +212,9 @@
                     <a href="#Message" id="Email" target="_self" onclick="GoEmail()" class="btn btn-primary">ارسال عبر الايميل</a>
                 </div>
                 <span class="text-danger Alert"></span>
+            </div>
+            <div  class="ContentAd">
+               <h3 style="padding-top:130px">مساحة اعلانيه</h3>
             </div>
         </div>
       
@@ -214,6 +267,32 @@
             <div id="TextOrderContainer">
                 <a href="#Message" id="TextOrderBtn" class="btn btn-info"><i id="TextOrderIcon" class="fas fa-comment-medical"></i> <span>أرسل طلبك فى رساله</span></a>
             </div>
+            <div id="Share">
+                <a href="#" id="ShareBtn" data-toggle="modal" data-target=".bd-example-modal-lg" class="btn btn-warning"><i id="ShareBtnIcon" class="fas fa-share-alt"></i> <span>مشاركة</span></a>
+            </div>
+            <div class="SideAd">
+                <h3 style="padding-top:130px;">مساحة اعلانيه</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="myModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">مشاركة الخدمة</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div id="ManageCategories" class="modal-body">
+                <div class="addthis_inline_share_toolbox"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
+            </div>
+
         </div>
     </div>
 </div>
