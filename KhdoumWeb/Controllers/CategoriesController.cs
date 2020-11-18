@@ -10,9 +10,11 @@ using KhdoumWeb.Models;
 using KhdoumWeb.Helpers;
 using AutoMapper;
 using KhdoumWeb.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace KhdoumWeb.Controllers
 {
+    [Authorize]
     public class CategoriesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -30,25 +32,42 @@ namespace KhdoumWeb.Controllers
         // GET: Categories
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Categories.ToListAsync());
+            try
+            {
+                return View(await _context.Categories.ToListAsync());
+
+            }
+            catch
+            {
+                return RedirectToAction(nameof(Index),"Home");
+            }
+
         }
 
         // GET: Categories/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (category == null)
+                var category = await _context.Categories
+                    .FirstOrDefaultAsync(m => m.Id == id);
+                if (category == null)
+                {
+                    return NotFound();
+                }
+
+                return View(category);
+            }
+            catch
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
-
-            return View(category);
+            
         }
 
         // GET: Categories/Create
@@ -64,33 +83,49 @@ namespace KhdoumWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CategoryViewModel category)
         {
-            if (ModelState.IsValid)
+            try
             {
-                Category Category = mapper.Map<Category>(category);
-                Category.ImgUrl = uploadImages.AddImage(category.File);
+                if (ModelState.IsValid)
+                {
+                    Category Category = mapper.Map<Category>(category);
+                    Category.ImgUrl = uploadImages.AddImage(category.File);
 
-                _context.Add(Category);
-                await _context.SaveChangesAsync();
+                    _context.Add(Category);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(category);
+            }
+            catch
+            {
                 return RedirectToAction(nameof(Index));
             }
-            return View(category);
+           
         }
 
         // GET: Categories/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var category = await _context.Categories.FindAsync(id);
-            if (category == null)
-            {
-                return NotFound();
+                var category = await _context.Categories.FindAsync(id);
+                if (category == null)
+                {
+                    return NotFound();
+                }
+                var CategoryViewModel = mapper.Map<CategoryViewModel>(category);
+                return View(CategoryViewModel);
             }
-            var CategoryViewModel = mapper.Map<CategoryViewModel>(category);
-            return View(CategoryViewModel);
+            catch
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            
         }
 
         // POST: Categories/Edit/5
@@ -100,6 +135,7 @@ namespace KhdoumWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, CategoryViewModel category)
         {
+          
             if (id != category.Id)
             {
                 return NotFound();
@@ -137,19 +173,27 @@ namespace KhdoumWeb.Controllers
         // GET: Categories/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (category == null)
+                var category = await _context.Categories
+                    .FirstOrDefaultAsync(m => m.Id == id);
+                if (category == null)
+                {
+                    return NotFound();
+                }
+
+                return View(category);
+            }
+            catch
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
-
-            return View(category);
+           
         }
 
         // POST: Categories/Delete/5
@@ -157,11 +201,19 @@ namespace KhdoumWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
-            uploadImages.DeleteImage(category.ImgUrl);
-            _context.Categories.Remove(category);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                var category = await _context.Categories.FindAsync(id);
+                uploadImages.DeleteImage(category.ImgUrl);
+                _context.Categories.Remove(category);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            
         }
 
         private bool CategoryExists(int id)

@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using KhdoumWeb.Data;
 using KhdoumWeb.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace KhdoumWeb.Controllers
 {
+    [Authorize]
     public class CitiesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -22,34 +24,58 @@ namespace KhdoumWeb.Controllers
         // GET: Cities
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Cities.Include(c => c.Governorate);
-            return View(await applicationDbContext.ToListAsync());
+            try
+            {
+                var applicationDbContext = _context.Cities.Include(c => c.Governorate);
+                return View(await applicationDbContext.ToListAsync());
+            }
+            catch
+            {
+                return RedirectToAction(nameof(Index),"Home");
+            }
+            
         }
 
         // GET: Cities/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var city = await _context.Cities
-                .Include(c => c.Governorate)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (city == null)
+                var city = await _context.Cities
+                    .Include(c => c.Governorate)
+                    .FirstOrDefaultAsync(m => m.Id == id);
+                if (city == null)
+                {
+                    return NotFound();
+                }
+
+                return View(city);
+            }
+            catch
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
-
-            return View(city);
+          
         }
 
         // GET: Cities/Create
         public IActionResult Create()
         {
-            ViewData["GovernorateId"] = new SelectList(_context.Governorates, "Id", "Name");
-            return View();
+            try
+            {
+                ViewData["GovernorateId"] = new SelectList(_context.Governorates, "Id", "Name");
+                return View();
+            }
+            catch
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            
         }
 
         // POST: Cities/Create
@@ -59,31 +85,47 @@ namespace KhdoumWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,GovernorateId")] City city)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(city);
-                await _context.SaveChangesAsync();
+                if (ModelState.IsValid)
+                {
+                    _context.Add(city);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                ViewData["GovernorateId"] = new SelectList(_context.Governorates, "Id", "Name", city.GovernorateId);
+                return View(city);
+            }
+            catch
+            {
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GovernorateId"] = new SelectList(_context.Governorates, "Id", "Name", city.GovernorateId);
-            return View(city);
+           
         }
 
         // GET: Cities/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var city = await _context.Cities.FindAsync(id);
-            if (city == null)
-            {
-                return NotFound();
+                var city = await _context.Cities.FindAsync(id);
+                if (city == null)
+                {
+                    return NotFound();
+                }
+                ViewData["GovernorateId"] = new SelectList(_context.Governorates, "Id", "Name", city.GovernorateId);
+                return View(city);
             }
-            ViewData["GovernorateId"] = new SelectList(_context.Governorates, "Id", "Name", city.GovernorateId);
-            return View(city);
+            catch
+            {
+                return RedirectToAction(nameof(Index));
+            }
+           
         }
 
         // POST: Cities/Edit/5
@@ -93,6 +135,7 @@ namespace KhdoumWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,GovernorateId")] City city)
         {
+            
             if (id != city.Id)
             {
                 return NotFound();
@@ -125,20 +168,28 @@ namespace KhdoumWeb.Controllers
         // GET: Cities/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var city = await _context.Cities
-                .Include(c => c.Governorate)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (city == null)
+                var city = await _context.Cities
+                    .Include(c => c.Governorate)
+                    .FirstOrDefaultAsync(m => m.Id == id);
+                if (city == null)
+                {
+                    return NotFound();
+                }
+
+                return View(city);
+            }
+            catch
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
-
-            return View(city);
+          
         }
 
         // POST: Cities/Delete/5
@@ -146,10 +197,18 @@ namespace KhdoumWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var city = await _context.Cities.FindAsync(id);
-            _context.Cities.Remove(city);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                var city = await _context.Cities.FindAsync(id);
+                _context.Cities.Remove(city);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            
         }
 
         private bool CityExists(int id)

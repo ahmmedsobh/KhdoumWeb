@@ -32,16 +32,24 @@ namespace KhdoumWeb.Controllers
 
         public IActionResult Search(string q)
         {
-            var items = (from i in _context.Items.Include(i => i.Member)
-                         from c in _context.Categories
-                         from sc in _context.SubCategories
-                         from ic in _context.ItemsCategories
-                         from isc in _context.ItemsSupCategories
-                         where ic.ItemId == i.Id && ic.CategoryId == c.Id && isc.ItemId == i.Id && isc.SubCategoryId == sc.Id
-                         where i.Title.Contains(q) || i.Description.Contains(q) || i.Address.Contains(q) || c.Name.Contains(q) || sc.Name.Contains(q) || i.Member.FullName.Contains(q)
-                         select i).ToList();
-            ViewBag.q = q;
-            return View(items);
+            try
+            {
+                var items = (from i in _context.Items.Include(i => i.Member)
+                             from c in _context.Categories
+                             from sc in _context.SubCategories
+                             from ic in _context.ItemsCategories
+                             from isc in _context.ItemsSupCategories
+                             where ic.ItemId == i.Id && ic.CategoryId == c.Id && isc.ItemId == i.Id && isc.SubCategoryId == sc.Id
+                             where i.Title.Contains(q) || i.Description.Contains(q) || i.Address.Contains(q) || c.Name.Contains(q) || sc.Name.Contains(q) || i.Member.FullName.Contains(q)
+                             select i).ToList();
+                ViewBag.q = q;
+                return View(items);
+            }
+            catch
+            {
+                return RedirectToAction(nameof(Index));
+            }
+          
         }
 
         public IActionResult SubCategories(int id, int SubId = 0)
@@ -59,88 +67,95 @@ namespace KhdoumWeb.Controllers
             {
                 return BadRequest();
             }
-
-            var item = (from i in _context.Items.Include(i => i.Member)
-                        from c in _context.Categories
-                        from sc in _context.SubCategories
-                        from ic in _context.ItemsCategories
-                        from isc in _context.ItemsSupCategories
-                        where ic.ItemId == i.Id && ic.CategoryId == c.Id && isc.ItemId == i.Id && isc.SubCategoryId == sc.Id && i.ShortLink == id
-                        select new ItemDetailsViewModel
-                        {
-                            Id = i.Id
-                             ,
-                            Title = i.Title
-                             ,
-                            Date = i.Date
-                             ,
-                            ImgUrl = i.ImgUrl
-                             ,
-                            Description = i.Description
-                             ,
-                            Address = i.Address
-                             ,
-                            ShortLink = i.ShortLink
-                             ,
-                            ViewsCount = i.ViewsCount
-                             ,
-                            RatingValues = i.RatingValues
-                             ,
-                            RatingCount = i.RatingCount
-                             ,
-                            Price = i.Price
-                             ,
-                            IsPaid = i.IsPaid
-                             ,
-                            Phone = i.Phone
-                             ,
-                            CategoryName = c.Name
-                             ,
-                            SubCategoryName = sc.Name
-                             ,
-                            CategoryId = c.Id
-                             ,
-                            SubCategoryId = sc.Id
-                             ,
-                            Member = i.Member
-                          
-                        }).FirstOrDefault();
-            if(item == null)
+            try
             {
-                return NotFound();
-            }
+                var item = (from i in _context.Items.Include(i => i.Member)
+                            from c in _context.Categories
+                            from sc in _context.SubCategories
+                            from ic in _context.ItemsCategories
+                            from isc in _context.ItemsSupCategories
+                            where ic.ItemId == i.Id && ic.CategoryId == c.Id && isc.ItemId == i.Id && isc.SubCategoryId == sc.Id && i.ShortLink == id
+                            select new ItemDetailsViewModel
+                            {
+                                Id = i.Id
+                                 ,
+                                Title = i.Title
+                                 ,
+                                Date = i.Date
+                                 ,
+                                ImgUrl = i.ImgUrl
+                                 ,
+                                Description = i.Description
+                                 ,
+                                Address = i.Address
+                                 ,
+                                ShortLink = i.ShortLink
+                                 ,
+                                ViewsCount = i.ViewsCount
+                                 ,
+                                RatingValues = i.RatingValues
+                                 ,
+                                RatingCount = i.RatingCount
+                                 ,
+                                Price = i.Price
+                                 ,
+                                IsPaid = i.IsPaid
+                                 ,
+                                Phone = i.Phone
+                                 ,
+                                CategoryName = c.Name
+                                 ,
+                                SubCategoryName = sc.Name
+                                 ,
+                                CategoryId = c.Id
+                                 ,
+                                SubCategoryId = sc.Id
+                                 ,
+                                Member = i.Member
 
-            if(TempData["IsWatchIt"] as string == "true")
-            {
-                TempData.Keep("IsWatchIt");
-            }
-
-
-            if (FromAction == 0)
-            {
-            
-                if(TempData["IsWatchIt"] as string != "true")
+                            }).FirstOrDefault();
+                if (item == null)
                 {
-                    var ItemForViewCount = _context.Items.FirstOrDefault(i => i.ShortLink == id);
-                    if (ItemForViewCount.ViewsCount == null)
+                    return NotFound();
+                }
+
+                if (TempData["IsWatchIt"] as string == "true")
+                {
+                    TempData.Keep("IsWatchIt");
+                }
+
+
+                if (FromAction == 0)
+                {
+
+                    if (TempData["IsWatchIt"] as string != "true")
                     {
-                        ItemForViewCount.ViewsCount = 0;
+                        var ItemForViewCount = _context.Items.FirstOrDefault(i => i.ShortLink == id);
+                        if (ItemForViewCount.ViewsCount == null)
+                        {
+                            ItemForViewCount.ViewsCount = 0;
+                        }
+
+                        ItemForViewCount.ViewsCount++;
+                        _context.Update(ItemForViewCount);
+                        _context.SaveChanges();
+                        TempData["IsWatchIt"] = "true";
+
+
+
                     }
 
-                    ItemForViewCount.ViewsCount++;
-                    _context.Update(ItemForViewCount);
-                    _context.SaveChanges();
-                    TempData["IsWatchIt"] = "true";
-                   
 
-                       
                 }
-                
-                
+
+
+                return View(item);
             }
-
-
-            return View(item);
+            catch
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            
         }
 
         public IActionResult Order(int id)
@@ -150,22 +165,30 @@ namespace KhdoumWeb.Controllers
                 return NotFound();
             }
 
-            var Item = _context.Items.FirstOrDefault(i => i.Id == id);
-
-            if (Item == null)
+            try
             {
-                return NotFound();
+                var Item = _context.Items.FirstOrDefault(i => i.Id == id);
+
+                if (Item == null)
+                {
+                    return NotFound();
+                }
+                if (Item.ClicksCount == null)
+                {
+                    Item.ClicksCount = 0;
+                }
+
+                Item.ClicksCount++;
+                _context.Update(Item);
+                _context.SaveChanges();
+
+                return RedirectToAction(nameof(Item), new { id = Item.ShortLink, FromAction = 1 });
             }
-            if (Item.ClicksCount == null)
+            catch
             {
-                Item.ClicksCount = 0;
+                return RedirectToAction(nameof(Index));
             }
-
-            Item.ClicksCount++;
-            _context.Update(Item);
-            _context.SaveChanges();
-
-            return RedirectToAction(nameof(Item), new { id = Item.ShortLink, FromAction = 1 });
+           
         }
 
         public IActionResult Login(string Url)
@@ -175,94 +198,126 @@ namespace KhdoumWeb.Controllers
         [HttpPost]
         public IActionResult Login(LoginViewModel login)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var user = _context.Members.FirstOrDefault(m => m.Phone == login.Phone || m.Email == login.Phone && m.Password == login.Password);
-                if (user == null)
+                if (ModelState.IsValid)
                 {
-                    return NotFound();
-                }
+                    var user = _context.Members.FirstOrDefault(m => m.Phone == login.Phone || m.Email == login.Phone && m.Password == login.Password);
+                    if (user == null)
+                    {
+                        return NotFound();
+                    }
 
-                TempData["IsLogin"] = "true";
+                    TempData["IsLogin"] = "true";
 
-                if(!string.IsNullOrEmpty(login.Url))
-                {
-                    return Redirect(login.Url);
+                    if (!string.IsNullOrEmpty(login.Url))
+                    {
+                        return Redirect(login.Url);
+                    }
+                    else
+                    {
+                        return RedirectToAction(nameof(Dashboard), new { id = user.Id });
+                    }
                 }
-                else
-                {
-                    return RedirectToAction(nameof(Dashboard), new { id = user.Id });
-                }
+                return View(login);
             }
-            return View(login);
+            catch
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            
         }
 
         public IActionResult Dashboard(int id = 0)
         {
-            if (TempData["IsLogin"] as string != "true")
+            try
             {
-                return RedirectToAction(nameof(Login),new {Url=Request.Path});
+                if (TempData["IsLogin"] as string != "true")
+                {
+                    return RedirectToAction(nameof(Login), new { Url = Request.Path });
+                }
+
+                TempData.Keep("IsLogin");
+
+                if (id == 0)
+                {
+                    return NotFound();
+                }
+
+                var member = _context.Members.Include(m => m.Items).FirstOrDefault(m => m.Id == id);
+                return View(member);
             }
-
-            TempData.Keep("IsLogin");
-
-            if (id == 0)
+            catch
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
-
-            var member = _context.Members.Include(m => m.Items).FirstOrDefault(m => m.Id == id);
-            return View(member);
+            
         }
         public IActionResult ItemStatistics(int Id=0)
         {
-            if (TempData["IsLogin"] as string != "true")
+            try
             {
-                return RedirectToAction(nameof(Login), new { Url = Request.Path });
+                if (TempData["IsLogin"] as string != "true")
+                {
+                    return RedirectToAction(nameof(Login), new { Url = Request.Path });
+                }
+
+                TempData.Keep("IsLogin");
+
+                if (Id == 0)
+                {
+                    return BadRequest();
+                }
+
+                var Item = _context.Items.FirstOrDefault(i => i.Id == Id);
+                if (Item == null)
+                {
+                    return NotFound();
+                }
+
+                return View(Item);
             }
-
-            TempData.Keep("IsLogin");
-
-            if (Id == 0)
+            catch
             {
-                return BadRequest();
+                return RedirectToAction(nameof(Index));
             }
-
-            var Item = _context.Items.FirstOrDefault(i=>i.Id == Id);
-            if(Item == null)
-            {
-                return NotFound();
-            }
-
-            return View(Item);
+            
         }
 
         public IActionResult Favorites(string id)
         {
-            if(string.IsNullOrEmpty(id))
+            try
             {
-                return BadRequest();
-            }
-
-            string[] items = id.Split(",");
-            
-
-            var itemsList = new List<Item>();
-            for(var i =0;i<items.Length;i++)
-            {
-                int iid =int.Parse(items[i]);
-                var item = _context.Items.FirstOrDefault(i => i.Id == iid );
-                if(item != null)
+                if (string.IsNullOrEmpty(id))
                 {
-                    var Itm = itemsList.FirstOrDefault(im => im.Id == item.Id);
-                    if(Itm == null)
+                    return BadRequest();
+                }
+
+                string[] items = id.Split(",");
+
+
+                var itemsList = new List<Item>();
+                for (var i = 0; i < items.Length; i++)
+                {
+                    int iid = int.Parse(items[i]);
+                    var item = _context.Items.FirstOrDefault(i => i.Id == iid);
+                    if (item != null)
                     {
-                        itemsList.Add(item);
+                        var Itm = itemsList.FirstOrDefault(im => im.Id == item.Id);
+                        if (Itm == null)
+                        {
+                            itemsList.Add(item);
+                        }
                     }
                 }
-            }
 
-            return View(itemsList);
+                return View(itemsList);
+            }
+            catch
+            {
+                return RedirectToAction(nameof(Index));
+            }
+           
         }
 
         public IActionResult Privacy()
@@ -278,25 +333,28 @@ namespace KhdoumWeb.Controllers
 
         public HomeModelView HomeModels(int LoadItemsCount)
         {
-            HomeModelView homeModel = new HomeModelView();
+           
+                HomeModelView homeModel = new HomeModelView();
 
-            var Categories = _context.Categories.Include(c => c.ItemsCategories).Where(c => c.State).ToList();
-            var Items = (from i in _context.Items
-                         from c in _context.Categories
-                         from sc in _context.SubCategories
-                         from ic in _context.ItemsCategories
-                         from isc in _context.ItemsSupCategories
-                         where ic.ItemId == i.Id && ic.CategoryId == c.Id && isc.ItemId == i.Id && isc.SubCategoryId == sc.Id
-                         where i.State
-                         select i).ToList().TakeLast(LoadItemsCount).ToList();
+                var Categories = _context.Categories.Include(c => c.ItemsCategories).Where(c => c.State).ToList();
+                var Items = (from i in _context.Items
+                             from c in _context.Categories
+                             from sc in _context.SubCategories
+                             from ic in _context.ItemsCategories
+                             from isc in _context.ItemsSupCategories
+                             where ic.ItemId == i.Id && ic.CategoryId == c.Id && isc.ItemId == i.Id && isc.SubCategoryId == sc.Id
+                             where i.State
+                             select i).ToList().TakeLast(LoadItemsCount).ToList();
 
 
 
 
-            homeModel.Categories = Categories;
-            homeModel.Items = Items;
+                homeModel.Categories = Categories;
+                homeModel.Items = Items;
 
-            return homeModel;
+                return homeModel;
+            
+           
         }
 
         public HomeModelView SubCategoryModels(int id, int SubId)

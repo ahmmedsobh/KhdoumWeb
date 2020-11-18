@@ -10,9 +10,11 @@ using KhdoumWeb.Models;
 using AutoMapper;
 using KhdoumWeb.Helpers;
 using KhdoumWeb.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace KhdoumWeb.Controllers
 {
+    [Authorize]
     public class MembersController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -67,17 +69,25 @@ namespace KhdoumWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(MemberViewModel member)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var Member = mapper.Map<Member>(member);
-                Member.ImgUrl = uploadImages.AddImage(member.File);
-                Member.ActivationCode = RandomURL.GetURL();
-                _context.Add(Member);
-                await _context.SaveChangesAsync();
+                if (ModelState.IsValid)
+                {
+                    var Member = mapper.Map<Member>(member);
+                    Member.ImgUrl = uploadImages.AddImage(member.File);
+                    Member.ActivationCode = RandomURL.GetURL();
+                    _context.Add(Member);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                ViewData["CityId"] = new SelectList(_context.Cities, "Id", "Name", member.CityId);
+                return View(member);
+            }
+            catch
+            {
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CityId"] = new SelectList(_context.Cities, "Id", "Name", member.CityId);
-            return View(member);
+           
         }
 
         // GET: Members/Edit/5

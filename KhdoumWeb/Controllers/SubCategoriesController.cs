@@ -10,9 +10,11 @@ using KhdoumWeb.Models;
 using AutoMapper;
 using KhdoumWeb.Helpers;
 using KhdoumWeb.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace KhdoumWeb.Controllers
 {
+    [Authorize]
     public class SubCategoriesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -64,16 +66,25 @@ namespace KhdoumWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(SubCategoryViewModel subCategory)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var SubCategory = mapper.Map<SubCategory>(subCategory);
-                SubCategory.ImgUrl = uploadImages.AddImage(subCategory.File);
+                if (ModelState.IsValid)
+                {
+                    var SubCategory = mapper.Map<SubCategory>(subCategory);
+                    SubCategory.ImgUrl = uploadImages.AddImage(subCategory.File);
 
-                _context.Add(SubCategory);
-                await _context.SaveChangesAsync();
+                    _context.Add(SubCategory);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(subCategory);
+
+            }
+            catch
+            {
                 return RedirectToAction(nameof(Index));
             }
-            return View(subCategory);
+           
         }
 
         // GET: SubCategories/Edit/5

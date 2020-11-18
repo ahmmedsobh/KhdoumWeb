@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using KhdoumWeb.Data;
 using KhdoumWeb.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace KhdoumWeb.Controllers
 {
+    [Authorize]
     public class GovernoratesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -22,25 +24,41 @@ namespace KhdoumWeb.Controllers
         // GET: Governorates
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Governorates.ToListAsync());
+            try
+            {
+                return View(await _context.Governorates.ToListAsync());
+
+            }
+            catch
+            {
+                return RedirectToAction(nameof(Index),"Home");
+            }
         }
 
         // GET: Governorates/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
-            }
+                if (id == null)
+                {
+                    return NotFound();
+                }
 
-            var governorate = await _context.Governorates
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (governorate == null)
+                var governorate = await _context.Governorates
+                    .FirstOrDefaultAsync(m => m.Id == id);
+                if (governorate == null)
+                {
+                    return NotFound();
+                }
+
+                return View(governorate);
+            }
+            catch
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
-
-            return View(governorate);
+           
         }
 
         // GET: Governorates/Create
