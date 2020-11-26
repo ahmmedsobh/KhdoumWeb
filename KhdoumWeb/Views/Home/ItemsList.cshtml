@@ -12,7 +12,7 @@
                 {
                     string Id = $"btn{item.Id}";
                     <div class="col-lg-4">
-                        <div class="card" style="margin-bottom:15px;height: 475px;">
+                        <div class="card" style="margin-bottom:15px;">
                             @if (item.ImgUrl == "false")
                             {
                                 <img style="height:200px" src="~/uploads/default.png" class="card-img-top" alt="@item.Title" title="@item.Title">
@@ -23,12 +23,17 @@
                             }
                         <div class="card-body">
                             <h5 class="card-title"><a target="_blank" asp-action="Item" asp-route-id="@item.ShortLink" class="nav-link Lnk">@item.Title</a></h5>
+                            <h5 class="card-title">@item.Price ج.م</h5>
                             <p style="margin:0" class="card-text">
-                                <a target="_blank" asp-action="Item" asp-route-id="@item.ShortLink" class="nav-link text-dark">
-                                    @Html.Raw(item.Description.Substring(0, 85)))
+                                @item.Date
+                                @*<a target="_blank" asp-action="Item" asp-route-id="@item.ShortLink" class="nav-link text-dark">
+                                    @Html.Raw(item.Description.Substring(0, 85))
                                     <span>...</span>
-                                </a>
+                                </a>*@
                             </p>
+                            <p class="card-text">@item.City.Name</p>
+                        </div>
+                        <div class="card-footer bg-white">
                             <button onclick="AddToFavorite(@item.Id)" name="@item.Id" id="@Id" class="btn btn-primary"><i class="fas fa-heart text-white"></i></button>
                             <a href="#" id="ShareBtn" data-toggle="modal" data-target=".bd-example-modal-lg" class="btn btn-warning"><i id="ShareBtnIcon" class="fas fa-share-alt"></i></a>
                         </div>

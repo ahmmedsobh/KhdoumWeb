@@ -1,17 +1,23 @@
 ﻿@model KhdoumWeb.Models.ViewModels.ItemDetailsViewModel
 @{
     ViewData["Title"] = $"{Model.Title}";
+    ViewData["Image"] = $"~/uploads/Items/{Model.ImgUrl}";
+    ViewData["Url"] = Context.Request.Path;
+    ViewData["SiteName"] = "Khdoum.com";
+
     int? count = Model.RatingCount;
     int? value = Model.RatingValues;
 
     int? rating = value / count;
 
 }
+
+
 <style>
     #ItemMain {
         background-color: white;
         padding: 10px;
-        overflow:auto;
+        overflow: auto;
     }
 
     #ImgContainer {
@@ -21,7 +27,7 @@
 
     #ItemImg {
         height: 500px;
-        width: 500px
+        width: 65%;
     }
 
     #UserInfo {
@@ -111,27 +117,28 @@
             margin-top: 5px;
         }
 
-    .Message{
-        background-color:white;
-        padding:10px;
-        margin-top:20px;
+    .Message {
+        background-color: white;
+        padding: 10px;
+        margin-top: 20px;
     }
+
     .MessageBody {
         border: none;
         background-color: #f3f3f3;
         width: 100%;
         padding: 10px;
     }
-    .Message .MessageLnks
-    {
-        width:100%;
+
+    .Message .MessageLnks {
+        width: 100%;
     }
 
-    .Message .MessageLnks a {
-        border-radius: 0;
-        width: 100%;
-        margin: auto;
-    }
+        .Message .MessageLnks a {
+            border-radius: 0;
+            width: 100%;
+            margin: auto;
+        }
 
     #Share {
         margin-top: 20px;
@@ -153,9 +160,9 @@
 
     .HeaderAd {
         background-color: #007eb2;
-        color:white;
-        height:100px;
-        margin-bottom:20px;
+        color: white;
+        height: 100px;
+        margin-bottom: 20px;
     }
 
     .SideAd {
@@ -163,7 +170,7 @@
         color: white;
         height: 300px;
         margin-top: 20px;
-        text-align:center;
+        text-align: center;
     }
 
     .ContentAd {
@@ -173,8 +180,6 @@
         margin-top: 20px;
         text-align: center;
     }
-
-
 </style>
 
 <div style="margin-top:20px">
@@ -213,13 +218,12 @@
                 </div>
                 <span class="text-danger Alert"></span>
             </div>
-            <div  class="ContentAd">
-               <h3 style="padding-top:130px">مساحة اعلانيه</h3>
+            <div class="ContentAd">
+                <h3 style="padding-top:130px">مساحة اعلانيه</h3>
             </div>
         </div>
-      
-        <div class="col-lg-3">
 
+        <div class="col-lg-3">
             <div id="Raiting">
                 <div id="Stars">
                     @for (int i = 1; i < 6; i++)
@@ -260,7 +264,9 @@
                     <h4 class="text-center text-danger">@Model.Price ج.م</h4>
                 </div>
             }
-
+            <div class="SideAd">
+                <iframe src="https://www.google.com/maps/embed?pb=@Model.LocationMap" frameborder="0" style="border:0;width:100%;height:100%" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+            </div>
             <div id="OrderContainer">
                 <a id="OrderBtn" asp-action="Order" asp-route-id="@Model.Id" data-ajax="true" data-ajax-method="post" class="btn btn-primary"><i id="OrderIcon" class="fas fa-phone"></i> <span>أطلب الآن</span></a>
             </div>
@@ -288,11 +294,11 @@
             </div>
             <div id="ManageCategories" class="modal-body">
                 <div class="addthis_inline_share_toolbox"></div>
+                @*<div class="sharethis-inline-share-buttons"></div>*@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">اغلاق</button>
             </div>
-
         </div>
     </div>
 </div>
@@ -306,12 +312,12 @@
 
             if ($(this).find('span').text() != "أطلب الآن") {
                 console.log("true")
-                $(this).attr('href', '');
+                $(this).attr('href', 'tel:+201064641608');
                 e.preventDefault();
                 return;
             }
 
-            $(this).find('span').text("@Model.Phone");
+            $(this).find('span').text("201064641608");
         });
     });
 
@@ -323,9 +329,9 @@
                 $('.Alert').text("ادخل طلبك");
                 return;
             }
-            
 
-            $('#Whats').attr("href", `https://wa.me/@Model.Phone?text= ${message} لـ ${Title}  (${Url})`)
+
+            $('#Whats').attr("href", `https://wa.me/201064641608?text= ${message} لـ ${Title}  (${Url})`)
             $('#Whats').attr("target", "_blank");
             $('.Alert').text("");
         }

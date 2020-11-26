@@ -32,7 +32,7 @@ namespace KhdoumWeb.Models
         [DisplayName("الحالة")]
         public bool State { get; set; }
 
-        [Required]
+        //[Required]
         [DisplayName("الخصوصية")]
         public string Privacy { get; set; }
 
@@ -74,9 +74,16 @@ namespace KhdoumWeb.Models
         [Phone]
         public string Phone { get; set; }
 
+
+        [DisplayName("الخريطة")]
+        public string LocationMap { get; set; }
+
+
         public int MemberId { get; set; }
         [DisplayName("المورد")]
         public Member Member { get; set; }
+
+
 
         public List<ItemCategory> ItemsCategories { get; set; }
         public List<MemberItem> MembersItems { get; set; }

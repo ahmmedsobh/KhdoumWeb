@@ -8,6 +8,13 @@
     @*<link href="~/css/carousel.css" rel="stylesheet" />*@
     <link href="~/lib/bootstrap/dist/css/bootstrap-rtl.min.css" rel="stylesheet" />
 
+    <meta property="og:title" content="@ViewData["Title"]" />
+    <meta property="og:type" content="blog" />
+    <meta property="og:image" content="@ViewData["Image"]" />
+    <meta property="og:url" content="@ViewData["Url"]" />
+    <meta property="og:site_name" content="@ViewData["SiteName"]" />
+
+
     @*<link href="~/css/theme1.css" rel="stylesheet" />*@
     <link href="~/css/theme2.css" rel="stylesheet" />
     @*<link href="~/css/theme3.css" rel="stylesheet" />*@
@@ -15,6 +22,7 @@
     <link rel="stylesheet" href="~/css/site.css" />
     <link href="https://fonts.googleapis.com/css?family=Cairo&display=swap" rel="stylesheet">
     @*<link href="https://fonts.googleapis.com/css?family=Almarai|Cairo&display=swap" rel="stylesheet">*@
+    @*<link rel="Shortcut Icon" href="favicon.ico" type="image/x-icon" />*@
     <style>
         .btn-blue {
             background-color: #512bd4;
@@ -28,23 +36,23 @@
             color: white;
         }
 
-        .btn-color2:hover {
-            background-color: #ffa242;
-            border-color: #ffa242;
-            color: white;
-        }
+            .btn-color2:hover {
+                background-color: #ffa242;
+                border-color: #ffa242;
+                color: white;
+            }
 
         .btn-outline-color2 {
-            background-color:white;
+            background-color: white;
             border-color: white;
             color: #fd8204;
         }
 
-        .btn-outline-color2:hover {
-            background-color: #fd8204;
-            border-color: #fd8204;
-            color: white;
-        }
+            .btn-outline-color2:hover {
+                background-color: #fd8204;
+                border-color: #fd8204;
+                color: white;
+            }
 
         .btn-blue:hover {
             background-color: #3c11d1;
@@ -64,46 +72,46 @@
             background-color: white
         }
 
-        .btn-outline-blue:hover {
-            color: white;
-            border-color: #512bd4;
-            background-color: #512bd4;
-        }
+            .btn-outline-blue:hover {
+                color: white;
+                border-color: #512bd4;
+                background-color: #512bd4;
+            }
 
         .text-blue {
             color: #512bd4;
         }
 
-        .text-blue:hover {
-            color: #3c11d1;
-        }
+            .text-blue:hover {
+                color: #3c11d1;
+            }
 
         .text-whitee {
             color: #e0e0e0;
         }
 
-        .text-whitee:hover {
-            color: #fff;
-        }
+            .text-whitee:hover {
+                color: #fff;
+            }
 
         .Lnk {
             color: #007eb2;
         }
 
-        .Lnk:hover {
-            text-decoration: none;
-            color: #0098d0;
-        }
+            .Lnk:hover {
+                text-decoration: none;
+                color: #0098d0;
+            }
 
         .iqlaa3-btn {
             background-color: white;
             color: #007eb2;
         }
 
-        .iqlaa3-btn:hover {
-            background-color: #007eb2;
-            color: white;
-        }
+            .iqlaa3-btn:hover {
+                background-color: #007eb2;
+                color: white;
+            }
 
         .MainCategories {
             width: 100%;
@@ -132,10 +140,10 @@
             color: #007eb2;
         }
 
-        .CategoryLnk:hover {
-            text-decoration: none;
-            color: #0098d0;
-        }
+            .CategoryLnk:hover {
+                text-decoration: none;
+                color: #0098d0;
+            }
 
         .tbl-btn {
             width: 40px;
@@ -145,8 +153,37 @@
         }
     </style>
 
+   @* <script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property=5fbe47317530e20012b5f03d&product=inline-share-buttons' async='async'></script>*@
+
 </head>
 <body style="font-family:'Cairo'; background-color: #f3f3f3">
+    <!-- Load Facebook SDK for JavaScript -->
+    <div id="fb-root"></div>
+    <script>
+        window.fbAsyncInit = function () {
+            FB.init({
+                xfbml: true,
+                version: 'v9.0'
+            });
+        };
+
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = 'https://connect.facebook.net/ar_AR/sdk/xfbml.customerchat.js';
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
+
+    <!-- Your Chat Plugin code -->
+    <div class="fb-customerchat"
+         attribution=setup_tool
+         page_id="102745648330624"
+         logged_in_greeting="أهلا بحضرتك ، ابعتلنا محتاج ايه ؟"
+         logged_out_greeting="أهلا بحضرتك ، ابعتلنا محتاج ايه ؟">
+    </div>
+
     <header>
         <nav style="background-color: #007eb2" class="navbar  navbar-expand-sm navbar-toggleable-sm    ">
             <div class="container">
@@ -161,18 +198,18 @@
                     @*<partial name="_LoginPartial" />*@
                     <ul class="navbar-nav">
                         <li style="margin-left: 10px;" class="nav-item">
-                            <a href="#" class="btn btn-color2 text-white"><i class="fas fa-plus"></i> <span>اضف نشاطك</span> </a>
+                            <a href="https://forms.gle/sDwtDnRLe2qSjGag8" target="_blank" class="btn btn-color2 text-white"><i class="fas fa-plus"></i> <span class="d-none d-lg-inline">اضف نشاطك</span> </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" id="FavoriteLink" onclick="GetFavorites()" class="btn btn-outline-color2"><i class="fas fa-heart"></i> <span>المفضلة</span> </a>
+                            <a href="#" id="FavoriteLink" onclick="GetFavorites()" class="btn btn-outline-color2"><i class="fas fa-heart"></i> <span class="d-none d-lg-inline">المفضلة</span> </a>
                         </li>
                     </ul>
-                    
+
                 </div>
             </div>
         </nav>
     </header>
-  
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -191,7 +228,7 @@
     <script src="https://kit.fontawesome.com/ef95329904.js" crossorigin="anonymous"></script>
     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5ece7c650c8b6e5f"></script>
     <script src="~/js/caleandar.min.js"></script>
-    <script src="//code.tidio.co/zq3epalba2ghwuf9u8apjfk8wzkktpo9.js" async></script>
+    @*<script src="//code.tidio.co/zq3epalba2ghwuf9u8apjfk8wzkktpo9.js" async></script>*@
     <script>
         function AddToFavorite(id) {
             items = JSON.parse(localStorage.getItem("items") || "[]");
@@ -220,7 +257,7 @@
 
         $(function () {
             items = JSON.parse(localStorage.getItem("items") || "[]");
-            
+
             $('#tbl button').each(function () {
                 id = $(this).attr("name");
                 if (items.includes(Number(id))) {
@@ -232,7 +269,7 @@
 
             });
 
-            
+
 
         });
     </script>

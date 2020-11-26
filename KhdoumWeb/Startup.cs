@@ -42,8 +42,11 @@ namespace KhdoumWeb
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<ApplicationUser> userManager,ApplicationDbContext context)
         {
+            //add default user 
+
+            MyIdentityDataInitializer.SeedUsers(userManager);
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -70,6 +73,9 @@ namespace KhdoumWeb
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+
+            MyIdentityDataInitializer.SeedRoles(context);
+
         }
     }
 }

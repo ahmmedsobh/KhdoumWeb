@@ -64,7 +64,7 @@ namespace KhdoumWeb.Controllers
         public IActionResult Create()
         {
             ViewData["CityId"] = new SelectList(_context.Cities, "Id", "Name");
-            ViewData["MemberId"] = new SelectList(_context.Members, "Id", "FullName");
+            ViewData["MemberId"] = new SelectList(supliers(), "Id", "FullName");
             return View();
         }
 
@@ -107,7 +107,7 @@ namespace KhdoumWeb.Controllers
                     return RedirectToAction(nameof(Index));
                 }
                 ViewData["CityId"] = new SelectList(_context.Cities, "Id", "Name", item.CityId);
-                ViewData["MemberId"] = new SelectList(_context.Members, "Id", "FullName", item.MemberId);
+                ViewData["MemberId"] = new SelectList(supliers(), "Id", "FullName", item.MemberId);
                 return View(item);
             }
             catch
@@ -134,7 +134,7 @@ namespace KhdoumWeb.Controllers
                 }
                 var Item = mapper.Map<ItemViewModel>(item);
                 ViewData["CityId"] = new SelectList(_context.Cities, "Id", "Name", item.CityId);
-                ViewData["MemberId"] = new SelectList(_context.Members, "Id", "FullName", item.MemberId);
+                ViewData["MemberId"] = new SelectList(supliers(), "Id", "FullName", item.MemberId);
                 return View(Item);
             }
             catch
@@ -213,7 +213,7 @@ namespace KhdoumWeb.Controllers
                     return RedirectToAction(nameof(Index));
                 }
                 ViewData["CityId"] = new SelectList(_context.Cities, "Id", "Name", item.CityId);
-                ViewData["MemberId"] = new SelectList(_context.Members, "Id", "FullName", item.MemberId);
+                ViewData["MemberId"] = new SelectList(supliers(), "Id", "FullName", item.MemberId);
                 return View(item);
             }
             catch
@@ -429,6 +429,16 @@ namespace KhdoumWeb.Controllers
                 return RedirectToAction(nameof(Index));
             }
            
+        }
+
+        public List<Member> supliers()
+        {
+            var Suppliers = (from m in _context.Members.Include(m => m.City)
+                                  from r in _context.Roless
+                                  from mr in _context.MemberRoles
+                                  where mr.MemberId == m.Id && mr.RoleId == r.Id && r.Name == "Supplier"
+                                  select m).ToList();
+            return Suppliers;
         }
 
         private bool ItemExists(int id)

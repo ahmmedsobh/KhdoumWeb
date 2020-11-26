@@ -1,0 +1,84 @@
+﻿@model KhdoumWeb.Models.Member
+
+@{
+    ViewData["Title"] = "تفاصيل العضو";
+    Layout = "~/Views/Shared/DashBoardLayout.cshtml";
+}
+
+<h1>تفاصيل العضو</h1>
+<div>
+    <hr />
+    <dl class="row">
+        <dt>
+
+        </dt>
+        @if (Model.ImgUrl == "false")
+        {
+            <dd class="col-sm-12">
+                <img class="tbl-img" src="~/uploads/default.png" />
+            </dd>
+        }
+        else
+        {
+            <dd class="col-sm-12">
+                <img class="tbl-img" src="~/uploads/Members/@Model.ImgUrl" />
+            </dd>
+        }
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.FullName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.FullName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Phone)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Phone)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Password)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Password)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ActivationCode)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ActivationCode)
+        </dd>
+       
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.City)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.City.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.State)
+        </dt>
+        @if (Model.State)
+        {
+            <dd class="col-sm-10">
+                <i class="fas fa-check text-success"></i>
+            </dd>
+        }
+        else
+        {
+            <dd class="col-sm-10">
+                <i class="fas fa-times text-danger"></i>
+            </dd>
+        }
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" class="btn btn-warning" asp-route-id="@Model.Id">تعديل</a>
+    <a asp-action="Index" class="btn btn-info">الرجوع للقائمة</a>
+</div>

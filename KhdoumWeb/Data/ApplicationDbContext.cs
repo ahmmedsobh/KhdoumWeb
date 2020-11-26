@@ -7,6 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KhdoumWeb.Data
 {
+    /// <summary>
+    /// IdentityDbContext<ApplicationUser>
+    /// </summary>
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
@@ -25,6 +28,8 @@ namespace KhdoumWeb.Data
         public DbSet<MemberItem> MembersItems { get; set; }
         public DbSet<Raiting> Raitings { get; set; }
         public DbSet<Role> Roless { get; set; }
+        public DbSet<MemberRole> MemberRoles { get; set; }
+
         public DbSet<SubCategory> SubCategories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -95,6 +100,15 @@ namespace KhdoumWeb.Data
                 .WithMany(s => s.MembersRoles)
                 .HasForeignKey(IS => IS.MemberId)
                 .IsRequired();
+
+
+            //modelBuilder.Entity<Role>().HasData(
+            //    new Role { Id = 1, Name = "Supplier" }
+            //   , new Role { Id = 2, Name = "Customer" }
+            //);
+
+
+
 
 
 

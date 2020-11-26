@@ -150,6 +150,12 @@
                 <i class="fas fa-times text-danger"></i>
             </dd>
         }
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.LocationMap)
+        </dd>
+        <dt class="col-sm-2">
+            <iframe src="https://www.google.com/maps/embed?pb=@Model.LocationMap" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+        </dt>
     </dl>
 </div>
 <div>

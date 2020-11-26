@@ -1,0 +1,167 @@
+﻿@model KhdoumWeb.Models.ViewModels.DashboardModelView
+@{
+    ViewData["Title"] = "لوحة التحكم";
+    Layout = "~/Views/Shared/DashBoardLayout.cshtml";
+
+}
+
+<style>
+    .section
+    {
+        margin-bottom:25px;
+    }
+
+    .DashBtn
+    {
+        border-radius:0;
+        width:100%;
+    }
+
+
+</style>
+
+<br />
+<br />
+<h3>لوحة التحكم</h3>
+<hr />
+<div class="section">
+    <h5>التصنيفات</h5>
+    <div class="row">
+
+        <div class="col-lg-4 mxwdth">
+            <div class="card text-white bg-primary mb-3" >
+                <div class="card-body">
+                    <h5 class="card-title"> عدد التصنيفات الكلى</h5>
+                    <p class="card-text text-center">@Model.CategoriesCount</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card text-white bg-success mb-3" >
+                <div class="card-body">
+                    <h5 class="card-title">عدد التصنيفات المفعلة</h5>
+                    <p class="card-text text-center">@Model.ActiveCategories</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card text-white bg-danger mb-3" >
+                <div class="card-body">
+                    <h5 class="card-title">عدد التصنيفات الغير مفعلة</h5>
+                    <p class="card-text text-center">@Model.UnActiveCategories</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-12">
+           <a href="/Categories" class="btn btn-success DashBtn">ادارة التصنيفات</a>
+        </div>
+
+    </div>
+</div>
+<div class="section">
+    <h5>التصنيفات الفرعية</h5>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card text-white bg-primary mb-3" >
+                <div class="card-body">
+                    <h5 class="card-title"> عدد التصنيفات الفرعية الكلى</h5>
+                    <p class="card-text text-center">@Model.SubCategoriesCount</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card text-white bg-success mb-3" >
+                <div class="card-body">
+                    <h5 class="card-title">عدد التصنيفات الفرعية المفعلة</h5>
+                    <p class="card-text text-center">@Model.ActiveSubCategories</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card text-white bg-danger mb-3" >
+                <div class="card-body">
+                    <h5 class="card-title">عدد التصنيفات الفرعية الغير مفعلة</h5>
+                    <p class="card-text text-center">@Model.UnActiveSubCategories</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-12">
+            <a href="/SubCategories" class="btn btn-success DashBtn">ادارة التصنيفات الفرعية</a>
+        </div>
+
+    </div>
+</div>
+<div class="section">
+    <h5>مقدمى الخدمات</h5>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card text-white bg-primary mb-3" >
+                <div class="card-body">
+                    <h5 class="card-title">العدد الكلى لمقدمى الخدمات</h5>
+                    <p class="card-text text-center">@Model.MembersCount</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card text-white bg-success mb-3" >
+                <div class="card-body">
+                    <h5 class="card-title">عدد مقدمى الخدمات المفعلين</h5>
+                    <p class="card-text text-center">@Model.ActiveMembers</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card text-white bg-danger mb-3" >
+                <div class="card-body">
+                    <h5 class="card-title">عدد مقدمى الخدمات الغير مفعلة</h5>
+                    <p class="card-text text-center">@Model.UnActiveMembers</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-12">
+            <a href="/Members" class="btn btn-success DashBtn">ادارة مقدمى الخدمات</a>
+        </div>
+    </div>
+</div>
+<div class="section">
+    <h5>العناصر</h5>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card text-white bg-primary mb-3" >
+                <div class="card-body">
+                    <h5 class="card-title"> عدد العناصر الكلى</h5>
+                    <p class="card-text text-center">@Model.ItemsCount</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card text-white bg-success mb-3" >
+                <div class="card-body">
+                    <h5 class="card-title">عدد العناصر المفعلة</h5>
+                    <p class="card-text text-center">@Model.ActiveItems</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card text-white bg-danger mb-3" >
+                <div class="card-body">
+                    <h5 class="card-title">عدد العناصر الغير مفعلة</h5>
+                    <p class="card-text text-center">@Model.UnActiveItems</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-12">
+            <a href="/Items" class="btn btn-success DashBtn">ادارة العناصر</a>
+        </div>
+
+    </div>
+</div>

@@ -2,7 +2,6 @@
 @{
     ViewData["Title"] = "لوحة التحكم";
 
-
 }
 <br />
 <br />
@@ -62,12 +61,12 @@
                                 }
                             <div class="card-body">
                                 <h5 class="card-title"><a target="_blank" asp-action="Item" asp-route-id="@item.ShortLink" class="nav-link Lnk">@item.Title</a></h5>
-                                <p style="margin:0" class="card-text">
+                                @*<p style="margin:0" class="card-text">
                                     <a target="_blank" asp-action="Item" asp-route-id="@item.ShortLink" class="nav-link text-dark">
                                         @Html.Raw(item.Description.Substring(0, 85))
                                         <span>...</span>
                                     </a>
-                                </p>
+                                </p>*@
                                 @*<a asp-action="" class="btn btn-primary tbl-btn"><i class="fas fa-eye"></i></a>*@
                                 <a asp-action="ItemStatistics" asp-route-Id="@item.Id" class="btn btn-primary"><i class="fas fa-sort-amount-up"></i> احصاءات الخدمة </a>
                             </div>

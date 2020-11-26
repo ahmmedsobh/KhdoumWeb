@@ -32,9 +32,15 @@ namespace KhdoumWeb.Controllers
         // GET: Members
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Members.Include(m => m.City);
-            return View(await applicationDbContext.ToListAsync());
+            var suppliers =await (from m in _context.Members.Include(m => m.City)
+                             from r in _context.Roless
+                             from mr in _context.MemberRoles
+                             where mr.MemberId == m.Id && mr.RoleId == r.Id && r.Name == "Supplier"
+                             select m).ToListAsync();
+
+            return View(suppliers);
         }
+
 
         // GET: Members/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -77,7 +83,22 @@ namespace KhdoumWeb.Controllers
                     Member.ImgUrl = uploadImages.AddImage(member.File);
                     Member.ActivationCode = RandomURL.GetURL();
                     _context.Add(Member);
-                    await _context.SaveChangesAsync();
+                    var created =  await _context.SaveChangesAsync();
+
+                    if(created >= 0)
+                    {
+                        //add supplier to role
+                        var supplier = _context.Members.ToList().LastOrDefault();
+                        var role = _context.Roless.FirstOrDefault(r => r.Name == "Supplier");
+                        if (role != null && supplier != null)
+                        {
+                            MemberRole SupplierRole = new MemberRole();
+                            SupplierRole.MemberId = supplier.Id;
+                            SupplierRole.RoleId = role.Id;
+                            _context.MemberRoles.Add(SupplierRole);
+                            _context.SaveChanges();
+                        }
+                    }
                     return RedirectToAction(nameof(Index));
                 }
                 ViewData["CityId"] = new SelectList(_context.Cities, "Id", "Name", member.CityId);
@@ -87,7 +108,7 @@ namespace KhdoumWeb.Controllers
             {
                 return RedirectToAction(nameof(Index));
             }
-           
+
         }
 
         // GET: Members/Edit/5

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using KhdoumWeb.CustomValidationAttribute;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,10 +15,12 @@ namespace KhdoumWeb.Models.ViewModels
         [Required(ErrorMessage = "من فضلك ادخل الاسم")]
         [DisplayName("الاسم")]
         public string Name { get; set; }
-        [Required(ErrorMessage = "من فضلك ادخل الوصف")]
+        //[Required(ErrorMessage = "من فضلك ادخل الوصف")]
         [DisplayName("الوصف")]
         public string Description { get; set; }
 
+        [MaxFileSize(2 * 1024 * 1024)]
+        [AllowedExtensions(new string[] { ".jpg", ".png" })]
         //[Required(ErrorMessage = "من فضلك حدد الصورة")]
         [DisplayName("الصورة")]
         public IFormFile File { get; set; }

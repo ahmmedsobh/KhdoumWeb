@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using KhdoumWeb.CustomValidationAttribute;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,6 +19,8 @@ namespace KhdoumWeb.Models.ViewModels
         [DisplayName("التاريخ")]
         public string Date { get; set; }
         [DisplayName("الصورة")]
+        [MaxFileSize(2 * 1024 * 1024)]
+        [AllowedExtensions(new string[] { ".jpg", ".png" })]
         public IFormFile File { get; set; }
 
         [Required(ErrorMessage = "من فضلك ادخل الوصف")]
@@ -32,7 +35,7 @@ namespace KhdoumWeb.Models.ViewModels
         [DisplayName("الحالة")]
         public bool State { get; set; }
 
-        [Required]
+        //[Required]
         [DisplayName("الخصوصية")]
         public string Privacy { get; set; }
 
@@ -70,6 +73,9 @@ namespace KhdoumWeb.Models.ViewModels
         [DisplayName("رقم الهاتف")]
         [Phone(ErrorMessage = "ادخل رقم هاتف صحيح")]
         public string Phone { get; set; }
+
+        [DisplayName("الخريطة")]
+        public string LocationMap { get; set; }
 
         [DisplayName("صاحب الخدمة")]
         [Required(ErrorMessage = "اختر صاحب الخدمة")]

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using KhdoumWeb.CustomValidationAttribute;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -32,6 +33,8 @@ namespace KhdoumWeb.Models.ViewModels
         [Compare("Password", ErrorMessage = "كلمة ليست متطابقة")]
         public string ConfirmPassword { get; set; }
         [DisplayName("الصورة")]
+        [MaxFileSize(2 * 1024 * 1024)]
+        [AllowedExtensions(new string[] { ".jpg", ".png" })]
         public IFormFile File { get; set; }
         [DisplayName("الحالة")]
         public bool State { get; set; }

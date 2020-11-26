@@ -34,7 +34,7 @@ namespace KhdoumWeb.Controllers
         {
             try
             {
-                var items = (from i in _context.Items.Include(i => i.Member)
+                var items = (from i in _context.Items.Include(i => i.Member).Include(i=>i.City)
                              from c in _context.Categories
                              from sc in _context.SubCategories
                              from ic in _context.ItemsCategories
@@ -112,6 +112,8 @@ namespace KhdoumWeb.Controllers
                                 SubCategoryId = sc.Id
                                  ,
                                 Member = i.Member
+                                ,
+                                LocationMap = i.LocationMap
 
                             }).FirstOrDefault();
                 if (item == null)
@@ -208,6 +210,11 @@ namespace KhdoumWeb.Controllers
                         return NotFound();
                     }
 
+                    if(user.State == false)
+                    {
+                        return NotFound();
+                    }
+
                     TempData["IsLogin"] = "true";
 
                     if (!string.IsNullOrEmpty(login.Url))
@@ -300,7 +307,7 @@ namespace KhdoumWeb.Controllers
                 for (var i = 0; i < items.Length; i++)
                 {
                     int iid = int.Parse(items[i]);
-                    var item = _context.Items.FirstOrDefault(i => i.Id == iid);
+                    var item = _context.Items.Include(i=>i.City).FirstOrDefault(i => i.Id == iid);
                     if (item != null)
                     {
                         var Itm = itemsList.FirstOrDefault(im => im.Id == item.Id);
@@ -337,7 +344,7 @@ namespace KhdoumWeb.Controllers
                 HomeModelView homeModel = new HomeModelView();
 
                 var Categories = _context.Categories.Include(c => c.ItemsCategories).Where(c => c.State).ToList();
-                var Items = (from i in _context.Items
+                var Items = (from i in _context.Items.Include(i=>i.City)
                              from c in _context.Categories
                              from sc in _context.SubCategories
                              from ic in _context.ItemsCategories
@@ -361,7 +368,7 @@ namespace KhdoumWeb.Controllers
         {
             HomeModelView SubCategoryModels = new HomeModelView();
 
-            var SubCategories = (from i in _context.Items
+            var SubCategories = (from i in _context.Items.Include(i=>i.City)
                                  from c in _context.Categories
                                  from sc in _context.SubCategories
                                  from ic in _context.ItemsCategories
@@ -373,7 +380,7 @@ namespace KhdoumWeb.Controllers
 
             if (SubId != 0)
             {
-                Items = (from i in _context.Items
+                Items = (from i in _context.Items.Include(i=>i.City)
                          from c in _context.SubCategories
                          from isc in _context.ItemsSupCategories
                          where isc.ItemId == i.Id && isc.SubCategoryId == c.Id && c.Id == SubId
@@ -381,7 +388,7 @@ namespace KhdoumWeb.Controllers
             }
             else
             {
-                Items = (from i in _context.Items
+                Items = (from i in _context.Items.Include(i=>i.City)
                          from c in _context.Categories
                          from ic in _context.ItemsCategories
                          where ic.ItemId == i.Id && ic.CategoryId == c.Id && c.Id == id
@@ -393,6 +400,11 @@ namespace KhdoumWeb.Controllers
             SubCategoryModels.Items = Items;
             SubCategoryModels.CategoryId = id;
             return SubCategoryModels;
+        }
+
+        public IActionResult About()
+        {
+            return View();
         }
     }
 }

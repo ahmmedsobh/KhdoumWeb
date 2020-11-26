@@ -4,15 +4,14 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - اقلاع دوت كوم</title>
+    <title>@ViewData["Title"] - خدوم</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     @*<link rel="stylesheet" href="~/css/site.css" />*@
     <link href="~/lib/bootstrap/dist/css/bootstrap-rtl.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Cairo&display=swap" rel="stylesheet">
     <link href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css" rel="stylesheet">
     <link href="~/css/dashboard.css" rel="stylesheet" />
-
-
+    @*<link rel="Shortcut Icon" href="favicon.ico" type="image/x-icon" />*@
     <style>
         .sidebar {
             position: fixed;
@@ -24,7 +23,7 @@
             float: left;
         }
 
-       /* .modal-content {
+        /* .modal-content {
             width: 70%;
             margin-right: 15%;
         }*/
@@ -36,10 +35,10 @@
         }
 
         .tbl-btn {
-            width: 40px;
             height: 40px;
             text-align: center;
-            border-radius:0;
+            border-radius: 0;
+            width: 40px;
         }
 
         .RouteBtnIcon {
@@ -52,11 +51,13 @@
         .RouteBtn {
             height: 110px;
             border-radius: 0;
+            width: 100%;
         }
 
-        .RouteBtn:hover {
-            color: whitesmoke;
-        }
+            .RouteBtn:hover {
+                color: whitesmoke;
+                text-decoration: none
+            }
 
         .no-gutters-custom {
             margin-top: 20px;
@@ -79,7 +80,7 @@
 </head>
 <body style="font-family:'Cairo';font-size: 1rem;">
     <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-        <a class="navbar-brand col-sm-3 col-md-2 ml-0 mr-0" href="#">اقلاع دوت كوم</a>
+        <a class="navbar-brand col-sm-3 col-md-2 ml-0 mr-0" href="#">خدوم دوت كوم</a>
         <input class="form-control form-control-dark w-100" type="text" placeholder="ابحث" aria-label="Search">
         <ul class="navbar-nav px-3">
             <li class="nav-item text-nowrap">
@@ -96,7 +97,7 @@
                 <div class="sidebar-sticky">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link active" asp-controller="Reports" asp-action="OverView">
+                            <a class="nav-link active" asp-controller="Dashboard" asp-action="Index">
                                 <i class="fas fa-home mr-2"></i>
                                 لوحة التحكم <span class="sr-only">(current)</span>
                             </a>

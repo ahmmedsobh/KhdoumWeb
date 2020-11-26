@@ -13,7 +13,7 @@ namespace KhdoumWeb.Models
         [Required(ErrorMessage = "من فضلك ادخل الاسم")]
         [DisplayName("الاسم")]
         public string Name { get; set; }
-        [Required(ErrorMessage = "من فضلك ادخل الوصف")]
+        //[Required(ErrorMessage = "من فضلك ادخل الوصف")]
         [DisplayName("الوصف")]
         public string Description { get; set; }
         [Required]
