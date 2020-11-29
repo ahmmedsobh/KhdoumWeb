@@ -41,7 +41,12 @@ namespace KhdoumWeb.Controllers
                              from isc in _context.ItemsSupCategories
                              where ic.ItemId == i.Id && ic.CategoryId == c.Id && isc.ItemId == i.Id && isc.SubCategoryId == sc.Id
                              where i.Title.Contains(q) || i.Description.Contains(q) || i.Address.Contains(q) || c.Name.Contains(q) || sc.Name.Contains(q) || i.Member.FullName.Contains(q)
+                             where i.State
                              select i).ToList();
+                if(q == null || q == "")
+                {
+                    q = "غير معروف";
+                }
                 ViewBag.q = q;
                 return View(items);
             }
@@ -384,6 +389,7 @@ namespace KhdoumWeb.Controllers
                          from c in _context.SubCategories
                          from isc in _context.ItemsSupCategories
                          where isc.ItemId == i.Id && isc.SubCategoryId == c.Id && c.Id == SubId
+                         where i.State
                          select i).ToList();
             }
             else
@@ -392,6 +398,7 @@ namespace KhdoumWeb.Controllers
                          from c in _context.Categories
                          from ic in _context.ItemsCategories
                          where ic.ItemId == i.Id && ic.CategoryId == c.Id && c.Id == id
+                         where i.State
                          select i).ToList();
             }
 

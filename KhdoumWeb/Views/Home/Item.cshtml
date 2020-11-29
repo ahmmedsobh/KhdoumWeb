@@ -283,6 +283,8 @@
     </div>
 </div>
 
+<a class="btn btn-primary" href="tel:+2-010-646-416-08">click here</a>
+
 <div id="myModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -310,14 +312,20 @@
     $(function () {
         $('#OrderBtn').click(function (e) {
 
+
             if ($(this).find('span').text() != "أطلب الآن") {
-                console.log("true")
-                $(this).attr('href', 'tel:+201064641608');
-                e.preventDefault();
-                return;
+                
+                $(this).attr('href', 'tel:+2-010-646-416-08');
+                $(this).attr('data-ajax', '');
+                $(this).attr('data-ajax-method', '');
+
+                //e.preventDefault();
+                //return;
+            }
+            else {
+                $(this).find('span').text("201064641608");
             }
 
-            $(this).find('span').text("201064641608");
         });
     });
 
