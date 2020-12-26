@@ -1,6 +1,7 @@
 ﻿@model KhdoumWeb.Models.ViewModels.HomeModelView
 @{
     ViewData["Title"] = "التصنيفات الفرعية";
+    var IdList = new List<int>();
 }
 
 <br />
@@ -11,37 +12,46 @@
     <div class="row">
         @foreach (var item in Model.SubCategories)
         {
-            //if (item.ItemsCategories.Count() != 0)
-            //{
-            //data-ajax-loading="SpinnerDown()"  data-ajax-success="SpinnerUp()"
-            <div class="col-lg-3 col-md-12 mb-4">
-                <div class="Category">
-                    <a asp-action="SubCategories" asp-route-SubId="@item.Id" asp-route-id="@Model.CategoryId" data-ajax="true" data-ajax-mode="replace" class="Lnk">
-                        <div class="CategoryImg">
-                            @if (item.ImgUrl == "false")
-                            {
-                                <img src="~/uploads/default.png" />
-                            }
-                            else
-                            {
-                                <img src="~/uploads/SubCategory/@item.ImgUrl" />
-                            }
-                        </div>
-                        <div class="CategoryTitle">
-                            <h6>@item.Name</h6>
-                        </div>
-                    </a>
+
+            if (IdList.IndexOf(item.Id) < 0)
+            {
+                //if (item.ItemsCategories.Count() != 0)
+                //{
+                //data-ajax-loading="SpinnerDown()"  data-ajax-success="SpinnerUp()"
+                <div class="col-lg-3 col-md-12 mb-4">
+                    <div class="Category">
+                        <a asp-action="SubCategoriesItems" asp-route-SubId="@item.Id" data-ajax="true" data-ajax-update="#SubCategoriesList" data-ajax-success="Success()" data-ajax-mode="replace" class="Lnk">
+                            <div class="CategoryImg">
+                                @if (item.ImgUrl == "false")
+                                {
+                                    <img src="~/uploads/default.png" />
+                                }
+                                else
+                                {
+                                    <img src="~/uploads/SubCategory/@item.ImgUrl" />
+                                }
+                            </div>
+                            <div class="CategoryTitle">
+                                <h6>@item.Name</h6>
+                            </div>
+                        </a>
+                    </div>
                 </div>
-            </div>
-            @*}*@
+                @*}*@
+            }
+            IdList.Add(item.Id);
+
         }
     </div>
 </div>
 
 @*<partial name="~/Views\Shared\_Spinner.cshtml" />*@
-<partial model="Model.Items" name="~/Views\Home\ItemsList.cshtml" />
+<div id="SubCategoriesList">
+    <partial model="Model.Items" name="~/Views\Home\ItemsList.cshtml" />
+</div>
 
 @section Scripts{
+    @*<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5ece7c650c8b6e5f"></script>*@
     <script>
         //function SpinnerDown() {
         //    $('#LoadSpinner').slideDown();
@@ -50,5 +60,23 @@
         //function SpinnerUp() {
         //    $('#LoadSpinner').slideUp();
         //}
+
+        function Success() {
+            items = JSON.parse(localStorage.getItem("items") || "[]");
+
+            $('#tbl button').each(function () {
+                id = $(this).attr("name");
+                if (items.includes(Number(id))) {
+                    $("#btn" + id).attr("class", "btn btn-danger");
+                }
+                console.log(items);
+                console.log(items.includes(id));
+                console.log(id);
+            });
+
+            //$('#ShareButtons').remove();
+            //$('#ShareModal').append('<div id="ShareButtons" class="addthis_inline_share_toolbox"></div>');
+        }
+
     </script>
 }

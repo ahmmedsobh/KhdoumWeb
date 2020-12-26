@@ -29,6 +29,11 @@ namespace KhdoumWeb.Controllers
             return View(HomeModels(LoadItemsCount));
         }
 
+        public IActionResult ShowMoreItems(int LoadItemsCount = 9)
+        {
+            return PartialView("ItemsList", ShowMoreItemsFun(LoadItemsCount));
+        }
+
 
         public IActionResult Search(string q)
         {
@@ -65,6 +70,16 @@ namespace KhdoumWeb.Controllers
             }
             return View(SubCategoryModels(id, SubId));
         }
+
+        public IActionResult SubCategoriesItems(int SubId = 0)
+        {
+            if (SubId == 0)
+            {
+                return NotFound();
+            }
+            return PartialView("ItemsList",SubCategoriesItemsFun(SubId));
+        }
+
 
         public IActionResult Item(string id, int FromAction = 0)
         {
@@ -312,7 +327,7 @@ namespace KhdoumWeb.Controllers
                 for (var i = 0; i < items.Length; i++)
                 {
                     int iid = int.Parse(items[i]);
-                    var item = _context.Items.Include(i=>i.City).FirstOrDefault(i => i.Id == iid);
+                    var item = _context.Items.Include(i=>i.City).Where(i=>i.State).FirstOrDefault(i => i.Id == iid);
                     if (item != null)
                     {
                         var Itm = itemsList.FirstOrDefault(im => im.Id == item.Id);
@@ -345,69 +360,116 @@ namespace KhdoumWeb.Controllers
 
         public HomeModelView HomeModels(int LoadItemsCount)
         {
-           
+           try
+            {
                 HomeModelView homeModel = new HomeModelView();
 
                 var Categories = _context.Categories.Include(c => c.ItemsCategories).Where(c => c.State).ToList();
-                var Items = (from i in _context.Items.Include(i=>i.City)
+                homeModel.Categories = Categories;
+                homeModel.Items = ShowMoreItemsFun(LoadItemsCount);
+
+                return homeModel;
+            }
+            catch
+            {
+                return new HomeModelView();
+            }
+                
+            
+           
+        }
+        public List<Item> ShowMoreItemsFun(int LoadItemsCount)
+        {
+
+            try
+            {
+                var Items = (from i in _context.Items.Include(i => i.City)
                              from c in _context.Categories
                              from sc in _context.SubCategories
                              from ic in _context.ItemsCategories
                              from isc in _context.ItemsSupCategories
                              where ic.ItemId == i.Id && ic.CategoryId == c.Id && isc.ItemId == i.Id && isc.SubCategoryId == sc.Id
                              where i.State
-                             select i).ToList().TakeLast(LoadItemsCount).ToList();
 
+                             select i).ToList().TakeLast(LoadItemsCount).ToList().OrderByDescending(i => i.Id).ToList();
 
-
-
-                homeModel.Categories = Categories;
-                homeModel.Items = Items;
-
-                return homeModel;
-            
+                return Items;
+            }
+            catch
+            {
+                return new List<Item>();
+            }
            
+
+
         }
 
         public HomeModelView SubCategoryModels(int id, int SubId)
         {
-            HomeModelView SubCategoryModels = new HomeModelView();
-
-            var SubCategories = (from i in _context.Items.Include(i=>i.City)
-                                 from c in _context.Categories
-                                 from sc in _context.SubCategories
-                                 from ic in _context.ItemsCategories
-                                 from isc in _context.ItemsSupCategories
-                                 where ic.ItemId == i.Id && ic.CategoryId == c.Id && isc.ItemId == i.Id && isc.SubCategoryId == sc.Id && c.Id == id
-                                 select sc).ToList();
-
-            var Items = new List<Item>();
-
-            if (SubId != 0)
+            try
             {
-                Items = (from i in _context.Items.Include(i=>i.City)
-                         from c in _context.SubCategories
-                         from isc in _context.ItemsSupCategories
-                         where isc.ItemId == i.Id && isc.SubCategoryId == c.Id && c.Id == SubId
-                         where i.State
-                         select i).ToList();
+                HomeModelView SubCategoryModels = new HomeModelView();
+
+                var SubCategories = (from i in _context.Items.Include(i => i.City)
+                                     from c in _context.Categories
+                                     from sc in _context.SubCategories
+                                     from ic in _context.ItemsCategories
+                                     from isc in _context.ItemsSupCategories
+                                     where ic.ItemId == i.Id && ic.CategoryId == c.Id && isc.ItemId == i.Id && isc.SubCategoryId == sc.Id && c.Id == id
+                                     select sc).ToList();
+
+
+
+
+
+                var Items = new List<Item>();
+
+                if (SubId != 0)
+                {
+                    SubCategoriesItemsFun(SubId);
+                }
+                else
+                {
+                    Items = (from i in _context.Items.Include(i => i.City)
+                             from c in _context.Categories
+                             from ic in _context.ItemsCategories
+                             where ic.ItemId == i.Id && ic.CategoryId == c.Id && c.Id == id
+                             where i.State
+                             select i).ToList();
+                }
+
+
+                SubCategoryModels.SubCategories = SubCategories;
+                SubCategoryModels.Items = Items;
+                SubCategoryModels.CategoryId = id;
+                return SubCategoryModels;
             }
-            else
+            catch
             {
-                Items = (from i in _context.Items.Include(i=>i.City)
-                         from c in _context.Categories
-                         from ic in _context.ItemsCategories
-                         where ic.ItemId == i.Id && ic.CategoryId == c.Id && c.Id == id
-                         where i.State
-                         select i).ToList();
+                return new HomeModelView();
             }
-
-
-            SubCategoryModels.SubCategories = SubCategories;
-            SubCategoryModels.Items = Items;
-            SubCategoryModels.CategoryId = id;
-            return SubCategoryModels;
+            
         }
+
+        public List<Item> SubCategoriesItemsFun(int SubId)
+        {
+            try
+            {
+                var Items = (from i in _context.Items.Include(i => i.City)
+                             from c in _context.SubCategories
+                             from isc in _context.ItemsSupCategories
+                             where isc.ItemId == i.Id && isc.SubCategoryId == c.Id && c.Id == SubId
+                             where i.State
+                             select i).ToList();
+                return Items;
+            }
+            catch
+            {
+                return new List<Item>();
+            }
+           
+        }
+
 
         public IActionResult About()
         {

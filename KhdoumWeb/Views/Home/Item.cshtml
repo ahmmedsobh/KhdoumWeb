@@ -7,8 +7,11 @@
 
     int? count = Model.RatingCount;
     int? value = Model.RatingValues;
-
-    int? rating = value / count;
+    int? rating = 0;
+    if (count > 0)
+    {
+         rating = value / count;
+    }
 
 }
 
@@ -23,10 +26,16 @@
     #ImgContainer {
         width: 100%;
         text-align: center;
+        position: relative;
+    }
+
+    #ImgContainer:before {
+        float: left;
+        padding-top: 100%; /* initial ratio of 1:1*/
     }
 
     #ItemImg {
-        height: 500px;
+        max-height:500px; 
         width: 65%;
     }
 
@@ -218,6 +227,10 @@
                 </div>
                 <span class="text-danger Alert"></span>
             </div>
+            <div id="Message" class="Message">
+                <h5 class="MessageTitle">شارك على حساباتك</h5>
+                <div style="margin-top:10px" class="addthis_inline_share_toolbox"></div>
+            </div>
             <div class="ContentAd">
                 <h3 style="padding-top:130px">مساحة اعلانيه</h3>
             </div>
@@ -247,9 +260,9 @@
             </div>
             <div id="UserInfo">
                 <div id="UserImgContainer">
-                    @if (Model.ImgUrl == "false")
+                    @if (Model.Member.ImgUrl == "false")
                     {
-                        <img id="UserImg" src="~/uploads/default.png" alt="@Model.Title" title="@Model.Member.FullName">
+                        <img id="UserImg" class="" src="~/uploads/default.png" alt="@Model.Title" title="@Model.Member.FullName">
                     }
                     else
                     {
@@ -283,7 +296,6 @@
     </div>
 </div>
 
-<a class="btn btn-primary" href="tel:+2-010-646-416-08">click here</a>
 
 <div id="myModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">

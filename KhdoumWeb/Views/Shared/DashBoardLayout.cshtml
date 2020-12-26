@@ -81,6 +81,9 @@
 <body style="font-family:'Cairo';font-size: 1rem;">
     <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
         <a class="navbar-brand col-sm-3 col-md-2 ml-0 mr-0" href="#">خدوم دوت كوم</a>
+        <button id="BtnCollaps" style="z-index: 100;z-index: 100;position: absolute;right: 87%;top: 4px;" class="navbar-toggler position-absolute d-md-none" type="button" >
+            <span class="navbar-toggler-icon"></span>
+        </button>
         <input class="form-control form-control-dark w-100" type="text" placeholder="ابحث" aria-label="Search">
         <ul class="navbar-nav px-3">
             <li class="nav-item text-nowrap">
@@ -93,7 +96,7 @@
 
     <div class="container-fluid">
         <div class="row">
-            <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <nav id="sidebarMenu"  class="col-md-2 mt-sm-2 d-md-block bg-light sidebar">
                 <div class="sidebar-sticky">
                     <ul class="nav flex-column">
                         <li class="nav-item">
@@ -151,7 +154,24 @@
     <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
 
+    <script>
+        $(function () {
+            $("#sidebarMenu").hide();
+        });
 
+        $("#BtnCollaps").click(function () {
+            if ($("#sidebarMenu").is(":hidden")) {
+                $("#sidebarMenu").attr("style","margin-top: 80px;");
+                $("#sidebarMenu").slideDown();
+                console.log(false);
+            }
+            else {
+                $("#sidebarMenu").attr("style", "margin-top: 80px;");
+                $("#sidebarMenu").slideUp();
+                console.log(true);
+            }
+        })
+    </script>
 
 
 

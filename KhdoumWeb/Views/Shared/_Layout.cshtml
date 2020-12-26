@@ -188,7 +188,7 @@
         <nav style="background-color: #007eb2" class="navbar  navbar-expand-sm navbar-toggleable-sm    ">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                    <img src="~/uploads/websiteLogo.png" width="75" height="75" alt="" loading="lazy">
+                    <img src="~/uploads/wslogo.png" width="150" height="75" alt="" loading="lazy">
                 </a>
                 @*<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                             aria-expanded="false" aria-label="Toggle navigation">
@@ -197,11 +197,17 @@
                 <div class=" d-sm-inline-flex flex-sm-row-reverse">
                     @*<partial name="_LoginPartial" />*@
                     <ul class="navbar-nav">
-                        <li style="margin-left: 10px;" class="nav-item">
+                        <li style="margin-left: 10px;margin-bottom:10px" class="nav-item">
                             <a href="https://forms.gle/sDwtDnRLe2qSjGag8" target="_blank" class="btn btn-color2 text-white"><i class="fas fa-plus"></i> <span class="d-none d-lg-inline">اضف نشاطك</span> </a>
                         </li>
-                        <li class="nav-item">
+                        <li style="margin-left: 10px;margin-bottom:10px" class="nav-item">
                             <a href="#" id="FavoriteLink" onclick="GetFavorites()" class="btn btn-outline-color2"><i class="fas fa-heart"></i> <span class="d-none d-lg-inline">المفضلة</span> </a>
+                        </li>
+                        <li style="margin-left: 10px;margin-bottom:10px" class="nav-item">
+                            <a href="tel:+2-010-646-416-08"  class="btn btn-secondary"><i class="fas fa-phone"></i> <span class="d-none d-lg-inline">كلمنا موبايل</span> </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="https://wa.me/201064641608"  class="btn btn-info"><i class="fab fa-whatsapp"></i> <span class="d-none d-lg-inline">كلمنا واتس</span> </a>
                         </li>
                     </ul>
 
@@ -235,16 +241,17 @@
             if (!items.includes(id)) {
                 items.push(id);
                 localStorage.setItem("items", JSON.stringify(items));
-                $("#btn" + id).removeClass("btn-primary");
-                $("#btn" + id).addClass("btn-danger");
-
+                $("#btn" + id).removeClass("btn-dark");
+                $("#btn" + id).addClass(" btn-danger");
             }
             else {
                 var index = items.indexOf(id);
                 items.splice(index, 1);
                 localStorage.setItem("items", JSON.stringify(items));
-                $("#btn" + id).addClass("btn-primary");
+
                 $("#btn" + id).removeClass("btn-danger");
+                $("#btn" + id).addClass("btn-dark");
+
             }
 
             console.log(items);
@@ -269,7 +276,8 @@
 
             });
 
-
+            //$('#ShareButtons').remove();
+            //$('#ShareModal').append('<div id="ShareButtons" class="addthis_inline_share_toolbox"></div>');
 
         });
     </script>
