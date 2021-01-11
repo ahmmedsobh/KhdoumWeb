@@ -4,6 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - خدوم</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     @*<link href="~/css/carousel.css" rel="stylesheet" />*@
     <link href="~/lib/bootstrap/dist/css/bootstrap-rtl.min.css" rel="stylesheet" />
@@ -18,7 +20,6 @@
     @*<link href="~/css/theme1.css" rel="stylesheet" />*@
     <link href="~/css/theme2.css" rel="stylesheet" />
     @*<link href="~/css/theme3.css" rel="stylesheet" />*@
-
     <link rel="stylesheet" href="~/css/site.css" />
     <link href="https://fonts.googleapis.com/css?family=Cairo&display=swap" rel="stylesheet">
     @*<link href="https://fonts.googleapis.com/css?family=Almarai|Cairo&display=swap" rel="stylesheet">*@
@@ -151,9 +152,13 @@
             text-align: center;
             border-radius: 0;
         }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Cairo';
+        }
     </style>
 
-   @* <script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property=5fbe47317530e20012b5f03d&product=inline-share-buttons' async='async'></script>*@
+    @* <script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property=5fbe47317530e20012b5f03d&product=inline-share-buttons' async='async'></script>*@
 
 </head>
 <body style="font-family:'Cairo'; background-color: #f3f3f3">
@@ -279,7 +284,12 @@
             //$('#ShareButtons').remove();
             //$('#ShareModal').append('<div id="ShareButtons" class="addthis_inline_share_toolbox"></div>');
 
+            
         });
+
+
+        
+
     </script>
     @RenderSection("Scripts", required: false)
 </body>

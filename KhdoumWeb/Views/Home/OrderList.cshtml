@@ -1,0 +1,168 @@
+﻿
+@{
+    ViewData["Title"] = "قائمة التسوق";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>قائمة التسوق</h3>
+<label>التوصيل الى :</label>
+<select id="States">
+    <option value="5">الجمالية</option>
+    <option value="10">البصراط</option>
+    <option value="20">المنزلة</option>
+    <option value="10">ميت مرجا</option>
+    <option value="15">الكفر الجديد</option>
+    <option value="15">ميت سلسيل</option>
+    <option value="20">الكردى</option>
+    <option value="10">عزبة عبده</option>
+    <option value="15">ليسا الجمالية</option>
+    <option value="20">اسكندرية الجديده</option>
+    <option value="20">مصر الجديدة</option>
+</select>
+<table id="OrderListTbl" class="table table-bordered table-striped text-center bg-white">
+    <thead>
+        <tr>
+            <th></th>
+            <th>اسم الصنف</th>
+            <th>الكمية</th>
+            <th>السعر</th>
+            <th>السعر الكلى</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+<a href="#" id="OrderNow" class="btn btn-primary" style="width: 100%; border-radius:0">أطلب الأن</a>
+
+@section Scripts{
+    <script>
+
+        var db;
+        var request = window.indexedDB.open("newDatabase", 1);
+        request.onerror = function (event) {
+            console.log("error: ");
+        };
+
+        request.onsuccess = function (event) {
+            db = request.result;
+            console.log("success: " + db);
+        };
+
+        var TotalPrice = 0;
+
+        $(function () {
+
+            
+            // render order items 
+            PaintOrder()
+            
+
+
+            $('#States').change(function () {
+                var BackDelivery = Number($('#Delivery').text());
+                TotalPrice = TotalPrice - BackDelivery + Number($(this).val());
+                $('#Delivery').text($(this).val());
+                $('#TotalDelivery').text($(this).val());
+                $('#TotalPrice').text(TotalPrice);
+            });
+
+
+            $('#OrderNow').click(function () {
+                var Rows = "";
+                $('#OrderListTbl tbody .r').each(function (i, tr) {
+                    TblTitle = $(`#OrderListTbl tbody tr:eq(${i}) td:eq(1)`).text();
+                    TblQuantity = $(`#OrderListTbl tbody tr:eq(${i}) td:eq(2)`).text();
+                    TblPrice = $(`#OrderListTbl tbody tr:eq(${i}) td:eq(3)`).text();
+                    TblTotalPrice = $(`#OrderListTbl tbody tr:eq(${i}) td:eq(4)`).text();
+                    Rows = Rows + `الصنف : ${TblTitle}، الكمية :${TblQuantity}، السعر :${TblPrice} ،السعر الكلى : ${TblTotalPrice} \n...<<<0>>>...`;
+                });
+
+                Rows = Rows + `الاجمالى : ${$('#TotalPrice').text()}`;
+                $('#OrderNow').attr("href", `https://wa.me/201064641608?text= ${Rows}`);
+                $('#OrderNow').attr("target", "_blank");
+                //console.log(Rows);
+            });
+
+        });
+
+        function remove(itm) {
+            var request = db.transaction(["item"], "readwrite")
+                .objectStore("item")
+                .delete(itm);
+
+            console.log(itm);
+
+            request.onsuccess = function (event) {
+                $('#OrderListTbl tbody tr').remove();
+                PaintOrder();
+            };
+        }
+
+        function PaintOrder() {
+            var ItemsCount = db.transaction(["item"], "readwrite")
+                .objectStore("item").count();
+            var tr = ``;
+           
+            ItemsCount.onsuccess = function () {
+                var result = ItemsCount.result;
+                if (result > 0) {
+                    var objectStore = db.transaction("item").objectStore("item");
+
+                    objectStore.openCursor().onsuccess = function (event) {
+                        var cursor = event.target.result;
+
+                        if (cursor) {
+                            tr = tr + `
+                                <tr class="r" id="tr${cursor.value.id}">
+                                <td><img src="${cursor.value.img}" style="width:50px;height:50px"/></td>
+                                <td>${cursor.value.title}</td>
+                                <td>${cursor.value.quantity}</td>
+                                <td>${cursor.value.price}</td>
+                                <td>${cursor.value.totalPrice}</td>
+                                <td><button onclick="remove('${cursor.value.id}')" class="btn btn-danger text-white"><i class="fas fa-trash-alt"></i></button></td>
+                                </tr>
+                            ` ;
+                            TotalPrice = TotalPrice + Number(cursor.value.totalPrice);
+                            cursor.continue();
+                        } else {
+
+                            price = Number($('#States').val());
+                            TotalPrice = TotalPrice + price;
+                            tr = tr + `
+                                <tr class="r">
+                                <td></td>
+                                <td>خدمة التوصيل</td>
+                                <td>1</td>
+                                <td id="Delivery">${price}</td>
+                                <td id="TotalDelivery">${price}</td>
+                                <td></td>
+                                </tr>
+                            ` ;
+
+                            tr = tr + `
+                                <tr>
+                                <td></td>
+                                <td colspan="3">الاجمالى</td>
+                                <td id="TotalPrice">${TotalPrice}</td>
+                                <td></td>
+                                </tr>
+                            ` ;
+
+                            $('#OrderListTbl tbody').append(tr);
+                        }
+
+
+                    };
+
+
+                }
+                else {
+                    $('#OrderNow').hide();
+                    tr = `<tr><td colspan="6">لا يوجد أصناف</td></tr>`;
+                    $('#OrderListTbl tbody').append(tr);
+                }
+            }
+        }
+    </script>
+}

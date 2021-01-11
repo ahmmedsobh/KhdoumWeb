@@ -16,3 +16,65 @@
 <a href="" class="btn btn-dark"><i class="fas fa-phone"></i>  01064641608</a>
 <a href="https://forms.gle/zHttaHqh2wkTg6fM6" class="btn btn-warning"><i class="fas fa-envelope"></i>  ارسال رسالة</a>
 
+
+<div id="ItemCard1" data-itm="1" class="ItemCard">
+    <div class="card mb-3" style="width:99%">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <div class="w3-content w3-display-container">
+                    <img id="Img1" class="mySlides1" src="~/uploads/categories/18750440-a4ba-442c-baa1-ee8630038852.png" style="width:100%">
+                    <img class="mySlides1" src="~/uploads/categories/6ff56705-5588-48ae-abd6-50785f87406a.png" style="width:100%">
+                    <img class="mySlides1" src="~/uploads/categories/78572f39-e629-40df-951b-75ad14e6e035.png" style="width:100%">
+                    <img class="mySlides1" src="~/uploads/categories/891934c3-b67a-439b-b05c-3075df5ea068.png" style="width:100%">
+                    @*onclick="plusDivs(-1,1)"*@
+                    @*onclick="plusDivs(1,1)"*@
+                    <button class="w3-button w3-black w3-display-left BtnLeft">&#10095;</button>
+                    <button class="w3-button w3-black w3-display-right BtnRight">&#10094;</button>
+                </div>
+            </div>
+            @*<div class="col-md-8">
+                <div class="card-body">
+                    <div class="ItemCardContent">
+                        <h3 id="ItemCardContentTitle1" class="card-title">اريال - مسحوق غسيل 4 كيلو + 2 كيلو هدية</h3>
+                        <h4 class="card-text">
+                            السعر
+                            <strong class="ItemCardContentInfoPrice text-danger"> 50.5 ج</strong>
+                            لكل
+                            <strong class="ItemCardContentInfoUnit text-danger"> وحدة</strong>
+                        </h4>
+                        <div class="ItemCardContentOrder">
+                            <input type="hidden" id="ItmId1" value="1" />
+                            <input type="hidden" id="Quantity1" value="1" />
+                            <input id="Price1" type="hidden" value="10" />
+                            <button onclick="PlusQuantity(1)" class="ItemCardContentOrderPlus btn btn-secondary"><i class="fas fa-plus"></i></button>
+                            <span id="QuantityLabel1" class="ItemCardContentOrderQuantity">0.0</span>
+                            <button onclick="MinsQuantity(1)" class="ItemCardContentOrderMins btn btn-secondary"><i class="fas fa-minus"></i></button>
+
+                            <button id="AddToCart1" onclick="add('1')" class="ItemCardContentOrderPlus btn btn-dark"><i class="fas fa-cart-plus"></i></button>
+                            <span id="ItemCardContentBtnPrice1" class="ItemCardContentOrderQuantity">0</span><span>ج</span>
+                            <button onclick="remove('1')" class="ItemCardContentOrderMins btn btn-dark"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+<script>
+    $('.BtnLeft').click(function () {
+
+        console.log($(this).parents(".ItemCard").attr("data-itm"));
+
+    });
+
+    $('.BtnRight').click(function () {
+
+        console.log($(this).parents(".ItemCard").attr("data-itm"));
+
+    });
+</script>
+    
+
+}

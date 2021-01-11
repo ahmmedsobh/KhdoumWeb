@@ -189,6 +189,100 @@
         margin-top: 20px;
         text-align: center;
     }
+    .ItemCard {
+/*        height: 220px;*/
+        margin-top:25px;
+        width:100%;
+    }
+
+    .ItemCard .ItemCardSlider {
+        width: 25%;
+        height: 100%;
+        float: right;
+    }
+
+    
+
+    .ItemCard .ItemCardContent {
+        width: 100%;
+        height: 100%;
+    }
+
+        .ItemCard .ItemCardContent .ItemCardContentTitle {
+           margin-right:27%;
+/*           font-size:20%;*/
+        }
+
+
+        .ItemCard .ItemCardContent .ItemCardContentBtn {
+            border-radius: 0;
+            margin-right: 27%;
+            display: block;
+            width: 73%;
+            height: 26%;
+        }
+        .ItemCard .ItemCardContent .ItemCardContentBtn .ItemCardContentBtnPrice {
+            position: absolute;
+            left: 30px;
+            font-size:20px;
+        }
+
+        .ItemCard .ItemCardContent .ItemCardContentBtn .ItemCardContentBtnIcon {
+            position: absolute;
+            right: 31%;
+            margin-top:7px;
+        }
+
+        .ItemCard .ItemCardContent .ItemCardContentInfo {
+            margin-right: 27%;
+        }
+
+        .ItemCard .ItemCardContent .ItemCardContentOrder {
+/*           margin-right: 27%;*/
+            height:32%;
+            text-align: center;
+            font-size: 20px;
+        }
+
+        .ItemCard .ItemCardContent .ItemCardContentOrderPlus, .ItemCard .ItemCardContent .ItemCardContentOrderMins, .ItemCardContentOrderAdd, .ItemCardContentOrderRemove {
+            font-size: 25px;
+            font-weight: bold;
+            width: 50px;
+            /*           height:50px;*/
+        }
+
+    #ItemMain #BtnCartInfo {
+        width: 85px;
+        height: 85px;
+        border-radius: 200px;
+        position: fixed;
+        bottom: 109px;
+        right: 96px;
+        background-color: rgb(0, 112, 205);
+        color:white;
+        z-index:100;
+    }
+
+    .BtnCartInfoNotfcation {
+        width: 40px;
+        display: none;
+        height: 40px;
+        background-color: rgb(239, 15, 15);
+        border-radius: 25px;
+        text-align: center;
+        padding: 7px;
+        position: absolute;
+        top: -20px;
+        left: 1px;
+        color:white;
+        
+    }
+
+    #BtnCartInfo:hover {
+        background-color: rgb(1, 139, 255);
+    }
+
+    
 </style>
 
 <div style="margin-top:20px">
@@ -202,6 +296,9 @@
     <div class="row">
         <div class="col-lg-9">
             <div id="ItemMain">
+                <div>
+                    <button  onclick="location.href='@Url.Action("OrderList", "Home")'" class="btn text-center" id="BtnCartInfo"><i style="font-size:25px" class="fas fa-cart-plus"></i> <span class="BtnCartInfoNotfcation">0</span></button>
+                </div>
                 <h4 id="ItemTitle">@Model.Title</h4>
                 <p>تمت الاضافة بتاريخ : @Model.Date</p>
                 <div id="ImgContainer">
@@ -216,6 +313,137 @@
                 </div>
                 <div>
                     <p>@Html.Raw(Model.Description)</p>
+
+            
+                    @*<div>
+                        <div id="ItemCard1" data-itm="1" class="ItemCard">
+                            <div class="card mb-3" style="width:99%">
+                                <div class="row g-0">
+                                    <div class="col-md-4">
+                                        <div class="w3-content w3-display-container">
+                                            <img id="Img1" class="mySlides1" src="~/uploads/categories/18750440-a4ba-442c-baa1-ee8630038852.png" style="width:100%">
+                                            <img class="mySlides1" src="~/uploads/categories/6ff56705-5588-48ae-abd6-50785f87406a.png" style="width:100%">
+                                            <img class="mySlides1" src="~/uploads/categories/78572f39-e629-40df-951b-75ad14e6e035.png" style="width:100%">
+                                            <img class="mySlides1" src="~/uploads/categories/891934c3-b67a-439b-b05c-3075df5ea068.png" style="width:100%">
+                                            
+                                            <button class="w3-button w3-black w3-display-left BtnLeft">&#10095;</button>
+                                            <button class="w3-button w3-black w3-display-right BtnRight">&#10094;</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="card-body">
+                                            <div class="ItemCardContent">
+                                                <h3 id="ItemCardContentTitle1" class="card-title">اريال - مسحوق غسيل 4 كيلو + 2 كيلو هدية</h3>
+                                                <h4 class="card-text">
+                                                    السعر
+                                                    <strong class="ItemCardContentInfoPrice text-danger"> 50.5 ج</strong>
+                                                    لكل
+                                                    <strong class="ItemCardContentInfoUnit text-danger"> وحدة</strong>
+                                                </h4>
+                                                <div class="ItemCardContentOrder">
+                                                    <input type="hidden" id="ItmId1" value="1" />
+                                                    <input type="hidden" id="Quantity1" value="1" />
+                                                    <input id="Price1" type="hidden" value="10" />
+                                                    <button  class="ItemCardContentOrderPlus btn btn-secondary"><i class="fas fa-plus"></i></button>
+                                                    <span id="QuantityLabel1" class="ItemCardContentOrderQuantity">0.0</span>
+                                                    <button  class="ItemCardContentOrderMins btn btn-secondary"><i class="fas fa-minus"></i></button>
+
+                                                    <button id="AddToCart1"  class="ItemCardContentOrderAdd btn btn-dark"><i class="fas fa-cart-plus"></i></button>
+                                                    <span id="ItemCardContentBtnPrice1" class="ItemCardContentOrderQuantity">0</span><span>ج</span>
+                                                    <button  class="ItemCardContentOrderRemove btn btn-dark"><i class="fas fa-trash-alt"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="ItemCard2" data-itm="2" class="ItemCard">
+                            <div class="card mb-3" style="width:99%">
+                                <div class="row g-0">
+                                    <div class="col-md-4">
+                                        <div class="w3-content w3-display-container">
+                                            <img id="Img2" class="mySlides2" src="~/uploads/categories/18750440-a4ba-442c-baa1-ee8630038852.png" style="width:100%">
+                                            <img class="mySlides2" src="~/uploads/categories/6ff56705-5588-48ae-abd6-50785f87406a.png" style="width:100%">
+                                            <img class="mySlides2" src="~/uploads/categories/78572f39-e629-40df-951b-75ad14e6e035.png" style="width:100%">
+                                            <img class="mySlides2" src="~/uploads/categories/891934c3-b67a-439b-b05c-3075df5ea068.png" style="width:100%">
+
+                                            <button class="w3-button w3-black w3-display-left BtnLeft" >&#10095;</button>
+                                            <button class="w3-button w3-black w3-display-right BtnRight" >&#10094;</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="card-body">
+                                            <div class="ItemCardContent">
+                                                <h3 id="ItemCardContentTitle2" class="card-title">اريال - مسحوق غسيل 4 كيلو + 2 كيلو هدية</h3>
+                                                <h4 class="card-text">
+                                                    السعر
+                                                    <strong class="ItemCardContentInfoPrice text-danger"> 50.5 ج</strong>
+                                                    لكل
+                                                    <strong class="ItemCardContentInfoUnit text-danger"> وحدة</strong>
+                                                </h4>
+                                                <div class="ItemCardContentOrder">
+                                                    <input type="hidden" id="ItmId2" value="2" />
+                                                    <input type="hidden" id="Quantity2" value="1" />
+                                                    <input id="Price2" type="hidden" value="10" />
+                                                    <button  class="ItemCardContentOrderPlus btn btn-secondary"><i class="fas fa-plus"></i></button>
+                                                    <span id="QuantityLabel2" class="ItemCardContentOrderQuantity">0.0</span>
+                                                    <button  class="ItemCardContentOrderMins btn btn-secondary"><i class="fas fa-minus"></i></button>
+
+                                                    <button id="AddToCart2"  class="ItemCardContentOrderAdd btn btn-dark"><i class="fas fa-cart-plus"></i></button>
+                                                    <span id="ItemCardContentBtnPrice2" class="ItemCardContentOrderQuantity">0ج</span>
+                                                    <button  class="ItemCardContentOrderRemove btn btn-dark"><i class="fas fa-trash-alt"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="ItemCard3" data-itm="3" class="ItemCard">
+                            <div class="card mb-3" style="width:99%">
+                                <div class="row g-0">
+                                    <div class="col-md-4">
+                                        <div class="w3-content w3-display-container">
+                                            <img id="Img3" class="mySlides3" src="~/uploads/categories/18750440-a4ba-442c-baa1-ee8630038852.png" style="width:100%">
+                                            <img class="mySlides3" src="~/uploads/categories/6ff56705-5588-48ae-abd6-50785f87406a.png" style="width:100%">
+                                            <img class="mySlides3" src="~/uploads/categories/78572f39-e629-40df-951b-75ad14e6e035.png" style="width:100%">
+                                            <img class="mySlides3" src="~/uploads/categories/891934c3-b67a-439b-b05c-3075df5ea068.png" style="width:100%">
+
+                                            <button class="w3-button w3-black w3-display-left BtnLeft" >&#10095;</button>
+                                            <button class="w3-button w3-black w3-display-right BtnRight" >&#10094;</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="card-body">
+                                            <div class="ItemCardContent">
+                                                <h3 id="ItemCardContentTitle3" class="card-title">اريال - مسحوق غسيل 4 كيلو + 2 كيلو هدية</h3>
+                                                <h4 class="card-text">
+                                                    السعر
+                                                    <strong class="ItemCardContentInfoPrice text-danger"> 50.5 ج</strong>
+                                                    لكل
+                                                    <strong class="ItemCardContentInfoUnit text-danger"> وحدة</strong>
+                                                </h4>
+                                                <div class="ItemCardContentOrder">
+                                                    <input type="hidden" id="ItmId3" value="3" />
+                                                    <input type="hidden" id="Quantity3" value="1" />
+                                                    <input id="Price3" type="hidden" value="10" />
+                                                    <button  class="ItemCardContentOrderPlus btn btn-secondary"><i class="fas fa-plus"></i></button>
+                                                    <span id="QuantityLabel3" class="ItemCardContentOrderQuantity">0.0</span>
+                                                    <button  class="ItemCardContentOrderMins btn btn-secondary"><i class="fas fa-minus"></i></button>
+
+                                                    <button id="AddToCart3"  class="ItemCardContentOrderAdd btn btn-dark"><i class="fas fa-cart-plus"></i></button>
+                                                    <span id="ItemCardContentBtnPrice3" class="ItemCardContentOrderQuantity">0ج</span>
+                                                    <button  class="ItemCardContentOrderRemove btn btn-dark"><i class="fas fa-trash-alt"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>*@
+                   
                 </div>
             </div>
             <div id="Message" class="Message">
@@ -321,12 +549,19 @@
 {
 
     <script>
-    $(function () {
+        $(function () {
+
+
+            $('.ItemCardContentOrderPlus').html('<i class="fas fa-plus"></i>');
+            $('.ItemCardContentOrderMins').html('<i class="fas fa-minus"></i>');
+            $('.ItemCardContentOrderAdd').html('<i class="fas fa-cart-plus">');
+            $('.ItemCardContentOrderRemove').html('<i class="fas fa-trash-alt"></i>');
+
         $('#OrderBtn').click(function (e) {
 
 
             if ($(this).find('span').text() != "أطلب الآن") {
-                
+
                 $(this).attr('href', 'tel:+2-010-646-416-08');
                 $(this).attr('data-ajax', '');
                 $(this).attr('data-ajax-method', '');
@@ -339,6 +574,13 @@
             }
 
         });
+
+
+        //Show Count of item Records in indexedDb
+        remove("00-00");
+        ShowItemCountOnOrderButton();
+       
+
     });
 
         function GoWhats() {
@@ -371,5 +613,281 @@
             $('.Alert').text("");
             //console.log(`mailto:@Model.Member.Email?subject= ${Title}&body=${message}`);
         }
+
+        //item card slider
+        var slideIndex = 1;
+        var Counter = 1;
+        var BackItm = 1;
+        $('.ItemCard').each(function (i, tr) {
+            showDivs(slideIndex, Counter);
+            Counter = Counter + 1;
+        });
+
+        $('.BtnLeft').click(function () {
+            var itm = $(this).parents(".ItemCard").attr("data-itm");
+            plusDivs(-1,itm);
+        });
+
+        $('.BtnRight').click(function () {
+            var itm = $(this).parents(".ItemCard").attr("data-itm");
+            plusDivs(1,itm);
+        });
+
+        //item card slider
+        function plusDivs(n, itm) {
+            if (itm != BackItm) {
+                slideIndex = 1;
+            }
+            showDivs(slideIndex += n, itm);
+            BackItm = itm;
+        }
+
+        function showDivs(n,itm) {
+            var i;
+            //var x = document.getElementsByClassName("mySlides" + itm);
+            var x = $('.mySlides' + itm);
+            console.log(x);
+            if (n > x.length) { slideIndex = 1 }
+            if (n < 1) { slideIndex = x.length }
+            for (i = 0; i < x.length; i++) {
+                x[i].style.display = "none";
+            }
+            x[slideIndex - 1].style.display = "block";
+        }
+
+        function PlusQuantity(itm) {
+            var Quantity = Number($('#Quantity' + itm).val());
+            var Price = Number($('#Price' + itm).val());
+            var QuantityLabel = $('#QuantityLabel' + itm);
+            var QuantityLabelVal = Number($('#QuantityLabel' + itm).text());
+            
+            var TotalQuantity = QuantityLabelVal + Quantity;
+            var TotalPrice = Price * TotalQuantity;
+            $(QuantityLabel).text(TotalQuantity);
+
+            var QuantityVal = $('#QuantityLabel' + itm).text();
+            console.log(QuantityVal.indexOf("."));
+            if (QuantityVal.indexOf(".") == -1) {
+                $('#QuantityLabel' + itm).text(`${QuantityVal}.0`);
+            }
+
+            $('#ItemCardContentBtnPrice' + itm).text(`${TotalPrice}`);
+            $('#AddToCart' + itm).removeClass("btn-dark");
+            $('#AddToCart' + itm).addClass(" btn-danger");
+        }
+
+        function MinsQuantity(itm) {
+            var Quantity = Number($('#Quantity' + itm).val());
+            var QuantityLabel = $('#QuantityLabel' + itm);
+            var QuantityLabelVal = Number($('#QuantityLabel' + itm).text());
+            var Price = Number($('#Price' + itm).val());
+
+           
+            if (!Number($('#QuantityLabel' + itm).text()) <= 0) {
+                var TotalQuantity = QuantityLabelVal - Quantity;
+                var TotalPrice = Price * TotalQuantity;
+                console.log(TotalPrice);
+                $(QuantityLabel).text(TotalQuantity);
+                var QuantityVal = $('#QuantityLabel' + itm).text();
+                if (QuantityVal.indexOf(".") == -1) {
+                    $('#QuantityLabel' + itm).text(`${QuantityVal}.0`);
+                    $('#ItemCardContentBtnPrice' + itm).text(`${TotalPrice}`);
+                }
+
+                if (QuantityVal == 0) {
+                    $('#AddToCart' + itm).removeClass("btn-danger");
+                    $('#AddToCart' + itm).addClass(" btn-dark");
+                }
+
+
+            }
+            
+
+        }
+
+        $('.ItemCardContentOrderPlus').click(function () {
+            var itm = $(this).parents(".ItemCard").attr("data-itm");
+            PlusQuantity(itm)
+        });
+
+         $('.ItemCardContentOrderMins').click(function () {
+            var itm = $(this).parents(".ItemCard").attr("data-itm");
+             MinsQuantity(itm)
+        });
+
+        function ShowItemCountOnOrderButton() {
+            var ItemsCount = db.transaction(["item"], "readwrite")
+                .objectStore("item").count();
+
+            ItemsCount.onsuccess = function () {
+                var result = ItemsCount.result;
+                if (result > 0) {
+                    if (result > 10) {
+                        $('.BtnCartInfoNotfcation').text(+10);
+                    }
+                    else {
+                        $('.BtnCartInfoNotfcation').text(result);
+                    }
+                    $('.BtnCartInfoNotfcation').show();
+                }
+                else {
+                    $('.BtnCartInfoNotfcation').hide();
+                }
+            }
+        }
+
+        //Start DataBase
+
+        
+
+        //prefixes of implementation that we want to test
+        window.indexedDB = window.indexedDB || window.mozIndexedDB ||
+            window.webkitIndexedDB || window.msIndexedDB;
+
+        //prefixes of window.IDB objects
+        window.IDBTransaction = window.IDBTransaction ||
+            window.webkitIDBTransaction || window.msIDBTransaction;
+        window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange ||
+            window.msIDBKeyRange
+
+        if (!window.indexedDB) {
+            window.alert("Your browser doesn't support a stable version of IndexedDB.")
+        }
+
+        //variables
+        var Id = 0;
+        var Title = "";
+        var Price = 0;
+        var Quantity = 0;
+        var Img = "";
+        var TotalPrice = 0;
+
+        const ItemData = [
+            { id: "00-00", title: "start", price: 0, quantity: 0, img: "", totalPrice: 0 }
+        ];
+
+        var db;
+        var request = window.indexedDB.open("newDatabase", 1);
+
+        request.onerror = function (event) {
+            console.log("error: ");
+        };
+
+        request.onsuccess = function (event) {
+            db = request.result;
+            console.log("success: " + db);
+        };
+
+        request.onupgradeneeded = function (event) {
+            var db = event.target.result;
+            var objectStore2 = db.createObjectStore("item", { keyPath: "id" });
+
+
+            for (var i in ItemData) {
+                objectStore2.add(ItemData[i]);
+            }
+        }
+
+
+        
+
+        function read() {
+            var transaction = db.transaction(["order"]);
+            var objectStore = transaction.objectStore("order");
+            var request = objectStore.get("00-02");
+
+            console.log(transaction);
+            console.log(objectStore);
+            console.log(request);
+
+            request.onerror = function (event) {
+                alert("Unable to retrieve daa from database!");
+            };
+
+            //request.onsuccess = function (event) {
+            //    // Do something with the request.result!
+            //    if (request.result) {
+            //        alert("Name: " + request.result.name + ", Age: " + request.result.age + ", Email: " + request.result.email);
+            //   } else {
+            //        alert("Kenny couldn't be found in your database!");
+            //    }
+            //};
+        }
+
+        function readAll() {
+            var objectStore = db.transaction("order").objectStore("order");
+
+            objectStore.openCursor().onsuccess = function (event) {
+                var cursor = event.target.result;
+
+                if (cursor) {
+                    alert("Name for id " + cursor.key + " is " + cursor.value.name + ",  Age: " + cursor.value.age + ", Email: " + cursor.value.email);
+                  cursor.continue();
+                } else {
+                    alert("No more entries!");
+                }
+            };
+        }
+        var Num = 0;
+        function add(itm) {
+            remove("00-00");
+            remove(itm);
+           
+
+            Id = $('#ItmId' + itm).val();
+            Title = $('#ItemCardContentTitle' + itm).text();
+            Quantity = $('#QuantityLabel' + itm).text();
+            TotalPrice = $('#ItemCardContentBtnPrice' + itm).text();
+            Img = $('#Img' + itm).attr("src");
+            Price = $('#Price' + itm).val();
+
+
+            console.log(Id);
+            console.log(Title);
+            console.log(Quantity);
+            console.log(Price);
+            console.log(Img);
+            if (Number(Quantity) > 0) {
+                var request = db.transaction(["item"], "readwrite")
+                    .objectStore("item")
+                    .add({ id: Id, title: Title, price: Price, quantity: Quantity, img: Img, totalPrice : TotalPrice });
+
+                request.onsuccess = function (event) {
+                    ShowItemCountOnOrderButton();
+                };
+
+                request.onerror = function (event) {
+                    //alert("Unable to add data\r\nKenny is aready exist in your database! ");
+                    console.log("error");
+                }
+            }
+            else {
+                console.log("less than");
+            }
+            
+        }
+
+        function remove(itm) {
+            var request = db.transaction(["item"], "readwrite")
+                .objectStore("item")
+                .delete(itm);
+
+            request.onsuccess = function (event) {
+                ShowItemCountOnOrderButton();
+            };
+        }
+
+        $('.ItemCardContentOrderAdd').click(function () {
+            var itm = $(this).parents(".ItemCard").attr("data-itm");
+            add(itm);
+        });
+
+         $('.ItemCardContentOrderRemove').click(function () {
+             var itm = $(this).parents(".ItemCard").attr("data-itm");
+             remove(itm);
+        });
+
+        //End DataBase
+
     </script>
 }

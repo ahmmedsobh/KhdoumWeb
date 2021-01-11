@@ -347,6 +347,11 @@ namespace KhdoumWeb.Controllers
            
         }
 
+        public IActionResult OrderList()
+        {
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();
