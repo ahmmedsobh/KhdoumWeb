@@ -150,11 +150,13 @@ namespace KhdoumWeb.Controllers
                 return NotFound();
             }
             member.ItemsCount = 0;
+            var Member = _context.Members.AsNoTracking().FirstOrDefault(m => m.Id == member.Id);
+            member.Password = Member.Password;
+            member.ConfirmPassword = Member.Password;
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var Member = _context.Members.AsNoTracking().FirstOrDefault(m => m.Id == member.Id);
                     member.ActivationCode = Member.ActivationCode;
                     string ImgUrl = Member.ImgUrl;
 

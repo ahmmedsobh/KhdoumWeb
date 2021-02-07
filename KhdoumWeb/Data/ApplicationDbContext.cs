@@ -29,8 +29,13 @@ namespace KhdoumWeb.Data
         public DbSet<Raiting> Raitings { get; set; }
         public DbSet<Role> Roless { get; set; }
         public DbSet<MemberRole> MemberRoles { get; set; }
-
         public DbSet<SubCategory> SubCategories { get; set; }
+
+        public DbSet<Unit> Units { get; set; }
+        public DbSet<Cart> Carts { get; set; }
+        public DbSet<CartHeader> CartHeaders { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderDetails> OrderDetails  { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -1,0 +1,57 @@
+﻿@model KhdoumWeb.Models.ViewModels.ClientLoginViewModel
+@{ 
+    ViewBag.Title = "تسجيل دخول";
+}
+<style>
+    #Login {
+        width: 35%;
+        min-width: 320px;
+        margin: auto;
+    }
+</style>
+<div id="Login">
+    <br />
+    <h3 class="text-center">من فضلك قم بتسجيل الدخول</h3>
+    <br />
+    <form asp-action="ClientLogin" method="post">
+        <div class="form-group">
+            <input asp-for="UserPhone" placeholder="رقم الهاتف" id="UserPhoneLogin" class="form-control" />
+            <span asp-validation-for="UserPhone" id="UserPhoneLoginMsg" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input asp-for="Password" placeholder="كلمة المرور" id="PasswordLogin" class="form-control" />
+            <span asp-validation-for="Password" id="UserPhoneLoginMsg" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" id="BtnLogin" style="width:100%" class="btn btn-primary" value="تسجيل الدخول" />
+        </div>
+        <div class="form-group">
+            <a asp-action="ClientRegister" id="BtnNotOwnAcc" style="width:100%" class="btn btn-success">لا أمتلك حساب</a>
+        </div>
+        <div class="form-group">
+            <a href="#" id="ForgetPassword" style="width:100%" class="btn btn-warning">أمتلك حساب لكن لا اعرف كلمة المرور</a>
+            <span class="text-danger text-center" id="ForgetPasswordMessage"></span>
+        </div>
+    </form>
+</div>
+
+@section Scripts{ 
+    <script>
+        $("#ForgetPassword").click(function(){
+            if ($("#UserPhoneLogin").val() == "") {
+                $("#ForgetPasswordMessage").text("من فضلك ادخل رقم الهاتف لاسترجاع كلمة المرور");
+            }
+            else {
+                var phone = $("#UserPhoneLogin").val();
+                $(this).attr("href", `https://wa.me/201064641608?text=INeedPasswordFor(${phone})`);
+                $("#ForgetPasswordMessage").text("");
+            }
+        });
+
+        $(function () {
+            $("#OrderSection").hide();
+        });
+
+    </script>
+
+}

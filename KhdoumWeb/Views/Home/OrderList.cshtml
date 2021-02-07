@@ -1,168 +1,295 @@
-﻿
+﻿@model List<KhdoumWeb.Models.Cart>
 @{
     ViewData["Title"] = "قائمة التسوق";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<br />
 <h3>قائمة التسوق</h3>
-<label>التوصيل الى :</label>
-<select id="States">
-    <option value="5">الجمالية</option>
-    <option value="10">البصراط</option>
-    <option value="20">المنزلة</option>
-    <option value="10">ميت مرجا</option>
-    <option value="15">الكفر الجديد</option>
-    <option value="15">ميت سلسيل</option>
-    <option value="20">الكردى</option>
-    <option value="10">عزبة عبده</option>
-    <option value="15">ليسا الجمالية</option>
-    <option value="20">اسكندرية الجديده</option>
-    <option value="20">مصر الجديدة</option>
-</select>
-<table id="OrderListTbl" class="table table-bordered table-striped text-center bg-white">
-    <thead>
-        <tr>
-            <th></th>
-            <th>اسم الصنف</th>
-            <th>الكمية</th>
-            <th>السعر</th>
-            <th>السعر الكلى</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-    </tbody>
-</table>
-<a href="#" id="OrderNow" class="btn btn-primary" style="width: 100%; border-radius:0">أطلب الأن</a>
+<div id="tbl">
+    <div style="margin-top:30px">
+        @if (Model.Count() != 0)
+        {
+            <div class="row" id="list">
+
+                @foreach (var item in Model)
+                {
+                    string Id = $"btn{item.Item.Id}";
+                    string CardId = $"Card{item.Item.Id}";
+                    string CardSection = $"CardSection{item.Item.Id}";
+                    <div class="col-lg-4 CardSection" id="@CardSection">
+                        <div class="card" id="@CardId" data-itm="@item.Item.Id" style="margin-bottom:15px;height:475px">
+                            @if (item.Item.ImgUrl == "false")
+                            {
+                                <img style="height:200px" src="~/uploads/default.png" class="card-img-top" alt="@item.Item.Title" title="@item.Item.Title">
+                            }
+                            else
+                            {
+                                <img style="height:200px" src="~/uploads/Items/@item.Item.ImgUrl" class="card-img-top" alt="@item.Item.Title" title="@item.Item.Title">
+                            }
+                            <div class="card-body">
+                                @{
+                                    var lblQuantity = $"lblQuantity{item.Id}";
+                                    var lblItmTotalPrice = $"lblItmTotalPrice{item.Id}";
+                                    var ItmId = $"ItmId{item.Id}";
+                                    var Quantity = $"Quantity{item.Id}";
+                                    var QuantityDuration = $"QuantityDuration{item.Id}";
+                                    var Price = $"Price{item.Id}";
+                                    var BtnAddToCart = $"BtnAddToCart{item.Id}";
+                                    var BtnRemoveFromCart = $"BtnRemoveFromCart{item.Id}";
+
+                                }
+                                <h5 class="card-title"><a target="_blank" asp-action="Item" asp-route-id="@item.Item.ShortLink" class="nav-link Lnk">@item.Item.Title</a></h5>
+                                <h6 class="card-title">السعر  : <strong class="text-danger">@item.Item.Price ج</strong> لكل <strong class="text-danger"> @item.Unit.Name </strong></h6>
+                                <h6 class="card-title"> الكمية : <span id="@lblQuantity" class="lblQuantity"> @item.Quantity </span></h6>
+                                <h6 class="card-title"> الاجمالى : <span id="@lblItmTotalPrice" class="lblItmTotalPrice"> @item.Value </span> ج </h6>
+
+                                <input type="hidden" id="@ItmId" value="@item.Item.Id" />
+                                <input type="hidden" id="@Quantity" value="@item.Item.QuantityDuration" />
+                                <input type="hidden" id="@QuantityDuration" value="@item.Item.QuantityDuration" />
+                                <input id="@Price" type="hidden" value="@item.Item.Price" />
+
+
+                            </div>
+                            <div class="card-footer bg-white" style="text-align:center">
+                                @*<button onclick="AddToFavorite(@item.Id)" name="@item.Id" id="@Id" class="btn btn-dark"><i class="fas fa-heart text-white"></i></button>
+                                <button class="btn btn-primary BtnQuantityPlus"><i class="fas fa-plus"></i></button>
+                                <button class="btn btn-primary BtnQuantityMinus"><i class="fas fa-minus"></i></button>*@
+                                @*<button id="@BtnAddToCart" class="btn btn-dark BtnAddToCart"><i class="fas fa-cart-plus"></i></button>*@
+                                <button id="@BtnRemoveFromCart" class="btn btn-dark BtnRemoveFromCart"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <form asp-action="OrderNow" id="OrderNowForm" asp-controller="Home">
+                <input type="hidden" class="UserPhone" name="UserPhone" />
+                <input type="hidden" class="Password" name="Password" />
+                <button id="OrderNow" type="submit" class="btn btn-primary" style="width: 100%; border-radius:0">أطلب الأن</button>
+            </form>
+        }
+        else
+        {
+            <p class="alert alert-warning text-center" style="border-radius:0;width:100%">لم يتم العثور على اى عناصر</p>
+        }
+
+    </div>
+</div>
+@*<label>التوصيل الى :</label>*@
+@*<select id="States">
+        <option value="5">الجمالية</option>
+        <option value="10">البصراط</option>
+        <option value="20">المنزلة</option>
+        <option value="10">ميت مرجا</option>
+        <option value="15">الكفر الجديد</option>
+        <option value="15">ميت سلسيل</option>
+        <option value="20">الكردى</option>
+        <option value="10">عزبة عبده</option>
+        <option value="15">ليسا الجمالية</option>
+        <option value="20">اسكندرية الجديده</option>
+        <option value="20">مصر الجديدة</option>
+    </select>*@
+@*<table id="OrderListTbl" class="table table-bordered table-striped text-center bg-white">
+        <thead>
+            <tr>
+                <th></th>
+                <th>اسم الصنف</th>
+                <th>الكمية</th>
+                <th>السعر</th>
+                <th>السعر الكلى</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>*@
+   
 
 @section Scripts{
+
     <script>
-
-        var db;
-        var request = window.indexedDB.open("newDatabase", 1);
-        request.onerror = function (event) {
-            console.log("error: ");
-        };
-
-        request.onsuccess = function (event) {
-            db = request.result;
-            console.log("success: " + db);
-        };
-
-        var TotalPrice = 0;
-
         $(function () {
-
-            
-            // render order items 
-            PaintOrder()
-            
-
-
-            $('#States').change(function () {
-                var BackDelivery = Number($('#Delivery').text());
-                TotalPrice = TotalPrice - BackDelivery + Number($(this).val());
-                $('#Delivery').text($(this).val());
-                $('#TotalDelivery').text($(this).val());
-                $('#TotalPrice').text(TotalPrice);
-            });
-
-
-            $('#OrderNow').click(function () {
-                var Rows = "";
-                $('#OrderListTbl tbody .r').each(function (i, tr) {
-                    TblTitle = $(`#OrderListTbl tbody tr:eq(${i}) td:eq(1)`).text();
-                    TblQuantity = $(`#OrderListTbl tbody tr:eq(${i}) td:eq(2)`).text();
-                    TblPrice = $(`#OrderListTbl tbody tr:eq(${i}) td:eq(3)`).text();
-                    TblTotalPrice = $(`#OrderListTbl tbody tr:eq(${i}) td:eq(4)`).text();
-                    Rows = Rows + `الصنف : ${TblTitle}، الكمية :${TblQuantity}، السعر :${TblPrice} ،السعر الكلى : ${TblTotalPrice} \n...<<<0>>>...`;
-                });
-
-                Rows = Rows + `الاجمالى : ${$('#TotalPrice').text()}`;
-                $('#OrderNow').attr("href", `https://wa.me/201064641608?text= ${Rows}`);
-                $('#OrderNow').attr("target", "_blank");
-                //console.log(Rows);
-            });
-
+            $("#OrderSection").hide();
         });
-
-        function remove(itm) {
-            var request = db.transaction(["item"], "readwrite")
-                .objectStore("item")
-                .delete(itm);
-
-            console.log(itm);
-
-            request.onsuccess = function (event) {
-                $('#OrderListTbl tbody tr').remove();
-                PaintOrder();
-            };
-        }
-
-        function PaintOrder() {
-            var ItemsCount = db.transaction(["item"], "readwrite")
-                .objectStore("item").count();
-            var tr = ``;
-           
-            ItemsCount.onsuccess = function () {
-                var result = ItemsCount.result;
-                if (result > 0) {
-                    var objectStore = db.transaction("item").objectStore("item");
-
-                    objectStore.openCursor().onsuccess = function (event) {
-                        var cursor = event.target.result;
-
-                        if (cursor) {
-                            tr = tr + `
-                                <tr class="r" id="tr${cursor.value.id}">
-                                <td><img src="${cursor.value.img}" style="width:50px;height:50px"/></td>
-                                <td>${cursor.value.title}</td>
-                                <td>${cursor.value.quantity}</td>
-                                <td>${cursor.value.price}</td>
-                                <td>${cursor.value.totalPrice}</td>
-                                <td><button onclick="remove('${cursor.value.id}')" class="btn btn-danger text-white"><i class="fas fa-trash-alt"></i></button></td>
-                                </tr>
-                            ` ;
-                            TotalPrice = TotalPrice + Number(cursor.value.totalPrice);
-                            cursor.continue();
-                        } else {
-
-                            price = Number($('#States').val());
-                            TotalPrice = TotalPrice + price;
-                            tr = tr + `
-                                <tr class="r">
-                                <td></td>
-                                <td>خدمة التوصيل</td>
-                                <td>1</td>
-                                <td id="Delivery">${price}</td>
-                                <td id="TotalDelivery">${price}</td>
-                                <td></td>
-                                </tr>
-                            ` ;
-
-                            tr = tr + `
-                                <tr>
-                                <td></td>
-                                <td colspan="3">الاجمالى</td>
-                                <td id="TotalPrice">${TotalPrice}</td>
-                                <td></td>
-                                </tr>
-                            ` ;
-
-                            $('#OrderListTbl tbody').append(tr);
-                        }
+    function RemoveItemFromCart(ItemId) {
+            var UserPhone = localStorage["UserPhone"];
+            var Password = localStorage["Password"];
+            debugger;
+            if (UserPhone == null || UserPhone == "" && Password == null || Password == "") {
+                location.href = "/Home/ClientLogin";
+            }
+            else {
 
 
-                    };
+                 $.ajax({
+                    type: 'POST',
+                    url: `@Url.Action("RemoveItemFromCart", "Home")`,
+                    data: {
+                        UserPhone: UserPhone,
+                        Password: Password,
+                        ItemId : ItemId
+                    },
+                     success: function (data) {
+                         if (data.state == 1) {
+                             $("#CardSection" + ItemId).remove();
+                         }
+                         if (data.num > 0) {
+                             $(".BtnCartInfoNotfcation").text(data.num);
+                             $(".BtnCartInfoNotfcation").show();
+                         }
+                         else {
+                             $(".BtnCartInfoNotfcation").hide();
+                         }
 
+                         var items = $(".CardSection");
+                         if (items.length == 0) {
+                             $("#OrderNowForm").remove();
+                             $("#list").append('<p class="alert alert-warning text-center" style="border-radius:0;width:100%">لم يتم العثور على اى عناصر</p>');
+                         }
 
-                }
-                else {
-                    $('#OrderNow').hide();
-                    tr = `<tr><td colspan="6">لا يوجد أصناف</td></tr>`;
-                    $('#OrderListTbl tbody').append(tr);
-                }
+                    },
+                    error: function (ex) {
+                        var r = jQuery.parseJSON(response.responseText);
+                        alert("Message: " + r.Message);
+                        alert("StackTrace: " + r.StackTrace);
+                        alert("ExceptionType: " + r.ExceptionType);
+                    }
+                });
             }
         }
+
+        $(".BtnRemoveFromCart").click(function (e) {
+            var itm = $(this).parents(".card").attr("data-itm");
+            RemoveItemFromCart(itm);
+        });
     </script>
+
+    @*<script>
+
+            var db;
+            var request = window.indexedDB.open("newDatabase", 1);
+            request.onerror = function (event) {
+                console.log("error: ");
+            };
+
+            request.onsuccess = function (event) {
+                db = request.result;
+                console.log("success: " + db);
+            };
+
+            var TotalPrice = 0;
+
+            $(function () {
+
+
+                // render order items
+                PaintOrder()
+
+
+
+                $('#States').change(function () {
+                    var BackDelivery = Number($('#Delivery').text());
+                    TotalPrice = TotalPrice - BackDelivery + Number($(this).val());
+                    $('#Delivery').text($(this).val());
+                    $('#TotalDelivery').text($(this).val());
+                    $('#TotalPrice').text(TotalPrice);
+                });
+
+
+                $('#OrderNow').click(function () {
+                    var Rows = "";
+                    $('#OrderListTbl tbody .r').each(function (i, tr) {
+                        TblTitle = $(`#OrderListTbl tbody tr:eq(${i}) td:eq(1)`).text();
+                        TblQuantity = $(`#OrderListTbl tbody tr:eq(${i}) td:eq(2)`).text();
+                        TblPrice = $(`#OrderListTbl tbody tr:eq(${i}) td:eq(3)`).text();
+                        TblTotalPrice = $(`#OrderListTbl tbody tr:eq(${i}) td:eq(4)`).text();
+                        Rows = Rows + `الصنف : ${TblTitle}، الكمية :${TblQuantity}، السعر :${TblPrice} ،السعر الكلى : ${TblTotalPrice} \n...<<<0>>>...`;
+                    });
+
+                    Rows = Rows + `الاجمالى : ${$('#TotalPrice').text()}`;
+                    $('#OrderNow').attr("href", `https://wa.me/201064641608?text= ${Rows}`);
+                    $('#OrderNow').attr("target", "_blank");
+                    //console.log(Rows);
+                });
+
+            });
+
+            function remove(itm) {
+                var request = db.transaction(["item"], "readwrite")
+                    .objectStore("item")
+                    .delete(itm);
+
+                console.log(itm);
+
+                request.onsuccess = function (event) {
+                    $('#OrderListTbl tbody tr').remove();
+                    PaintOrder();
+                };
+            }
+
+            function PaintOrder() {
+                var ItemsCount = db.transaction(["item"], "readwrite")
+                    .objectStore("item").count();
+                var tr = ``;
+
+                ItemsCount.onsuccess = function () {
+                    var result = ItemsCount.result;
+                    if (result > 0) {
+                        var objectStore = db.transaction("item").objectStore("item");
+
+                        objectStore.openCursor().onsuccess = function (event) {
+                            var cursor = event.target.result;
+
+                            if (cursor) {
+                                tr = tr + `
+                                    <tr class="r" id="tr${cursor.value.id}">
+                                    <td><img src="${cursor.value.img}" style="width:50px;height:50px"/></td>
+                                    <td>${cursor.value.title}</td>
+                                    <td>${cursor.value.quantity}</td>
+                                    <td>${cursor.value.price}</td>
+                                    <td>${cursor.value.totalPrice}</td>
+                                    <td><button onclick="remove('${cursor.value.id}')" class="btn btn-danger text-white"><i class="fas fa-trash-alt"></i></button></td>
+                                    </tr>
+                                ` ;
+                                TotalPrice = TotalPrice + Number(cursor.value.totalPrice);
+                                cursor.continue();
+                            } else {
+
+                                price = Number($('#States').val());
+                                TotalPrice = TotalPrice + price;
+                                tr = tr + `
+                                    <tr class="r">
+                                    <td></td>
+                                    <td>خدمة التوصيل</td>
+                                    <td>1</td>
+                                    <td id="Delivery">${price}</td>
+                                    <td id="TotalDelivery">${price}</td>
+                                    <td></td>
+                                    </tr>
+                                ` ;
+
+                                tr = tr + `
+                                    <tr>
+                                    <td></td>
+                                    <td colspan="3">الاجمالى</td>
+                                    <td id="TotalPrice">${TotalPrice}</td>
+                                    <td></td>
+                                    </tr>
+                                ` ;
+
+                                $('#OrderListTbl tbody').append(tr);
+                            }
+
+
+                        };
+
+
+                    }
+                    else {
+                        $('#OrderNow').hide();
+                        tr = `<tr><td colspan="6">لا يوجد أصناف</td></tr>`;
+                        $('#OrderListTbl tbody').append(tr);
+                    }
+                }
+            }
+        </script>*@
 }

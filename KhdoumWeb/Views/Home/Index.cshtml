@@ -1,8 +1,25 @@
 ﻿@model KhdoumWeb.Models.ViewModels.HomeModelView
-
+@using KhdoumWeb.Models.ViewModels
+@using Newtonsoft.Json;
 @{
     ViewData["Title"] = "الرئيسية";
     int LoadItemsCount = Model.Items.Count + 9;
+    string UserName = "";
+    string Password = "";
+    string UserPhone = "";
+    string data = "";
+    if (TempData["LoginData"] != null)
+    {
+        data = TempData["LoginData"] as string;
+    }
+    var LoginData = JsonConvert.DeserializeObject<ClientLoginViewModel>(data);
+    if (LoginData != null)
+    {
+        UserName = LoginData.UserName;
+        UserPhone = LoginData.UserPhone;
+        Password = LoginData.Password;
+    }
+
 }
 <style>
     .main {
@@ -112,9 +129,7 @@
                 if (items.includes(Number(id))) {
                     $("#btn" + id).attr("class", "btn btn-danger");
                 }
-                console.log(items);
-                console.log(items.includes(id));
-                console.log(id);
+                
 
             });
 
@@ -123,7 +138,19 @@
         }
 
         $(function () {
-           
+            var UserName = "@UserName";
+            var UserPhone = "@UserPhone";
+            var Password = "@Password";
+
+            console.log(`UserPhone ${UserPhone}`);
+            console.log(`UserName ${UserName}`);
+            console.log(`Password ${Password}`);
+
+            if (UserName != "" && Password != "") {
+                localStorage["UserPhone"] = UserPhone;
+                localStorage["UserName"] = UserName;
+                localStorage["Password"] = Password;
+            }
 
         });
     </script>

@@ -83,7 +83,7 @@ namespace KhdoumWeb.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,GovernorateId")] City city)
+        public async Task<IActionResult> Create( City city)
         {
             try
             {
@@ -133,7 +133,7 @@ namespace KhdoumWeb.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,GovernorateId")] City city)
+        public async Task<IActionResult> Edit(int id,  City city)
         {
             
             if (id != city.Id)

@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{ 
+    
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -156,6 +160,36 @@
         h1, h2, h3, h4, h5, h6 {
             font-family: 'Cairo';
         }
+
+        #OrderSection #BtnCartInfo {
+            width: 85px;
+            height: 85px;
+            border-radius: 200px;
+            position: fixed;
+            bottom: 109px;
+            right: 42%;
+            background-color: rgb(0, 112, 205);
+            color: white;
+            z-index: 100;
+        }
+
+        .BtnCartInfoNotfcation {
+            width: 40px;
+            display: none;
+            height: 40px;
+            background-color: rgb(239, 15, 15);
+            border-radius: 25px;
+            text-align: center;
+            padding: 7px;
+            position: absolute;
+            top: -20px;
+            left: 1px;
+            color: white;
+        }
+
+        #BtnCartInfo:hover {
+            background-color: rgb(1, 139, 255);
+        }
     </style>
 
     @* <script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property=5fbe47317530e20012b5f03d&product=inline-share-buttons' async='async'></script>*@
@@ -209,10 +243,10 @@
                             <a href="#" id="FavoriteLink" onclick="GetFavorites()" class="btn btn-outline-color2"><i class="fas fa-heart"></i> <span class="d-none d-lg-inline">المفضلة</span> </a>
                         </li>
                         <li style="margin-left: 10px;margin-bottom:10px" class="nav-item">
-                            <a href="tel:+2-010-646-416-08"  class="btn btn-secondary"><i class="fas fa-phone"></i> <span class="d-none d-lg-inline">كلمنا موبايل</span> </a>
+                            <a href="tel:+2-010-646-416-08" class="btn btn-secondary"><i class="fas fa-phone"></i> <span class="d-none d-lg-inline">كلمنا موبايل</span> </a>
                         </li>
                         <li class="nav-item">
-                            <a href="https://wa.me/201064641608"  class="btn btn-info"><i class="fab fa-whatsapp"></i> <span class="d-none d-lg-inline">كلمنا واتس</span> </a>
+                            <a href="https://wa.me/201064641608" class="btn btn-info"><i class="fab fa-whatsapp"></i> <span class="d-none d-lg-inline">كلمنا واتس</span> </a>
                         </li>
                     </ul>
 
@@ -227,6 +261,15 @@
         </main>
     </div>
 
+    <div id="OrderSection">
+        <form asp-action="OrderList" asp-controller="Home">
+            <input type="hidden" class="UserPhone" name="UserPhone" />
+            <input type="hidden" class="Password" name="Password" />
+            <button type="submit" class="btn text-center" id="BtnCartInfo"><i style="font-size:25px" class="fas fa-cart-plus"></i> <span class="BtnCartInfoNotfcation">0</span></button>
+        </form>
+    </div>
+
+
     <footer class="border-top footer text-muted">
         <div class="container">
             خدوم - &copy; @DateTime.Now.Year - <a asp-area="" asp-controller="Home" asp-action="About">عن المنصة</a>
@@ -234,13 +277,16 @@
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
     <script src="~/lib/jquery-ajax-unobtrusive/dist/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/js/tata.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="https://kit.fontawesome.com/ef95329904.js" crossorigin="anonymous"></script>
     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5ece7c650c8b6e5f"></script>
     <script src="~/js/caleandar.min.js"></script>
     @*<script src="//code.tidio.co/zq3epalba2ghwuf9u8apjfk8wzkktpo9.js" async></script>*@
-    <script>
+<script>
         function AddToFavorite(id) {
             items = JSON.parse(localStorage.getItem("items") || "[]");
             if (!items.includes(id)) {
@@ -268,6 +314,8 @@
         }
 
         $(function () {
+
+            //Favorits
             items = JSON.parse(localStorage.getItem("items") || "[]");
 
             $('#tbl button').each(function () {
@@ -275,22 +323,213 @@
                 if (items.includes(Number(id))) {
                     $("#btn" + id).attr("class", "btn btn-danger");
                 }
-                console.log(items);
-                console.log(items.includes(id));
-                console.log(id);
+
 
             });
 
             //$('#ShareButtons').remove();
             //$('#ShareModal').append('<div id="ShareButtons" class="addthis_inline_share_toolbox"></div>');
 
+
+            //add userphone and password to btn order list
+            var UserPhone = localStorage["UserPhone"];
+            var Password = localStorage["Password"];
+            debugger;
+            console.log(UserPhone);
+            console.log(Password);
+                if (UserPhone == null || UserPhone == "" && Password == null || Password == "") {
+                    if ($("#Login").length == 0 ) {
+                        //location.href = "/Home/ClientLogin";
+                        //Get Cart Items Cont For this user
+                    }
+                }
+                else {
+                    $(".UserPhone").val(UserPhone);
+                    $(".Password").val(Password);
+                    GetCartItemsCount();
+                }
+
+
+
+
+
+
+
+
+
+
+
+        });
+
+        //Fast user login functions
+        function FastUserLogin() {
+
+        }
+
+        function GetCartItemsCount() {
+            var UserPhone = localStorage["UserPhone"];
+            var Password = localStorage["Password"];
+            debugger;
             
+            if (UserPhone == null || UserPhone == "" && Password == null || Password == "") {
+                if ($("#Login").length == 0 ) {
+                    //location.href = "/Home/ClientLogin";
+                }
+            }
+            else {
+
+
+                 $.ajax({
+                    type: 'POST',
+                    url: `@Url.Action("GetCartItemsCount", "Home")`,
+                    data: {
+                        UserPhone: UserPhone,
+                        Password: Password
+                    },
+                     success: function (data) {
+                         if (data.num > 0) {
+
+                             $(".BtnCartInfoNotfcation").text(data.num);
+                             $(".BtnCartInfoNotfcation").show();
+                             //tata.success('عربة التسوق', 'تمت الاضافة', {
+                             //    position: 'mm'
+                             //})
+                         }
+                         else {
+                             $(".BtnCartInfoNotfcation").hide();
+                         }
+                    },
+                    error: function (ex) {
+                        var r = jQuery.parseJSON(response.responseText);
+                        alert("Message: " + r.Message);
+                        alert("StackTrace: " + r.StackTrace);
+                        alert("ExceptionType: " + r.ExceptionType);
+                    }
+                });
+            }
+        }
+
+        $('.BtnAddToCart').click(function () {
+            var UserPhone = localStorage["UserPhone"];
+            var Password = localStorage["Password"];
+            debugger;
+            if (UserPhone == null || UserPhone == "" && Password == null || Password == "") {
+                location.href = "/Home/ClientLogin";
+            }
+            else {
+                var itm = $(this).parents(".card").attr("data-itm");
+                var Quantity = Number($('#Quantity' + itm).val());
+
+                 $.ajax({
+                    type: 'POST',
+                    url: `@Url.Action("AddToCart", "Home")`,
+                    data: {
+                        UserPhone: UserPhone,
+                        Password: Password,
+                        Quantity: Quantity,
+                        ItemId: itm
+                    },
+                     success: function (data) {
+                         console.log(data);
+                         if (Number(data.num) > 0) {
+                             $(".BtnCartInfoNotfcation").text(data.num);
+                             $(".BtnCartInfoNotfcation").show();
+                             $(".UserPhone").val(UserPhone);
+                             $(".Password").val(Password);
+                         }
+                         else {
+                             $(".BtnCartInfoNotfcation").hide();
+                         }
+                    },
+                    error: function (ex) {
+                        var r = jQuery.parseJSON(response.responseText);
+                        alert("Message: " + r.Message);
+                        alert("StackTrace: " + r.StackTrace);
+                        alert("ExceptionType: " + r.ExceptionType);
+                    }
+                });
+            }
         });
 
 
-        
 
-    </script>
+
+        //start item list partial view
+        // start card order code
+        function PlusQuantity(itm) {
+            console.log(itm);
+            var Quantity = Number($('#Quantity' + itm).val());
+            var QuantityDuration = Number($('#QuantityDuration' + itm).val());
+
+            var Price = Number($('#Price' + itm).val());
+            var QuantityLabel = $('#lblQuantity' + itm);
+
+            var TotalQuantity = Quantity + QuantityDuration;
+            var TotalPrice = Price * TotalQuantity;
+
+            $(QuantityLabel).text(TotalQuantity);
+            $('#Quantity' + itm).val(TotalQuantity);
+
+            var QuantityVal = $('#Quantity' + itm).val();
+
+            console.log(QuantityVal.indexOf("."));
+            if (QuantityVal.indexOf(".") == -1) {
+                $('#Quantity' + itm).text(`${QuantityVal}.0`);
+                $('#lblQuantity' + itm).text(`${QuantityVal}.0`);
+            }
+
+            $('#lblItmTotalPrice' + itm).text(`${TotalPrice}`);
+            $('#BtnAddToCart' + itm).removeClass("btn-dark");
+            $('#BtnAddToCart' + itm).addClass(" btn-danger");
+        }
+
+        function MinusQuantity(itm) {
+            var Quantity = Number($('#Quantity' + itm).val());
+            var QuantityDuration = Number($('#QuantityDuration' + itm).val());
+
+            if (!Number($('#Quantity' + itm).val()) <= 0) {
+
+                var Price = Number($('#Price' + itm).val());
+                var QuantityLabel = $('#lblQuantity' + itm);
+
+                var TotalQuantity = Quantity - QuantityDuration;
+                var TotalPrice = Price * TotalQuantity;
+
+
+                $(QuantityLabel).text(TotalQuantity);
+                $('#Quantity' + itm).val(TotalQuantity);
+
+                var QuantityVal = $('#Quantity' + itm).val();
+
+                console.log(QuantityVal.indexOf("."));
+                if (QuantityVal.indexOf(".") == -1) {
+                    $('#Quantity' + itm).text(`${QuantityVal}.0`);
+                    $('#lblQuantity' + itm).text(`${QuantityVal}.0`);
+                    $('#lblItmTotalPrice' + itm).text(`${TotalPrice}`);
+                }
+
+                if (QuantityVal == 0) {
+                    $('#BtnAddToCart' + itm).removeClass("btn-danger");
+                    $('#BtnAddToCart' + itm).addClass(" btn-dark");
+                }
+            }
+        }
+
+        $('.BtnQuantityPlus').click(function () {
+            var itm = $(this).parents(".card").attr("data-itm");
+            PlusQuantity(itm)
+        });
+
+        $('.BtnQuantityMinus').click(function () {
+            var itm = $(this).parents(".card").attr("data-itm");
+            MinusQuantity(itm);
+        });
+            // start card order code
+
+            // end item list partial view
+
+
+</script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

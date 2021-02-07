@@ -4,14 +4,16 @@ using KhdoumWeb.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace KhdoumWeb.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210129174912_add-cart-unit-table")]
+    partial class addcartunittable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -91,20 +93,11 @@ namespace KhdoumWeb.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CartHeaderId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CartId")
-                        .HasColumnType("int");
-
                     b.Property<int>("ItemId")
                         .HasColumnType("int");
 
                     b.Property<int>("MemberId")
                         .HasColumnType("int");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("Quantity")
                         .HasColumnType("decimal(18,2)");
@@ -117,8 +110,6 @@ namespace KhdoumWeb.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CartHeaderId");
-
                     b.HasIndex("ItemId");
 
                     b.HasIndex("MemberId");
@@ -126,38 +117,6 @@ namespace KhdoumWeb.Data.Migrations
                     b.HasIndex("UnitId");
 
                     b.ToTable("Carts");
-                });
-
-            modelBuilder.Entity("KhdoumWeb.Models.CartHeader", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("CityId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Date")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Notes")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Phone")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Total")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CityId");
-
-                    b.ToTable("CartHeaders");
                 });
 
             modelBuilder.Entity("KhdoumWeb.Models.Category", b =>
@@ -192,9 +151,6 @@ namespace KhdoumWeb.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<decimal>("DeliveryService")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("GovernorateId")
                         .HasColumnType("int");
@@ -313,9 +269,6 @@ namespace KhdoumWeb.Data.Migrations
 
                     b.Property<string>("Privacy")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("QuantityDuration")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int?>("RatingCount")
                         .HasColumnType("int");
@@ -461,91 +414,6 @@ namespace KhdoumWeb.Data.Migrations
                     b.HasIndex("MemberId");
 
                     b.ToTable("MemberRoles");
-                });
-
-            modelBuilder.Entity("KhdoumWeb.Models.Order", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("CityId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Date")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("DeliveryService")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("LoginedPhone")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Notes")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Phone")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("State")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Total")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CityId");
-
-                    b.ToTable("Orders");
-                });
-
-            modelBuilder.Entity("KhdoumWeb.Models.OrderDetails", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ItemId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MemberId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("Quantity")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("UnitId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Value")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ItemId");
-
-                    b.HasIndex("MemberId");
-
-                    b.HasIndex("OrderId");
-
-                    b.HasIndex("UnitId");
-
-                    b.ToTable("OrderDetails");
                 });
 
             modelBuilder.Entity("KhdoumWeb.Models.Raiting", b =>
@@ -778,10 +646,6 @@ namespace KhdoumWeb.Data.Migrations
 
             modelBuilder.Entity("KhdoumWeb.Models.Cart", b =>
                 {
-                    b.HasOne("KhdoumWeb.Models.CartHeader", "CartHeader")
-                        .WithMany("CartDetails")
-                        .HasForeignKey("CartHeaderId");
-
                     b.HasOne("KhdoumWeb.Models.Item", "Item")
                         .WithMany()
                         .HasForeignKey("ItemId")
@@ -797,15 +661,6 @@ namespace KhdoumWeb.Data.Migrations
                     b.HasOne("KhdoumWeb.Models.Unit", "Unit")
                         .WithMany()
                         .HasForeignKey("UnitId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("KhdoumWeb.Models.CartHeader", b =>
-                {
-                    b.HasOne("KhdoumWeb.Models.City", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -918,42 +773,6 @@ namespace KhdoumWeb.Data.Migrations
                     b.HasOne("KhdoumWeb.Models.Role", "Role")
                         .WithMany("MembersRoles")
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("KhdoumWeb.Models.Order", b =>
-                {
-                    b.HasOne("KhdoumWeb.Models.City", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("KhdoumWeb.Models.OrderDetails", b =>
-                {
-                    b.HasOne("KhdoumWeb.Models.Item", "Item")
-                        .WithMany()
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("KhdoumWeb.Models.Member", "Member")
-                        .WithMany()
-                        .HasForeignKey("MemberId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("KhdoumWeb.Models.Order", "Order")
-                        .WithMany("OrderDetails")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("KhdoumWeb.Models.Unit", "Unit")
-                        .WithMany()
-                        .HasForeignKey("UnitId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

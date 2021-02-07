@@ -9,6 +9,10 @@ using KhdoumWeb.Models;
 using KhdoumWeb.Data;
 using Microsoft.EntityFrameworkCore;
 using KhdoumWeb.Models.ViewModels;
+using AutoMapper;
+using KhdoumWeb.Helpers;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 
 namespace KhdoumWeb.Controllers
 {
@@ -34,12 +38,11 @@ namespace KhdoumWeb.Controllers
             return PartialView("ItemsList", ShowMoreItemsFun(LoadItemsCount));
         }
 
-
         public IActionResult Search(string q)
         {
             try
             {
-                var items = (from i in _context.Items.Include(i => i.Member).Include(i=>i.City)
+                var items = (from i in _context.Items.Include(i => i.Member).Include(i => i.City)
                              from c in _context.Categories
                              from sc in _context.SubCategories
                              from ic in _context.ItemsCategories
@@ -48,7 +51,7 @@ namespace KhdoumWeb.Controllers
                              where i.Title.Contains(q) || i.Description.Contains(q) || i.Address.Contains(q) || c.Name.Contains(q) || sc.Name.Contains(q) || i.Member.FullName.Contains(q)
                              where i.State
                              select i).ToList();
-                if(q == null || q == "")
+                if (q == null || q == "")
                 {
                     q = "غير معروف";
                 }
@@ -59,7 +62,7 @@ namespace KhdoumWeb.Controllers
             {
                 return RedirectToAction(nameof(Index));
             }
-          
+
         }
 
         public IActionResult SubCategories(int id, int SubId = 0)
@@ -77,9 +80,8 @@ namespace KhdoumWeb.Controllers
             {
                 return NotFound();
             }
-            return PartialView("ItemsList",SubCategoriesItemsFun(SubId));
+            return PartialView("ItemsList", SubCategoriesItemsFun(SubId));
         }
-
 
         public IActionResult Item(string id, int FromAction = 0)
         {
@@ -177,7 +179,7 @@ namespace KhdoumWeb.Controllers
             {
                 return RedirectToAction(nameof(Index));
             }
-            
+
         }
 
         public IActionResult Order(int id)
@@ -210,12 +212,105 @@ namespace KhdoumWeb.Controllers
             {
                 return RedirectToAction(nameof(Index));
             }
-           
-        }
 
+        }
+        public IActionResult OrderNow(string UserPhone="",string Password = "")
+        {
+            if(UserPhone == "" || Password == "")
+            {
+                return RedirectToAction(nameof(ClientLogin));
+            }
+
+            if (IsClient(UserPhone, Password))
+            {
+                var Client = _context.Members.FirstOrDefault(c => c.Phone == UserPhone);
+                var CartItemsTotal = _context.Carts.Where(c => c.MemberId == Client.Id).Select(c=>c.Value).Sum();
+                var model = new OrderNowViewModel()
+                {
+                    Total = CartItemsTotal,
+                    UserPhone = Client.Phone,
+                    Cities = _context.Cities.ToList()
+                };
+                return View(model);
+
+            }
+
+            return RedirectToAction(nameof(ClientLogin));
+
+        }
+        [HttpPost]
+        public IActionResult OrderConfirm(OrderNowViewModel model)
+        {
+            if(ModelState.IsValid)
+            {
+                if (model.LoginedUserPhone == "" || model.Password == "")
+                {
+                    return RedirectToAction(nameof(ClientLogin));
+                }
+
+                if (IsClient(model.LoginedUserPhone, model.Password))
+                {
+                    var Client = _context.Members.FirstOrDefault(c => c.Phone == model.LoginedUserPhone);
+                    var CartItems = _context.Carts.Where(c => c.MemberId == Client.Id).ToList();
+                    var city = _context.Cities.FirstOrDefault(c => c.Id == model.CityId);
+                   if(CartItems.Count == 0)
+                    {
+                        return RedirectToAction(nameof(Index));
+                    }
+
+                   if(city == null)
+                    {
+                        return View(model);
+                    }
+                    var TotalAmount = CartItems.Select(c => c.Value).Sum();
+                    var TotalAmountWithDelivery = TotalAmount + city.DeliveryService;
+                    var order = new Order()
+                    {
+                        Name = model.UserName,
+                        Date = DateTime.Now.ToShortDateString(),
+                        Address = model.Address,
+                        Total = TotalAmountWithDelivery,
+                        Notes = model.Notes,
+                        Phone = model.UserPhone,
+                        LoginedPhone = model.LoginedUserPhone,
+                        State = "waiting",
+                        DeliveryService = city.DeliveryService,
+                        CityId = city.Id
+                    };
+
+                    _context.Orders.Add(order);
+                    _context.SaveChanges();
+
+                    var ThisOrder = _context.Orders.ToList().LastOrDefault(o => o.LoginedPhone == model.LoginedUserPhone); 
+                    if(ThisOrder != null)
+                    {
+                        var OrderDetails = from c in CartItems
+                                           select new OrderDetails()
+                                           {
+                                               Value = c.Value,
+                                               Quantity = c.Quantity,
+                                               Price = c.Price,
+                                               UnitId = c.UnitId,
+                                               ItemId = c.ItemId,
+                                               MemberId = c.MemberId,
+                                               OrderId = ThisOrder.Id
+                                           };
+                        _context.OrderDetails.AddRange(OrderDetails);
+                        _context.SaveChanges();
+                        _context.Carts.RemoveRange(CartItems);
+                        _context.SaveChanges();
+                        return RedirectToAction(nameof(Index));
+                    }
+
+                }
+
+            }
+
+            return View(model);
+        }
         public IActionResult Login(string Url)
         {
-            return View(new LoginViewModel {Url=Url});
+            return View(new LoginViewModel { Url = Url });
         }
         [HttpPost]
         public IActionResult Login(LoginViewModel login)
@@ -230,7 +325,7 @@ namespace KhdoumWeb.Controllers
                         return NotFound();
                     }
 
-                    if(user.State == false)
+                    if (user.State == false)
                     {
                         return NotFound();
                     }
@@ -252,7 +347,7 @@ namespace KhdoumWeb.Controllers
             {
                 return RedirectToAction(nameof(Index));
             }
-            
+
         }
 
         public IActionResult Dashboard(int id = 0)
@@ -278,9 +373,9 @@ namespace KhdoumWeb.Controllers
             {
                 return RedirectToAction(nameof(Index));
             }
-            
+
         }
-        public IActionResult ItemStatistics(int Id=0)
+        public IActionResult ItemStatistics(int Id = 0)
         {
             try
             {
@@ -308,7 +403,7 @@ namespace KhdoumWeb.Controllers
             {
                 return RedirectToAction(nameof(Index));
             }
-            
+
         }
 
         public IActionResult Favorites(string id)
@@ -327,7 +422,7 @@ namespace KhdoumWeb.Controllers
                 for (var i = 0; i < items.Length; i++)
                 {
                     int iid = int.Parse(items[i]);
-                    var item = _context.Items.Include(i=>i.City).Where(i=>i.State).FirstOrDefault(i => i.Id == iid);
+                    var item = _context.Items.Include(i => i.City).Where(i => i.State).FirstOrDefault(i => i.Id == iid);
                     if (item != null)
                     {
                         var Itm = itemsList.FirstOrDefault(im => im.Id == item.Id);
@@ -344,12 +439,265 @@ namespace KhdoumWeb.Controllers
             {
                 return RedirectToAction(nameof(Index));
             }
+
+        }
+
+        public IActionResult OrderList(string UserPhone="",string Password = "")
+        {
+            if (UserPhone == "" || Password == "")
+            {
+                return RedirectToAction(nameof(ClientLogin));
+            }
+
+            if (IsClient(UserPhone, Password))
+            {
+                var Client = _context.Members.FirstOrDefault(c=>c.Phone == UserPhone);
+                var CartItems = _context.Carts.Include(c=>c.Member).Include(c=>c.Unit).Include(c=>c.Item).Where(i => i.MemberId == Client.Id).ToList();
+                return View(CartItems);
+            }
+            
+            return RedirectToAction(nameof(ClientLogin));
+
+        }
+
+        public IActionResult RemoveItemFromCart(string UserPhone = "", string Password = "",int ItemId=0)
+        {
+            if (UserPhone == "" || Password == "")
+            {
+                return Json(new { state = -1 ,num=-1});
+            }
+
+            
+
+            if (IsClient(UserPhone, Password))
+            {
+                if (ItemId == 0)
+                {
+                    return Json(new { state = -1 ,num=-1});
+                }
+
+                var Client = _context.Members.FirstOrDefault(c => c.Phone == UserPhone);
+
+                var CartItem = _context.Carts.FirstOrDefault(i=>i.ItemId == ItemId && i.MemberId == Client.Id);
+                if(CartItem != null)
+                {
+                    _context.Carts.Remove(CartItem);
+                    _context.SaveChanges();
+                    var CartItemsCount = _context.Carts.Where(c => c.MemberId == Client.Id).ToList().Count;
+                    return Json(new { state = 1 ,num = CartItemsCount });
+                }
+            }
+
+            return Json(new { state = -1,num=-1 });
+
+        }
+
+        public IActionResult ClientRegister()
+        {
+            ViewData["CityId"] = new SelectList(_context.Cities, "Id", "Name", 0);
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult ClientRegister(ClientRegisterViewModel client)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var Client = (from c in _context.Members
+                                 from r in _context.Roless
+                                 from cr in _context.MemberRoles
+                                 where cr.RoleId == r.Id && cr.MemberId == c.Id && r.Name == "Customer" && c.Phone == client.UserPhone
+                                 select c).FirstOrDefault();
+
+                    if (Client != null)
+                    {
+                        ModelState.AddModelError("UserPhone", "تم تسجيل هذا الحساب مسبقا");
+                        return View(client);
+                    }
+
+                    var Member = new Member();
+                    Member.FullName = client.UserName;
+                    Member.Phone = client.UserPhone;
+                    Member.Password = RandomURL.GetURL();
+                    Member.CityId = client.CityId;
+                    Member.State = true;
+                   
+
+                    _context.Add(Member);
+                    var created = _context.SaveChanges();
+                    var Customer = new Member(); 
+                    if (created > 0)
+                    {
+                        //add Customer to role
+                         Customer = _context.Members.ToList().FirstOrDefault(c=>c.Phone == client.UserPhone);
+                        var role = _context.Roless.FirstOrDefault(r => r.Name == "Customer");
+                        if (role != null && Customer != null)
+                        {
+                            MemberRole CustomerRole = new MemberRole();
+                            CustomerRole.MemberId = Customer.Id;
+                            CustomerRole.RoleId = role.Id;
+                            _context.MemberRoles.Add(CustomerRole);
+                            _context.SaveChanges();
+                        }
+                    }
+
+
+                    if (IsClient(Customer.Phone, Customer.Password))
+                    {
+                        var data = new ClientLoginViewModel { UserPhone = Customer.Phone, Password = Customer.Password, UserName = Customer.FullName };
+                        TempData["LoginData"] =JsonConvert.SerializeObject(data);
+                        return RedirectToAction(nameof(Index));
+                    }
+                    //else
+                    //{
+                    //    ModelState.AddModelError("UserPhone", "رقم الهاتف أو كلمة المرور غير صحيحة");
+                    //    return View();
+                    //}
+
+                    return RedirectToAction(nameof(Index));
+                }
+
+                ViewData["CityId"] = new SelectList(_context.Cities, "Id", "Name", client.CityId);
+                return View(client);
+            }
+            catch(Exception ex)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
+        public IActionResult ClientLogin()
+        {
+            return View();
+        }
+
+        [HttpPost]
+         public IActionResult ClientLogin(ClientLoginViewModel client)
+        {
+            if(ModelState.IsValid)
+            {
+                if (IsClient(client.UserPhone, client.Password))
+                {
+                    var Customer = _context.Members.FirstOrDefault(c=>c.Phone == client.UserPhone);
+                    var data = new ClientLoginViewModel { UserPhone = Customer.Phone, Password = Customer.Password, UserName = Customer.FullName };
+                    TempData["LoginData"] = JsonConvert.SerializeObject(data);
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    ModelState.AddModelError("UserPhone", "رقم الهاتف أو كلمة المرور غير صحيحة");
+                    return View();
+                }
+            }
+            return View();
            
         }
 
-        public IActionResult OrderList()
+        public bool IsClient(string UserPhone,string Password)
         {
-            return View();
+            var Client = (from c in _context.Members
+                          from r in _context.Roless
+                          from cr in _context.MemberRoles
+                          where cr.RoleId == r.Id
+                          && cr.MemberId == c.Id
+                          && r.Name == "Customer"
+                          && c.Phone == UserPhone
+                          && c.Password == Password
+                          && c.State
+                          select c).FirstOrDefault();
+
+            if (Client == null)
+            {
+                return false;
+            }
+            else
+            {
+                if(Client.Phone == UserPhone && Client.Password == Password)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        public IActionResult AddToCart(CartViewModel model)
+        {
+            if(model.UserPhone == "" || model.Password == "")
+            {
+                return Json(new { num = -1 });
+            }
+
+            if(IsClient(model.UserPhone,model.Password))
+            {
+                var Client = _context.Members.FirstOrDefault(c=>c.Phone == model.UserPhone);
+                if(model.ItemId == 0)
+                {
+                    return Json(new { num = -1 });
+                }
+                else
+                {
+                    var item = _context.Items.Include(i=>i.Unit).FirstOrDefault(i=>i.Id == model.ItemId);
+                    if(model.Quantity > 0)
+                    {
+                        var CartItem = _context.Carts.FirstOrDefault(c=>c.ItemId == model.ItemId && c.MemberId == Client.Id);
+                       
+                        decimal value = model.Quantity * Convert.ToDecimal(item.Price);
+
+                        if (CartItem != null)
+                        {
+                            CartItem.Quantity = model.Quantity;
+                            CartItem.Value = value;
+                            CartItem.Price = Convert.ToDecimal(item.Price);
+                            _context.Entry(CartItem).State = EntityState.Modified;
+                        }
+                        else
+                        {
+                            CartItem = new Cart
+                            {
+                                Quantity = model.Quantity,
+                                Value = value,
+                                ItemId = model.ItemId,
+                                MemberId = Client.Id,
+                                UnitId = item.Unit.Id,
+                                Price = Convert.ToDecimal(item.Price)
+                            };
+                            _context.Carts.Add(CartItem);
+                        }
+                        _context.SaveChanges();
+                        var num = _context.Carts.Where(c=>c.MemberId == Client.Id).Count();
+                        return Json(new { num = num });
+
+                    }
+                    else
+                    {
+                        return Json(new { num = -1 });
+                    }
+                }
+            }
+
+            return Json(new { num = -1 }); 
+
+        }
+
+        public IActionResult GetCartItemsCount(string UserPhone = "",string Password = "")
+        {
+            if (UserPhone == "" || Password == "")
+            {
+                return Json(new { num = -1 }); ;
+            }
+
+            if (IsClient(UserPhone, Password))
+            {
+                var Client = _context.Members.FirstOrDefault(c => c.Phone == UserPhone);
+                var num = _context.Carts.Where(c => c.MemberId == Client.Id).Count();
+                return Json(new { num = num });
+            }
+            return Json(new { num = -1 });
         }
 
         public IActionResult Privacy()
@@ -365,7 +713,7 @@ namespace KhdoumWeb.Controllers
 
         public HomeModelView HomeModels(int LoadItemsCount)
         {
-           try
+            try
             {
                 HomeModelView homeModel = new HomeModelView();
 
@@ -379,10 +727,11 @@ namespace KhdoumWeb.Controllers
             {
                 return new HomeModelView();
             }
-                
-            
-           
+
+
+
         }
+
         public List<Item> ShowMoreItemsFun(int LoadItemsCount)
         {
 
@@ -400,11 +749,11 @@ namespace KhdoumWeb.Controllers
 
                 return Items;
             }
-            catch
+            catch(Exception ex)
             {
                 return new List<Item>();
             }
-           
+
 
 
         }
@@ -453,7 +802,7 @@ namespace KhdoumWeb.Controllers
             {
                 return new HomeModelView();
             }
-            
+
         }
 
         public List<Item> SubCategoriesItemsFun(int SubId)
@@ -472,13 +821,13 @@ namespace KhdoumWeb.Controllers
             {
                 return new List<Item>();
             }
-           
-        }
 
+        }
 
         public IActionResult About()
         {
             return View();
         }
+
     }
 }

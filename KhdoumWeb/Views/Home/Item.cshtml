@@ -296,9 +296,7 @@
     <div class="row">
         <div class="col-lg-9">
             <div id="ItemMain">
-                <div>
-                    <button  onclick="location.href='@Url.Action("OrderList", "Home")'" class="btn text-center" id="BtnCartInfo"><i style="font-size:25px" class="fas fa-cart-plus"></i> <span class="BtnCartInfoNotfcation">0</span></button>
-                </div>
+               
                 <h4 id="ItemTitle">@Model.Title</h4>
                 <p>تمت الاضافة بتاريخ : @Model.Date</p>
                 <div id="ImgContainer">
@@ -698,7 +696,6 @@
                     $('#AddToCart' + itm).removeClass("btn-danger");
                     $('#AddToCart' + itm).addClass(" btn-dark");
                 }
-
 
             }
             

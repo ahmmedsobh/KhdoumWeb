@@ -1,0 +1,85 @@
+﻿
+@{
+    ViewData["Title"] = "قائمة الطلبات";
+    Layout = "~/Views/Shared/DashBoardLayout.cshtml";
+}
+
+<br />
+<h1>قائمة الطلبات</h1>
+<br />
+
+<div id="OrdersList">
+
+</div>
+
+@section Scripts
+{
+    <script>
+
+        $(document).ready(function () {
+            PaintTableContent(2);
+        });
+
+
+
+        function PaintTableContent(filter) {
+             $.ajax({
+                    type: 'POST',
+                    url: `@Url.Action("OrdersList", "Order")`,
+                    data: {
+                        Filter: filter
+                    },
+                 success: function (data) {
+                        $("#OrdersList").append(data);
+                        BuildDatatable();
+                    },
+                    error: function (ex) {
+                        var r = jQuery.parseJSON(response.responseText);
+                        alert("Message: " + r.Message);
+                        alert("StackTrace: " + r.StackTrace);
+                        alert("ExceptionType: " + r.ExceptionType);
+                    }
+                });
+        }
+
+        function BuildDatatable() {
+            $('#tbl').DataTable({
+                language: {
+                    "sEmptyTable": "ليست هناك بيانات متاحة في الجدول",
+                    "sLoadingRecords": "جارٍ التحميل...",
+                    "sProcessing": "جارٍ التحميل...",
+                    "sLengthMenu": "أظهر _MENU_ عناصر",
+                    "sZeroRecords": "لم يعثر على أى عناصر",
+                    "sInfo": "إظهار _START_ إلى _END_ من أصل _TOTAL_ عناصر",
+                    "sInfoEmpty": "يعرض 0 إلى 0 من أصل 0 سجل",
+                    "sInfoFiltered": "(منتقاة من مجموع _MAX_ مُدخل)",
+                    "sInfoPostFix": "",
+                    "sSearch": "ابحث:",
+                    "sUrl": "",
+                    "oPaginate": {
+                        "sFirst": "الأول",
+                        "sPrevious": "السابق",
+                        "sNext": "التالي",
+                        "sLast": "الأخير"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": تفعيل لترتيب العمود تصاعدياً",
+                        "sSortDescending": ": تفعيل لترتيب العمود تنازلياً"
+                    }
+                },
+                //{
+                //    "search": "إبحث",
+                //    "lengthMenu": "أظهر _MENU_ شركات",
+                //    "zeroRecords": "لايوجد شركات",
+                //    //"info": "يوجد _PAGE_ من _PAGES_ شركات",
+                //    "infoEmpty": "لايوجد شركات",
+                //    "infoFiltered": "(بحث  من _MAX_ كل الشركات)"
+                //},
+                order: [0, 'asc'],
+                dom: 'Bflrtip',
+                buttons: ['copy', 'csv', 'excel', 'pdf', 'print']
+            });
+        }
+    </script>
+
+}

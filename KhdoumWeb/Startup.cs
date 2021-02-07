@@ -15,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using KhdoumWeb.Models;
 using AutoMapper;
 using KhdoumWeb.Helpers;
+using Newtonsoft.Json.Serialization;
 
 namespace KhdoumWeb
 {
@@ -39,6 +40,7 @@ namespace KhdoumWeb
             services.AddRazorPages();
             services.AddAutoMapper(typeof(Startup));
             services.AddScoped<UploadImages>();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

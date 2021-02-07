@@ -30,5 +30,10 @@ namespace KhdoumWeb.Controllers
         {
             return View();
         }
+
+        public IActionResult Orders()
+        {
+            return View();
+        }
     }
 }

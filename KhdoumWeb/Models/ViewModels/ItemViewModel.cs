@@ -84,6 +84,15 @@ namespace KhdoumWeb.Models.ViewModels
         [DisplayName("المدينة")]
         [Required(ErrorMessage = "اختر المدينة")]
         public int CityId { get; set; }
+        
+        [DisplayName("الوحده")]
+        [Required(ErrorMessage = "اختر الوحده")]
+        public int UnitId { get; set; }
+
+        [DisplayName("معدل زيادة الكمية")]
+        [Required(ErrorMessage = "ادخل معدل زيادة الكمية")]
+        public decimal QuantityDuration { get; set; }
+        
 
         [DisplayName("التقييم")]
         [Required(ErrorMessage = "اختر تقييم")]

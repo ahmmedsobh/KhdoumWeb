@@ -1,0 +1,48 @@
+﻿@model KhdoumWeb.Models.ViewModels.ClientRegisterViewModel
+
+@{
+    ViewData["Title"] = "تسجيل بياناتك";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    #SignIn {
+        width:35%;
+        min-width:320px;
+        margin:auto;
+    }
+</style>
+<div id="SignIn">
+    <br />
+    <h3 class="text-center">من فضلك قم بتسجيل بياناتك</h3>
+    <br />
+    <form asp-action="ClientRegister">
+        <div class="form-group">
+            <input asp-for="UserName" placeholder="الاسم" id="UserName" class="form-control" />
+            <span asp-validation-for="UserName"  class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input asp-for="UserPhone" placeholder="رقم الهاتف" id="UserPhone" class="form-control text-right" />
+            <span asp-validation-for="UserPhone"  class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <select asp-for="CityId" class="form-control" asp-items="ViewBag.CityId">
+                <option value="0">اختر مدينة</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <input type="submit" id="BtnRegister" style="width:100%" class="btn btn-primary" value="تسجيل حساب" />
+        </div>
+        <div class="form-group">
+            <a id="BtnHasAcc" asp-action="ClientLogin" style="width:100%" class="btn btn-success">تسجيل دخول</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+    <script>
+        $(function () {
+            $("#OrderSection").hide();
+        });
+    </script>
+}
+

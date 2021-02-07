@@ -79,6 +79,12 @@ namespace KhdoumWeb.Models
         public string LocationMap { get; set; }
 
 
+
+        [Required(ErrorMessage = "معدل زيادة الكمية مطلوب")]
+        [DisplayName("معدل زيادة الكمية")]
+        public decimal QuantityDuration { get; set; }
+
+
         public int MemberId { get; set; }
         [DisplayName("المورد")]
         public Member Member { get; set; }
@@ -91,9 +97,14 @@ namespace KhdoumWeb.Models
         public List<Raiting> Raitings { get; set; }
         public List<Comment> Comments { get; set; }
 
-
         public int CityId { get; set; }
         [DisplayName("المدينة")]
         public City City { get; set; }
+
+        [DisplayName("الوحده")]
+        public int? UnitId { get; set; }
+        [DisplayName("الوحدة")]
+        public Unit Unit { get; set; }
+       
     }
 }

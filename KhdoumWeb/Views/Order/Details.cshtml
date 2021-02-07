@@ -1,0 +1,108 @@
+﻿@model KhdoumWeb.Controllers.OrderController.OrderDetailsModelView
+
+@{
+    ViewData["Title"] = "تفاصيل الطلب";
+    Layout = "~/Views/Shared/DashBoardLayout.cshtml";
+}
+
+<style>
+    dt {
+        border: 3px solid #c9c9c9;
+        height: 32px;
+        border-left:0
+    }
+
+    dd {
+        border: 3px solid #c9c9c9;
+        height: 32px;
+    }
+
+   /* #OrderDetails {
+        border: 3px solid #c9c9c9;
+    }*/
+</style>
+<h2>تفاصيل الطلب</h2>
+
+<div>
+    <hr />
+    <h4>بيانات الطلب</h4>
+    <dl class="row" style="border:1px">
+
+        <dt class="col-sm-2">
+            اسم العميل
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Order.Name)
+        </dd>
+        <dt class="col-sm-2">
+            رقم الهاتف
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Order.Phone)
+        </dd>
+        <dt class="col-sm-2">
+            التاريخ
+        </dt>
+
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Order.Date)
+        </dd>
+        <dt class="col-sm-2">
+            المدينة
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Order.City.Name)
+        </dd>
+        <dt class="col-sm-2">
+            العنوان
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Order.Address)
+        </dd>
+        <dt class="col-sm-2">
+            الحالة
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Order.State)
+        </dd>
+        <dt class="col-sm-2">
+            ملاحظات
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Order.Notes)
+        </dd>
+        <dt class="col-sm-2">
+            خدمة التوصيل
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Order.DeliveryService)
+        </dd>
+        <dt class="col-sm-2">
+            المبلغ الكلى
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Order.Total)
+        </dd>
+    </dl>
+</div>
+
+<div>
+    <h4>تفاصيل الطلب</h4>
+    @foreach(var item in Model.OrderDetails)
+    {
+        <dl class="row" id="OrderDetails">
+            <dt class="col-sm-2" >اسم الصنف</dt>
+            <dd class="col-sm-10">@item.Item.Title</dd>
+            <dt class="col-sm-2">الكمية</dt>
+            <dd class="col-sm-10">@item.Quantity</dd>
+            <dt class="col-sm-2">السعر</dt>
+            <dd class="col-sm-10">@item.Price</dd>
+            <dt class="col-sm-2">القيمة</dt>
+            <dd class="col-sm-10">@item.Value</dd>
+        </dl>
+        <br />
+    }
+</div>
+<div>
+    <a class="btn btn-info" asp-action="Index">الرجوع للقائمة</a>
+</div>

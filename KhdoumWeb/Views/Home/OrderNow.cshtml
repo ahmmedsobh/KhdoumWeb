@@ -1,0 +1,98 @@
+﻿@model KhdoumWeb.Models.ViewModels.OrderNowViewModel
+@{
+    ViewData["Title"] = "أطلب الآن";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    #OrderNow {
+        width: 35%;
+        min-width: 320px;
+        margin: auto;
+    }
+</style>
+
+<div id="OrderNow">
+    <br />
+    <h3 class="text-center">استكمال بيانات الطلب</h3>
+    <br />
+    <form asp-action="OrderConfirm">
+        <input id="LoginedUserPhone" name="LoginedUserPhone" type="hidden" />
+        <input id="Password" name="Password" type="hidden" />
+        <div class="form-group">
+            <input asp-for="UserName" placeholder="الاسم" id="UserName" class="form-control" />
+            <span asp-validation-for="UserName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input asp-for="UserPhone" placeholder="رقم الهاتف" id="UserPhone" class="form-control text-right" />
+            <span asp-validation-for="UserPhone" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <select asp-for="CityId" id="CityId" class="form-control">
+                @foreach (var item in Model.Cities)
+                {
+                    <option item-value="@item.DeliveryService" value="@item.Id">@item.Name ( @item.DeliveryService ج )</option>
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <input asp-for="Address" placeholder="العنوان بالتفصيل" id="Address" class="form-control text-right" />
+            <span asp-validation-for="Address" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <textarea asp-for="Notes" rows="5" placeholder="ملاحظاتك" id="Notes" class="form-control text-right"></textarea>
+            <span asp-validation-for="Notes" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label>الاجمالى بدون خدمة التوصيل</label>
+            <input disabled asp-for="Total" value="@Model.Total" id="Total" class="form-control text-right" />
+            <span asp-validation-for="Total"  class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label>الاجمالى مع خدمة التوصيل</label>
+            <input disabled id="TotalWithDelivery" class="form-control text-right" />
+            <span  class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" id="BtnOrderOK" style="width:100%" class="btn btn-primary" value="تأكيد الطلب" />
+        </div>
+    </form>
+</div>
+
+@section Scripts{
+
+<script>
+    $(function () {
+        $("#UserName").val(localStorage["UserName"]);
+        $("#UserPhone").val(localStorage["UserPhone"]);
+        $("#LoginedUserPhone").val(localStorage["UserPhone"]);
+        $("#Password").val(localStorage["Password"]);
+        $("#CityId").val(localStorage["CityId"]);
+        $("#Address").val(localStorage["Address"]);
+
+        $("#CityId").val($("#CityId option:first").val());
+        $("#CityId").change();
+
+        $("#TotalWithDelivery").val(Number($("#CityId option:first").attr("item-value")) + Number($("#Total").val()));
+
+        $("#OrderSection").hide();
+    });
+
+    $("#CityId").change(function () {
+        $("#TotalWithDelivery").val(Number($("#CityId option:selected").attr("item-value")) + Number($("#Total").val()));
+    });
+
+    $("#BtnOrderOK").click(function () {
+
+        if (Number($("#CityId").val()) > 0) {
+            localStorage["CityId"] = $("#CityId").val();
+        }
+
+        if ($("#Address").val() != "") {
+            localStorage["Address"] = $("#Address").val();
+        }
+
+    })
+</script>
+
+ }

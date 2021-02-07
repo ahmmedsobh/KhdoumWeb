@@ -65,6 +65,7 @@ namespace KhdoumWeb.Controllers
         {
             ViewData["CityId"] = new SelectList(_context.Cities, "Id", "Name");
             ViewData["MemberId"] = new SelectList(supliers(), "Id", "FullName");
+            ViewData["UnitId"] = new SelectList(units(), "Id", "Name");
             return View();
         }
 
@@ -108,6 +109,9 @@ namespace KhdoumWeb.Controllers
                 }
                 ViewData["CityId"] = new SelectList(_context.Cities, "Id", "Name", item.CityId);
                 ViewData["MemberId"] = new SelectList(supliers(), "Id", "FullName", item.MemberId);
+                ViewData["UnitId"] = new SelectList(units(), "Id", "Name");
+
+
                 return View(item);
             }
             catch
@@ -135,6 +139,8 @@ namespace KhdoumWeb.Controllers
                 var Item = mapper.Map<ItemViewModel>(item);
                 ViewData["CityId"] = new SelectList(_context.Cities, "Id", "Name", item.CityId);
                 ViewData["MemberId"] = new SelectList(supliers(), "Id", "FullName", item.MemberId);
+                ViewData["UnitId"] = new SelectList(units(), "Id", "Name");
+
                 return View(Item);
             }
             catch
@@ -214,6 +220,8 @@ namespace KhdoumWeb.Controllers
                 }
                 ViewData["CityId"] = new SelectList(_context.Cities, "Id", "Name", item.CityId);
                 ViewData["MemberId"] = new SelectList(supliers(), "Id", "FullName", item.MemberId);
+                ViewData["UnitId"] = new SelectList(units(), "Id", "Name");
+
                 return View(item);
             }
             catch
@@ -438,6 +446,12 @@ namespace KhdoumWeb.Controllers
                                   from mr in _context.MemberRoles
                                   where mr.MemberId == m.Id && mr.RoleId == r.Id && r.Name == "Supplier"
                                   select m).ToList();
+            return Suppliers;
+        }
+
+        public List<Unit> units()
+        {
+            var Suppliers = _context.Units.ToList();
             return Suppliers;
         }
 

@@ -13,6 +13,10 @@ namespace KhdoumWeb.Models
         [Required(ErrorMessage = "من فضلك اسم الاسم")]
         [DisplayName("الاسم")]
         public string Name { get; set; }
+       
+        [Required(ErrorMessage = "ادخل قيمة التوصيل")]
+        [DisplayName("قيمة خدمة التوصيل")]
+        public decimal DeliveryService { get; set; }
         public int GovernorateId { get; set; }
         public Governorate Governorate { get; set; }
         public List<Item> Items { get; set; }
