@@ -10,6 +10,7 @@ namespace KhdoumWeb.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Date { get; set; }
+        public string DeliveryDate { get; set; }
         public string Address { get; set; }
         public decimal Total { get; set; }
         public string Notes { get; set; }

@@ -13,6 +13,7 @@ using AutoMapper;
 using KhdoumWeb.Helpers;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
+using System.Globalization;
 
 namespace KhdoumWeb.Controllers
 {
@@ -264,10 +265,12 @@ namespace KhdoumWeb.Controllers
                     }
                     var TotalAmount = CartItems.Select(c => c.Value).Sum();
                     var TotalAmountWithDelivery = TotalAmount + city.DeliveryService;
+                    var date = DateTime.UtcNow.ToString(new CultureInfo("ar-EG"));
+                    
                     var order = new Order()
                     {
                         Name = model.UserName,
-                        Date = DateTime.Now.ToShortDateString(),
+                        Date = date,
                         Address = model.Address,
                         Total = TotalAmountWithDelivery,
                         Notes = model.Notes,
@@ -275,7 +278,8 @@ namespace KhdoumWeb.Controllers
                         LoginedPhone = model.LoginedUserPhone,
                         State = "waiting",
                         DeliveryService = city.DeliveryService,
-                        CityId = city.Id
+                        CityId = city.Id,
+                        DeliveryDate = model.DeliveryDate
                     };
 
                     _context.Orders.Add(order);

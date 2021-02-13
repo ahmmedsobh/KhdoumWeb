@@ -36,6 +36,13 @@
             </select>
         </div>
         <div class="form-group">
+            <label>ميعاد الاستلام</label>
+            <select asp-for="DeliveryDate" id="DeliveryDate" class="form-control">
+                @*<option value="today">اختر ميعاد التسليم</option>*@
+            </select>
+            <span asp-validation-for="DeliveryDate" class="text-danger"></span>
+        </div>
+        <div class="form-group">
             <input asp-for="Address" placeholder="العنوان بالتفصيل" id="Address" class="form-control text-right" />
             <span asp-validation-for="Address" class="text-danger"></span>
         </div>
@@ -46,12 +53,12 @@
         <div class="form-group">
             <label>الاجمالى بدون خدمة التوصيل</label>
             <input disabled asp-for="Total" value="@Model.Total" id="Total" class="form-control text-right" />
-            <span asp-validation-for="Total"  class="text-danger"></span>
+            <span asp-validation-for="Total" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label>الاجمالى مع خدمة التوصيل</label>
             <input disabled id="TotalWithDelivery" class="form-control text-right" />
-            <span  class="text-danger"></span>
+            <span class="text-danger"></span>
         </div>
         <div class="form-group">
             <input type="submit" id="BtnOrderOK" style="width:100%" class="btn btn-primary" value="تأكيد الطلب" />
@@ -93,6 +100,166 @@
         }
 
     })
+
+    $("#DeliveryDate").on("focus",function () {
+        FillDeliveryDateSelect();
+    });
+
+    function FillDeliveryDateSelect() {
+        
+        var today = new Date();
+        var date = today.getDate() + '/' + ((today.getMonth() + 1) < 10 ? `0${(today.getMonth() + 1)}` : (today.getMonth() + 1)) + '/' + today.getFullYear();
+        //var time = (today.getHours() > 12 ? today.getHours() - 12 : today.getHours()) + ":" + today.getMinutes();
+        var dateTime = date;
+        var Nowhour = today.getHours();
+
+        var tomorrow = new Date();
+        tomorrow.setDate(new Date().getDate() + 1);
+
+        var dateTime2 = tomorrow.getDate() + '/' + (tomorrow.getMonth() + 1) < 10 ? `0${(tomorrow.getMonth() + 1)}`:(tomorrow.getMonth() + 1) + '/' + tomorrow.getFullYear();
+
+
+        //1>13||
+        //2>14||
+        //3>15||
+        //4>16||
+        //5>17||
+        //6>18||
+        //7>19||
+        //8>20||
+        //9>21||
+        //10>22||
+        //11>23||
+        //12>24||
+        let collection = [
+            {
+                "id":12,
+                "name": "من 12 الى 1 ظهرا",
+                "value": `${dateTime} 12`,
+            },
+            {
+                "id":13,
+                "name": "من 1 الى 2 مساءا",
+                "value": `${dateTime} 1`,
+            },
+            {
+                "id":14,
+                "name": "من 2 الى 3 مساءا",
+                "value": `${dateTime} 2`,
+            },
+            {
+                "id":15,
+                "name": "من 3 الى 4 مساءا",
+                "value": `${dateTime} 3`,
+            },
+            {
+                "id":16,
+                "name": "من 4 الى 5 مساءا",
+                "value": `${dateTime} 4`,
+            },
+            {
+                "id":17,
+                "name": "من 5 الى 6 مساءا",
+                "value": `${dateTime} 5`,
+            },
+            {
+                "id":18,
+                "name": "من 6 الى 7 مساءا",
+                "value": `${dateTime} 6`,
+            },
+            {
+                "id":19,
+                "name": "من 7 الى 8 مساءا",
+                "value": `${dateTime} 7`,
+            },
+            {
+                "id":20,
+                "name": "من 8 الى 9 مساءا",
+                "value": `${dateTime} 8`,
+            },
+            {
+                "id":21,
+                "name": "من 9 الى 10 مساءا",
+                "value": `${dateTime} 9`,
+            },
+        ];
+
+        let collection2 = [
+            {
+                "id": 12,
+                "name": "من 12 الى 1 ظهرا",
+                "value": `${dateTime2} 12`,
+            },
+            {
+                "id": 13,
+                "name": "من 1 الى 2 مساءا",
+                "value": `${dateTime2} 1`,
+            },
+            {
+                "id": 14,
+                "name": "من 2 الى 3 مساءا",
+                "value": `${dateTime2} 2`,
+            },
+            {
+                "id": 15,
+                "name": "من 3 الى 4 مساءا",
+                "value": `${dateTime2} 3`,
+            },
+            {
+                "id": 16,
+                "name": "من 4 الى 5 مساءا",
+                "value": `${dateTime2} 4`,
+            },
+            {
+                "id": 17,
+                "name": "من 5 الى 6 مساءا",
+                "value": `${dateTime2} 5`,
+            },
+            {
+                "id": 18,
+                "name": "من 6 الى 7 مساءا",
+                "value": `${dateTime2} 6`,
+            },
+            {
+                "id": 19,
+                "name": "من 7 الى 8 مساءا",
+                "value": `${dateTime2} 7`,
+            },
+            {
+                "id": 20,
+                "name": "من 8 الى 9 مساءا",
+                "value": `${dateTime2} 8`,
+            },
+            {
+                "id": 21,
+                "name": "من 9 الى 10 مساءا",
+                "value": `${dateTime2} 9`,
+            },
+        ];
+
+        $("#DeliveryDate optgroup").remove();
+        $("#DeliveryDate").append('<optgroup class="today" label="اليوم"></optgroup >');
+        $("#DeliveryDate").append('<optgroup class="nextday" label="غدا"></optgroup >');
+
+        var options = ``;
+        $.each(collection, function (i,item) {
+            if (Nowhour >= 12 && Nowhour <= 21) {
+                if (item.id > Nowhour) {
+                    options += `<option value="${item.value}">${item.name}</option>`
+                }
+            }
+        });
+
+        var options2 = ``;
+        $.each(collection2, function (i, item) {
+            options2 += `<option value="${item.value}">${item.name}</option>`
+        });
+
+       
+        
+        $("#DeliveryDate .today").append(options);
+        $("#DeliveryDate .nextday").append(options2);
+    }
 </script>
 
  }

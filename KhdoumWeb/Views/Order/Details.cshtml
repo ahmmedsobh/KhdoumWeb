@@ -8,13 +8,14 @@
 <style>
     dt {
         border: 3px solid #c9c9c9;
-        height: 32px;
-        border-left:0
+        max-height: 32px;
+        height:auto;
     }
 
     dd {
         border: 3px solid #c9c9c9;
-        height: 32px;
+        min-height: 32px;
+        height:auto;
     }
 
    /* #OrderDetails {
@@ -26,8 +27,8 @@
 <div>
     <hr />
     <h4>بيانات الطلب</h4>
+    <input type="hidden" id="OrderId" value="@Model.Order.Id" />
     <dl class="row" style="border:1px">
-
         <dt class="col-sm-2">
             اسم العميل
         </dt>
@@ -41,11 +42,17 @@
             @Html.DisplayFor(model => model.Order.Phone)
         </dd>
         <dt class="col-sm-2">
-            التاريخ
+            تاريخ الاضافة
         </dt>
 
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Order.Date)
+        </dd>
+        <dt class="col-sm-2">
+            تاريخ التسليم
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Order.DeliveryDate)
         </dd>
         <dt class="col-sm-2">
             المدينة
@@ -105,4 +112,19 @@
 </div>
 <div>
     <a class="btn btn-info" asp-action="Index">الرجوع للقائمة</a>
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            تغيير حالة الطلب
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a  class="dropdown-item" asp-action="ChangeOrderState" asp-route-OrderId="@Model.Order.Id" asp-route-State="done">تم التسليم</a>
+            <a class="dropdown-item" asp-action="ChangeOrderState" asp-route-OrderId="@Model.Order.Id" asp-route-State="cancel">ملغى</a>
+        </div>
+    </div>
 </div>
+
+@section Scripts{
+    <script>
+        
+    </script>
+}

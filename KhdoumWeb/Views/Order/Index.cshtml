@@ -3,11 +3,17 @@
     ViewData["Title"] = "قائمة الطلبات";
     Layout = "~/Views/Shared/DashBoardLayout.cshtml";
 }
-
+<audio id="NotfcationSound" controls="controls">
+    <source src="~/sounds/insight-578.ogg" type="audio/ogg" />
+</audio>
 <br />
 <h1>قائمة الطلبات</h1>
 <br />
-
+<label>فلتره بالتاريخ : </label>
+<select id="Sort">
+    <option selected value="1">اليوم</option>
+    <option value="2">الكل</option>
+</select>
 <div id="OrdersList">
 
 </div>
@@ -17,21 +23,36 @@
     <script>
 
         $(document).ready(function () {
-            PaintTableContent(2);
+            PaintTableContent(1);
         });
 
+        
+        setInterval(function () {
+            PaintTableContent(1, true);
+        }, 1000 * 60);
+      
 
+        $("#Sort").change(function () {
+            PaintTableContent($(this).val());
+        });
 
-        function PaintTableContent(filter) {
+        function PaintTableContent(filter,PlaySound) {
+            $('#tbl').DataTable().destroy();
+            $("#OrdersList table").remove();
              $.ajax({
                     type: 'POST',
                     url: `@Url.Action("OrdersList", "Order")`,
                     data: {
                         Filter: filter
                     },
-                 success: function (data) {
+                    success: function (data) {
                         $("#OrdersList").append(data);
                         BuildDatatable();
+                        if (PlaySound == true) {
+                            if ($("#tbl tbody tr").length > 1) {
+                                $('#NotfcationSound')[0].play();
+                            }
+                        }
                     },
                     error: function (ex) {
                         var r = jQuery.parseJSON(response.responseText);

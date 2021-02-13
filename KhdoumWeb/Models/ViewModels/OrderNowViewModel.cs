@@ -22,6 +22,8 @@ namespace KhdoumWeb.Models.ViewModels
         public string Address { get; set; }
         public string Notes { get; set; }
         public decimal Total { get; set; }
+        [Required(ErrorMessage = "اختر ميعاد التسليم")]
+        public string DeliveryDate { get; set; }
         public List<City> Cities { get; set; }
     }
 }

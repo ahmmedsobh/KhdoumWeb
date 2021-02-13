@@ -56,6 +56,30 @@ namespace KhdoumWeb.Controllers
             return PartialView(AllOrders(Filter));
         }
 
+        public IActionResult ChangeOrderState(int OrderId = 0,string State="")
+        {
+            if(OrderId == 0 || State == "")
+            {
+                return BadRequest();
+            }
+
+            var order = _context.Orders.FirstOrDefault(o=>o.Id == OrderId);
+            if(order == null)
+            {
+                return NotFound();
+            }
+
+            if(State == "done" || State == "cancel")
+            {
+                order.State = State;
+                _context.Entry(order).State = EntityState.Modified;
+                _context.SaveChanges();
+                return RedirectToAction(nameof(Details),OrderId);
+            }
+
+            return BadRequest();
+
+        }
 
         public List<Order> AllOrders(int Filter = 0)
         {
@@ -65,7 +89,7 @@ namespace KhdoumWeb.Controllers
                 if(Filter == 1)
                 {
                     var date = DateTime.Now.ToShortDateString();
-                    orders = _context.Orders.Where(o => o.Date == date).ToList();
+                    orders = _context.Orders.ToList().Where(o => (o.DeliveryDate == null ? "": o.DeliveryDate).Contains(date) && o.State == "waiting").ToList();
                 }
                 else if(Filter == 2)
                 {
@@ -74,5 +98,7 @@ namespace KhdoumWeb.Controllers
             }
             return orders;
         }
+
+
     }
 }
